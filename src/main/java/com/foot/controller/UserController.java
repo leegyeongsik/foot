@@ -14,15 +14,11 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
     UserService userService;
 
-    @PostMapping("/signup") // 회원가입
-    public void signup(@RequestBody SignupRequestDto requestDto) {
-        userService.Usersignup(requestDto);
-    }
 
-    @PostMapping("/login") // auth 로 빼기
-    public void login(@RequestBody LoginRequestDto requestDto) {
-        userService.Userlogin(requestDto);
-    }
+//    @PostMapping("/login") // auth 로 빼기
+//    public void login(@RequestBody LoginRequestDto requestDto) {
+//        userService.Userlogin(requestDto);
+//    }
 
     @PutMapping("/{userId}")
     public void updateUser(@RequestBody SignupRequestDto requestDto , @PathVariable Long userId) {

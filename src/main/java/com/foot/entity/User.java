@@ -2,6 +2,7 @@ package com.foot.entity;
 
 import jakarta.persistence.*;
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Columns;
@@ -12,6 +13,7 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor
+@EqualsAndHashCode
 @Table(name = "users")
 public class User extends Timestamped{
 
@@ -51,7 +53,7 @@ public class User extends Timestamped{
     @Builder
     public User(String email , String name , String password , String address , String cellphone , UserRoleEnum role , String userimage){
         this.email = email;
-        this.address =address;
+        this.address = address;
         this.cellphone =cellphone;
         this.name = name;
         this.password = password;
