@@ -3,12 +3,12 @@ package com.foot.controller;
 import com.foot.dto.SignupRequestDto;
 import com.foot.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
 
-@RestController
+@Controller
 @RequiredArgsConstructor
 @RequestMapping("/api/auth")
 public class AuthController {
@@ -17,6 +17,15 @@ public class AuthController {
     @PostMapping("/signup") // 회원가입
     public void signup(@RequestBody SignupRequestDto requestDto) {
         userService.userSignup(requestDto);
+    }
+
+    @GetMapping("/logout")
+    public String logout() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null) {
+            SecurityContextHolder.getContext().setAuthentication(null);
+        }
+        return "redirect:/";
     }
 
 }
