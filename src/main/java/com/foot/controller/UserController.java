@@ -1,33 +1,32 @@
 package com.foot.controller;
 
-import com.foot.dto.LoginRequestDto;
-import com.foot.dto.SignupRequestDto;
+import com.foot.dto.*;
+import com.foot.security.UserDetailsImpl;
 import com.foot.service.UserService;
 import jakarta.validation.Valid;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/users")
 public class UserController {
-    UserService userService;
 
+    private final UserService userService;
 
-//    @PostMapping("/login") // auth 로 빼기
-//    public void login(@RequestBody LoginRequestDto requestDto) {
-//        userService.Userlogin(requestDto);
-//    }
-
-    @PutMapping("/{userId}")
-    public void updateUser(@RequestBody SignupRequestDto requestDto , @PathVariable Long userId) {
-        userService.updateUser(requestDto , userId);
+    @PutMapping("/profile")
+    public ResponseEntity<ProfileResponseDto> updateUser(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody ProfileRequestDto requestDto) {
+        ProfileResponseDto profile = userService.updateUser(userDetails.getUser(), requestDto);
+        return ResponseEntity.ok().body(profile);
     }
 
-    @DeleteMapping("/{userId}")
-    public void signup(@PathVariable Long userId) {
-        userService.deleteUser(userId);
+    @DeleteMapping("/profile")
+    public void deleteUser(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody PasswordRequestDto requestDto) {
+        userService.deleteUser(userDetails.getUser(), requestDto);
     }
 
     @PutMapping("/{userId}/foot")

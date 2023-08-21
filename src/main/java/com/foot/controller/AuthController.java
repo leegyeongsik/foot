@@ -20,6 +20,7 @@ public class AuthController {
         userService.userSignup(requestDto);
     }
 
+    // 로그아웃
     @GetMapping("/logout")
     public ResponseEntity<String> logout() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

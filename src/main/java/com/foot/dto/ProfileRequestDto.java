@@ -1,23 +1,14 @@
 package com.foot.dto;
 
-import com.foot.entity.UserRoleEnum;
 import lombok.Getter;
 
 @Getter
-public class SignupRequestDto {
-
-    private String email;
-
-    private String name;
-
+public class ProfileRequestDto {
     private String password;
-
+    private String newPassword;
+    private String name;
+    private String email;
     private String address;
-
     private String cellphone;
-
     private String userImage;
-
-    private UserRoleEnum role;
-
 }
