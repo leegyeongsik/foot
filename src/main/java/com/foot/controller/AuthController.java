@@ -3,6 +3,7 @@ package com.foot.controller;
 import com.foot.dto.SignupRequestDto;
 import com.foot.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -20,12 +21,12 @@ public class AuthController {
     }
 
     @GetMapping("/logout")
-    public String logout() {
+    public ResponseEntity<String> logout() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null) {
             SecurityContextHolder.getContext().setAuthentication(null);
         }
-        return "redirect:/";
+        return ResponseEntity.ok("로그아웃 성공");
     }
 
 }
