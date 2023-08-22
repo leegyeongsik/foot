@@ -4,11 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"
-            integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g="
-            crossorigin="anonymous"></script>
+            integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-    <title>Login Page</title>
+    <title>Profile Page</title>
     <style>
 
         /* Reset some default styles */
@@ -25,14 +23,15 @@
             color: #000;
         }
 
-        .login-container {
+        .profile-container {
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
         }
 
-        .login-form {
+        .profile-form {
+            max-width: 300px;
             display: flex;
             flex-direction: column;
             align-items: flex-start;
@@ -42,15 +41,16 @@
             background-color: #fff;
         }
 
-        .login-form h1 {
+        .profile-form h1 {
             font-size: 32px;
             font-weight: 700;
             color: #575dfb;
             margin-bottom: 50px;
         }
 
-        .login-form input[type="text"],
-        .login-form input[type="password"] {
+        .profile-form input[type="email"],
+        .profile-form input[type="password"],
+        .profile-form input[type="text"] {
             width: 100%;
             padding: 10px;
             margin-top: 10px;
@@ -59,7 +59,7 @@
         }
 
 
-        .login-button {
+        .profile-button {
             width: 100%;
             padding: 16px;
             margin-top: 20px;
@@ -88,20 +88,20 @@
             cursor: pointer;
         }
 
-        .social-login {
+        .social-profile {
             display: flex;
             justify-content: center;
             align-items: center;
             margin-top: 20px;
         }
 
-        .social-login img {
+        .social-profile img {
             width: 24px;
             height: 24px;
             margin-right: 8px;
         }
 
-        .social-login p {
+        .social-profile p {
             font-size: 16px;
             font-weight: 700;
         }
@@ -110,65 +110,57 @@
 </head>
 
 <body>
-<div class="login-container">
-    <div class="login-form">
-        <h1>Login</h1>
-        <input type="text" id="name" placeholder="ID">
-        <input type="password" id="password" placeholder="Password">
-        <button class="login-button" onclick="onLogin()">Login</button>
-        <div class="social-login">
-            <p>Continue with Google</p>
-        </div>
+<div class="profile-container">
+    <div class="profile-form">
+        <h1>My Info</h1>
+        <input type="email" name="email" th:value="${profile.getEmail()}">
+        <input type="text" name="name" th:value="${profile.getName()}">
+        <input type="password" name="password" placeholder="Password">
+        <input type="text" name="address" th:value="${profile.getAddress()}">
+        <input type="text" name="cellphone" th:value="${profile.getCellphone()}">
+        <button onclick="onUpdating()" class="profile-button">Confirm</button>
         <div class="register-link">
-            <p>Don’t have an account? <span onclick="location.href='/view/signup'">Register</span></p>
+            <p>탈퇴하기 <span onclick="location.href='/view/login'">delete</span></p>
         </div>
-        <p class="forgot-password">Forgot Password?</p>
     </div>
 </div>
 </body>
 <script>
-    $(document).ready(function () {
-        // 토큰 삭제
-       // Cookies.remove('Authorization', {path: '/'});
-    });
-
-    const href = location.href;
-    const queryString = href.substring(href.indexOf("?") + 1)
-    if (queryString === 'error') {
-        const errorDiv = document.getElementById('login-failed');
-        errorDiv.style.display = 'block';
-    }
-
-    const host = 'http://' + window.location.host;
-    function onLogin() {
+    function onUpdating() {
+        let email = $('#email').val();
         let name = $('#name').val();
-        let password = $('#password').val();
+        let address = $('#address').val();
+        let cellphone = $('#cellphone').val();
+        console.log(email, name, address, cellphone);
 
         $.ajax({
-            type: "POST",
-            url: `/api/auth/login`,
+            type: "PUT",
+            url: `/api/users/profile`,
             contentType: "application/json",
-            data: JSON.stringify({name: name, password: password}),
-        })
-            .done(function (res, status, xhr) {
-                const token = xhr.getResponseHeader('Authorization');
-
-                Cookies.set('Authorization', token, {path: '/'})
-
-                $.ajaxPrefilter(function (options, originalOptions, jqXHR) {
-                    jqXHR.setRequestHeader('Authorization', token);
+            data: JSON.stringify({ email: email, name : name, address: address, cellphone: cellphone}),
+            success: function(response) {
+                Swal.fire({
+                    icon: 'success',                         // Alert 타입
+                    title: '변경 완료!'        // Alert 제목
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = "http://localhost:8080/view/profile";
+                    }
                 });
-
-                window.location.href = host + '/view/profile'
-            })
-            .fail(function (jqXHR, textStatus) {
-                // swal('로그인 실패!','warning');
+            },
+            error: function(xhr, status, error) {
                 Swal.fire({
                     icon: 'error',                         // Alert 타입
-                    title: '회원이 아닙니다!'        // Alert 제목
-                })
-            });
+                    title: '변경 실패!'        // Alert 제목
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = "http://localhost:8080/view/profile";
+                    }
+                });
+            }
+        });
     }
+
 
 </script>
 </html>

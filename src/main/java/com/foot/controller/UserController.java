@@ -9,21 +9,17 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-@RestController
+@Controller
 @RequiredArgsConstructor
 @RequestMapping("/api/users")
 public class UserController {
 
     private final UserService userService;
 
-    // 본인 프로필 조회
-    @GetMapping("/profile")
-    public ResponseEntity<ProfileResponseDto> getMyProfile(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-        ProfileResponseDto profile = new ProfileResponseDto(userDetails.getUser());
-        return ResponseEntity.ok().body(profile);
-    }
 
     // 회원 정보 수정
     @PutMapping("/profile")
@@ -31,6 +27,7 @@ public class UserController {
         ProfileResponseDto profile = userService.updateUser(userDetails.getUser(), requestDto);
         return ResponseEntity.ok().body(profile);
     }
+
 
     // 탈퇴
     @DeleteMapping("/profile")
@@ -42,4 +39,5 @@ public class UserController {
     public void signup( @RequestBody SignupRequestDto requestDto , @PathVariable Long userId) {
         userService.updateUserFoot(requestDto);
     }
+
 }

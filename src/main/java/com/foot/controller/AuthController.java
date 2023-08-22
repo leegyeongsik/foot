@@ -18,7 +18,7 @@ public class AuthController {
     @PostMapping("/signup") // 회원가입
     public String signup(SignupRequestDto requestDto) {
         userService.userSignup(requestDto);
-        return "redirect:/api/auth/login";
+        return "redirect:/view/login";
     }
 
     // 로그아웃
