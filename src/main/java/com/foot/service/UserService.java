@@ -2,13 +2,16 @@ package com.foot.service;
 
 import com.foot.dto.*;
 import com.foot.entity.User;
+import com.foot.entity.UserRoleEnum;
 import com.foot.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class UserService {
 
@@ -20,6 +23,10 @@ public class UserService {
         if(userRepository.existsByName(requestDto.getName())) {
             throw new IllegalArgumentException("이미 존재하는 아이디 입니다.");
         }
+        log.info(requestDto.getName());
+        log.info(requestDto.getEmail());
+        log.info(requestDto.getPassword());
+
 
         String password = passwordEncoder.encode(requestDto.getPassword());
 
@@ -29,19 +36,13 @@ public class UserService {
                 .password(password)
                 .cellphone(requestDto.getCellphone())
                 .address(requestDto.getAddress())
-                .role(requestDto.getRole())
-                .userImage(requestDto.getUserImage())
+                .role(UserRoleEnum.USER)
+                .userImage("")
                 .build();
 
         userRepository.save(user);
 
     }
-
-
-
-    public void updateUserFoot(SignupRequestDto requestDto) {
-    }
-
 
     // 회원 정보 수정
     @Transactional
@@ -79,5 +80,8 @@ public class UserService {
         }
 
         userRepository.delete(currentUser);
+    }
+
+    public void updateUserFoot(SignupRequestDto requestDto) {
     }
 }

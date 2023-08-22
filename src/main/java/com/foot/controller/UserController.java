@@ -18,12 +18,21 @@ public class UserController {
 
     private final UserService userService;
 
+    // 본인 프로필 조회
+    @GetMapping("/profile")
+    public ResponseEntity<ProfileResponseDto> getMyProfile(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+        ProfileResponseDto profile = new ProfileResponseDto(userDetails.getUser());
+        return ResponseEntity.ok().body(profile);
+    }
+
+    // 회원 정보 수정
     @PutMapping("/profile")
     public ResponseEntity<ProfileResponseDto> updateUser(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody ProfileRequestDto requestDto) {
         ProfileResponseDto profile = userService.updateUser(userDetails.getUser(), requestDto);
         return ResponseEntity.ok().body(profile);
     }
 
+    // 탈퇴
     @DeleteMapping("/profile")
     public void deleteUser(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody PasswordRequestDto requestDto) {
         userService.deleteUser(userDetails.getUser(), requestDto);

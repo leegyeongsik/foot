@@ -1,6 +1,7 @@
 package com.foot.security;
 
 import com.foot.entity.User;
+import com.foot.entity.UserRoleEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -35,8 +36,8 @@ public class UserDetailsImpl implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        String authority = this.getUsername();
-        log.info("authority: " + authority);
+        UserRoleEnum role = user.getRole();
+        String authority = role.getAuthority();
 
         SimpleGrantedAuthority simpleGrantedAuthority = new SimpleGrantedAuthority(authority);
         Collection<GrantedAuthority> authorities = new ArrayList<>();

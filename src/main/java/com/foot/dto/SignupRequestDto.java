@@ -2,8 +2,10 @@ package com.foot.dto;
 
 import com.foot.entity.UserRoleEnum;
 import lombok.Getter;
+import lombok.Setter;
 
 @Getter
+@Setter
 public class SignupRequestDto {
 
     private String email;
@@ -16,8 +18,8 @@ public class SignupRequestDto {
 
     private String cellphone;
 
-    private String userImage;
+   //private String userImage;
 
-    private UserRoleEnum role;
+    //private UserRoleEnum role;
 
 }
