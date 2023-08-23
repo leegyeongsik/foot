@@ -37,8 +37,8 @@ public class UserController {
 
     // 탈퇴
     @DeleteMapping("/profile")
-    public void deleteUser(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody PasswordRequestDto requestDto) {
-        userService.deleteUser(userDetails.getUser(), requestDto);
+    public void deleteUser(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+        userService.deleteUser(userDetails.getUser());
     }
 
     @PutMapping("/{userId}/foot")

@@ -84,15 +84,11 @@ public class UserService {
 
 
     // 회원 탈퇴
-    public void deleteUser(User user, PasswordRequestDto requestDto) {
+    public void deleteUser(User user) {
 
         User currentUser = userRepository.findByName(user.getName()).orElseThrow(
                 () -> new IllegalArgumentException("존재하지 않는 유저입니다.")
         );
-
-        if (!passwordEncoder.matches(requestDto.getPassword(), user.getPassword())) {
-            throw new IllegalArgumentException("비밀번호가 틀렸습니다.");
-        }
 
         userRepository.delete(currentUser);
     }
