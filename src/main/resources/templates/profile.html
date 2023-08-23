@@ -101,11 +101,23 @@
         }
 
         .register-link {
-            margin-top: 8px;
+            margin-left: 100px;
+            margin-top: 20px;
             font-size: 16px;
         }
 
         .register-link span {
+            color: #575dfb;
+            cursor: pointer;
+        }
+
+        .delete-user {
+            position: fixed;
+            bottom: 50px;
+            right: 50px;
+        }
+
+        .delete-user span {
             color: #575dfb;
             cursor: pointer;
         }
@@ -154,13 +166,32 @@
         <input type="text" id="cellphone" name="cellphone" th:value="${profile.getCellphone()}">
         <button onclick="onUpdating()" class="profile-button">Confirm</button>
         <div class="register-link">
-            <p>탈퇴하기 <span onclick="location.href='/view/login'">delete</span></p>
+            <span onclick="logoutUser()">Logout</span>
+        </div>
+        <div class="delete-user">
+            <p> 회원탈퇴 <span onclick="deleteUser()">Delete</span></p>
         </div>
     </div>
 </div>
+
 </body>
 <script>
 
+    // alert 창 표시를 위한 변수 선언
+    const Toast = Swal.mixin({
+        toast: true,
+        position: 'center-center',
+        showConfirmButton: false,
+        timer: 600,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+            toast.addEventListener('mouseenter', Swal.stopTimer)
+            toast.addEventListener('mouseleave', Swal.resumeTimer)
+        }
+    })
+
+
+    // 비밀번호 확인
     function onPassword() {
         let password = $('#old-password').val();
 
@@ -168,8 +199,8 @@
             type: "POST",
             url: `/api/users/profile/password`,
             contentType: "application/json",
-            data: JSON.stringify({ password: password }),
-            success: function(response, status, xhr) {
+            data: JSON.stringify({password: password}),
+            success: function (response, status, xhr) {
                 // 요청이 성공한 경우 처리할 로직을 작성합니다.
                 console.log("POST 요청이 성공했습니다.");
 
@@ -200,7 +231,7 @@
                     });
                 }
             },
-            error: function(xhr, status, error) {
+            error: function (xhr, status, error) {
                 // 요청이 실패한 경우 처리할 로직을 작성합니다.
                 console.log("POST 요청이 실패했습니다.");
                 // console.log(xhr.responseText);
@@ -216,6 +247,8 @@
             }
         });
     }
+
+    // 회원 정보 수정
     function onUpdating() {
         let email = $('#email').val();
         let name = $('#name').val();
@@ -224,14 +257,18 @@
         let cellphone = $('#cellphone').val();
         console.log(email, name, address, cellphone);
 
-
-
         $.ajax({
             type: "PUT",
             url: `/api/users/profile`,
             contentType: "application/json",
-            data: JSON.stringify({ newPassword : password, email: email, name : name, address: address, cellphone: cellphone}),
-            success: function(response) {
+            data: JSON.stringify({
+                newPassword: password,
+                email: email,
+                name: name,
+                address: address,
+                cellphone: cellphone
+            }),
+            success: function (response) {
                 Swal.fire({
                     icon: 'success',                         // Alert 타입
                     title: '변경 완료!'        // Alert 제목
@@ -241,13 +278,61 @@
                     }
                 });
             },
-            error: function(xhr, status, error) {
+            error: function (xhr, status, error) {
                 Swal.fire({
                     icon: 'error',                         // Alert 타입
                     title: '변경 실패!'        // Alert 제목
                 }).then((result) => {
                     if (result.isConfirmed) {
                         window.location.href = "http://localhost:8080/view/profile";
+                    }
+                });
+            }
+        });
+    }
+
+
+    // 로그아웃
+    function logoutUser() {
+        Cookies.remove('Authorization', {path: '/'});
+        Toast.fire({
+            icon: 'success',
+            title: '로그아웃을 성공하였습니다! \n 사이트 이용을 원하시면 로그인 부탁드립니다.'
+        }).then(function () {
+            window.location.href = "/view/login-page"
+        })
+    }
+
+    // 회원 탈퇴
+    function deleteUser() {
+        Swal.fire({
+            icon: 'warning',
+            title: '회원 탈퇴',
+            text: '정말로 탈퇴하시겠습니까?',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: '예, 탈퇴합니다',
+            cancelButtonText: '아니오, 취소합니다'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    type: "DELETE",
+                    url: "/api/users/profile",
+                    success: function (response) {
+                        Toast.fire({
+                            icon: 'success',
+                            title: '회원 탈퇴가 완료되었습니다.'
+                        }).then(function () {
+                            logoutUser(); // 탈퇴 후 자동 로그아웃
+                        });
+                    },
+                    error: function (xhr, status, error) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: '회원 탈퇴 실패',
+                            text: '회원 탈퇴를 처리하는 중에 문제가 발생했습니다.'
+                        });
                     }
                 });
             }
