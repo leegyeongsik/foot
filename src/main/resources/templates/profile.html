@@ -6,6 +6,7 @@
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"
             integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     <title>Profile Page</title>
     <style>
 
@@ -31,7 +32,7 @@
         }
 
         .profile-form {
-            max-width: 300px;
+            max-width: 400px;
             display: flex;
             flex-direction: column;
             align-items: flex-start;
@@ -48,6 +49,14 @@
             margin-bottom: 50px;
         }
 
+        .confirm-password h1 {
+            font-size: 32px;
+            font-weight: 700;
+            color: #575dfb;
+            margin-bottom: 50px;
+        }
+
+
         .profile-form input[type="email"],
         .profile-form input[type="password"],
         .profile-form input[type="text"] {
@@ -58,6 +67,14 @@
             border-radius: 16px;
         }
 
+        .confirm-password input {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            border: 1.5px solid #575dfb;
+            border-radius: 16px;
+
+        }
 
         .profile-button {
             width: 100%;
@@ -69,6 +86,19 @@
             color: #fff;
             font-weight: 700;
             cursor: pointer;
+        }
+
+        .password-btn {
+            width: 100%;
+            padding: 16px;
+            margin-top: 20px;
+            border: none;
+            border-radius: 16px;
+            background-color: #575dfb;
+            color: #fff;
+            font-weight: 700;
+            cursor: pointer;
+
         }
 
         .register-link {
@@ -111,7 +141,12 @@
 
 <body>
 <div class="profile-container">
-    <div class="profile-form">
+    <div class="confirm-password" id="passwordForm">
+        <h1>비밀번호 확인</h1>
+        <input type="password" name="old-password" placeholder="Password">
+        <button onclick="onPassword()" type="button" class="password-btn">Confirm</button>
+    </div>
+    <div class="profile-form" id="profileForm" style="display: none;">
         <h1>My Info</h1>
         <input type="email" name="email" th:value="${profile.getEmail()}">
         <input type="text" name="name" th:value="${profile.getName()}">
@@ -126,18 +161,77 @@
 </div>
 </body>
 <script>
+
+    function onPassword() {
+        let password = $('#old-password').val();
+
+        $.ajax({
+            type: "POST",
+            url: `/api/users/profile/password`,
+            contentType: "application/json",
+            data: JSON.stringify({ password: password }),
+            success: function(response, status, xhr) {
+                // 요청이 성공한 경우 처리할 로직을 작성합니다.
+                console.log("POST 요청이 성공했습니다.");
+
+                // 서버 응답이 성공적으로 왔을 때 처리
+                if (xhr.status === 200) {
+                    // 서버의 상태 코드가 200(성공)인 경우
+                    Swal.fire({
+                        icon: 'success',                         // Alert 타입
+                        title: '비밀번호 일치!',        // Alert 제목
+                        text: "회원정보 수정으로 이동합니다",
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            $('#passwordForm').hide();
+                            $('#profileForm').show();
+
+
+                        }
+                    });
+                } else {
+                    // 다른 상태 코드에 따라 처리
+                    Swal.fire({
+                        icon: 'error',                         // Alert 타입
+                        title: '비밀번호가 일치하지 않습니다'        // Alert 제목
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.href = "http://localhost:8080/";
+                        }
+                    });
+                }
+            },
+            error: function(xhr, status, error) {
+                // 요청이 실패한 경우 처리할 로직을 작성합니다.
+                console.log("POST 요청이 실패했습니다.");
+                // console.log(xhr.responseText);
+                // 다른 상태 코드에 따라 처리
+                Swal.fire({
+                    icon: 'error',                         // Alert 타입
+                    title: '비밀번호가 일치하지 않습니다'        // Alert 제목
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = "http://localhost:8080/";
+                    }
+                });
+            }
+        });
+    }
     function onUpdating() {
         let email = $('#email').val();
         let name = $('#name').val();
+        let password = $('#password').val();
         let address = $('#address').val();
         let cellphone = $('#cellphone').val();
         console.log(email, name, address, cellphone);
+
+
 
         $.ajax({
             type: "PUT",
             url: `/api/users/profile`,
             contentType: "application/json",
-            data: JSON.stringify({ email: email, name : name, address: address, cellphone: cellphone}),
+            data: JSON.stringify({ newPassword : password, email: email, name : name, address: address, cellphone: cellphone}),
             success: function(response) {
                 Swal.fire({
                     icon: 'success',                         // Alert 타입
