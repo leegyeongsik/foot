@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"
             integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     <title>Profile Page</title>
     <style>
 
@@ -143,16 +143,16 @@
 <div class="profile-container">
     <div class="confirm-password" id="passwordForm">
         <h1>비밀번호 확인</h1>
-        <input type="password" name="old-password" placeholder="Password">
+        <input type="password" id="old-password" name="old-password" placeholder="Password">
         <button onclick="onPassword()" type="button" class="password-btn">Confirm</button>
     </div>
     <div class="profile-form" id="profileForm" style="display: none;">
         <h1>My Info</h1>
-        <input type="email" name="email" th:value="${profile.getEmail()}">
-        <input type="text" name="name" th:value="${profile.getName()}">
-        <input type="password" name="password" placeholder="Password">
-        <input type="text" name="address" th:value="${profile.getAddress()}">
-        <input type="text" name="cellphone" th:value="${profile.getCellphone()}">
+        <input type="email" id="email" name="email" th:value="${profile.getEmail()}">
+        <input type="text" id="name" name="name" th:value="${profile.getName()}">
+        <input type="password" id="password" name="password" placeholder="Password">
+        <input type="text" id="address" name="address" th:value="${profile.getAddress()}">
+        <input type="text" id="cellphone" name="cellphone" th:value="${profile.getCellphone()}">
         <button onclick="onUpdating()" class="profile-button">Confirm</button>
         <div class="register-link">
             <p>탈퇴하기 <span onclick="location.href='/view/login'">delete</span></p>
