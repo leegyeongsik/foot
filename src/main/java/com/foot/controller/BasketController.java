@@ -1,6 +1,7 @@
 package com.foot.controller;
 
 import com.foot.dto.BasketRequestDto;
+import com.foot.security.UserDetailsImpl;
 import com.foot.service.BasketService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;

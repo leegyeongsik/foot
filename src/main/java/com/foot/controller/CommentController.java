@@ -2,6 +2,7 @@ package com.foot.controller;
 
 import com.foot.dto.ApiResponseDto;
 import com.foot.dto.CommentRequestDto;
+import com.foot.security.UserDetailsImpl;
 import com.foot.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

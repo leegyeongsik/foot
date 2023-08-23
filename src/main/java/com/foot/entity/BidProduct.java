@@ -53,10 +53,10 @@ public class BidProduct extends Timestamped{
      */
 
 
-    @OneToMany(mappedBy = "boardId", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "bidProduct", cascade = CascadeType.REMOVE)
     private List<Bid> bids = new ArrayList<>();
 
-    @OneToMany(mappedBy = "boardId", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "bidProduct", cascade = CascadeType.REMOVE)
     private List<BidProductFoot> bidProductFoots = new ArrayList<>();
 
     @ManyToOne
