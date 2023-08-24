@@ -1,9 +1,7 @@
 package com.foot.entity;
 
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.Columns;
 
 import java.util.ArrayList;
@@ -11,9 +9,11 @@ import java.util.List;
 
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor
+@EqualsAndHashCode
 @Table(name = "users")
-public class User extends Timestamped{
+public class User {
 
     /**
      * 컬럼 - 연관관계 컬럼을 제외한 컬럼을 정의합니다.
@@ -37,8 +37,8 @@ public class User extends Timestamped{
     @Column(name = "cellphone" , nullable = false)
     private String cellphone;
 
-    @Column(name = "userimage")
-    private String userimage;
+    @Column(name = "userImage")
+    private String userImage;
 
     @Enumerated(value = EnumType.STRING) // enum 타입을 데이터베이스에 저장할때 사용하는 애너테이션
     private UserRoleEnum role;
@@ -49,14 +49,14 @@ public class User extends Timestamped{
      * 생성자 - 약속된 형태로만 생성가능하도록 합니다.
      */
     @Builder
-    public User(String email , String name , String password , String address , String cellphone , UserRoleEnum role , String userimage){
+    public User(String email , String name , String password , String address , String cellphone , UserRoleEnum role , String userImage){
         this.email = email;
-        this.address =address;
-        this.cellphone =cellphone;
+        this.address = address;
+        this.cellphone = cellphone;
         this.name = name;
         this.password = password;
         this.role = role;
-        this.userimage = userimage;
+        this.userImage = userImage;
     }
 
     /**
