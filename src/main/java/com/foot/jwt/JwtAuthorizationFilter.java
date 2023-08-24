@@ -42,8 +42,6 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
             log.info(tokenValue);
             if (!jwtUtil.validateToken(tokenValue)) {
                 log.error("Token Error");
-                SecurityContextHolder.clearContext(); // Spring Security 컨텍스트 초기화
-                res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 return;
             }
 
