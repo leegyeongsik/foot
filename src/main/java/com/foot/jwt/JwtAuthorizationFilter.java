@@ -42,6 +42,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
             log.info(tokenValue);
             if (!jwtUtil.validateToken(tokenValue)) {
                 log.error("Token Error");
+                jwtUtil.deleteCookie(tokenValue, res); // 토큰 만료시 쿠키 삭제
                 return;
             }
 

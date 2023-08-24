@@ -21,15 +21,7 @@ public class AuthViewController {
 
     // 로그인 페이지
     @GetMapping("/login-page")
-    public String loginPage(HttpServletRequest request, HttpServletResponse response) {
-        Cookie[] cookies = request.getCookies(); // 모든 쿠키의 정보를 cookies에 저장
-        if(cookies != null){ // 쿠키가 한개라도 있으면 실행
-            for(int i=0; i< cookies.length; i++){
-                cookies[i].setMaxAge(0); // 유효시간을 0으로 설정
-                response.addCookie(cookies[i]); // 응답 헤더에 추가
-            }
-        }
-
+    public String loginPage() {
         return "login";
     }
 
