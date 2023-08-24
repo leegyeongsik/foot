@@ -1,5 +1,6 @@
 package com.foot.entity;
 
+import com.foot.dto.BrandRequestDto;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -20,7 +21,7 @@ public class Brand {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "name")
+    @Column(name = "name", unique = true)
     private String name;
 
 
@@ -40,6 +41,10 @@ public class Brand {
     private List<Product> products = new ArrayList<>();
     @OneToMany(mappedBy = "brand", cascade = CascadeType.REMOVE)
     private List<BidProduct> bidProducts = new ArrayList<>();
+
+    public void update(BrandRequestDto requestDto) {
+        this.name = requestDto.getName();
+    }
 
 
     /**

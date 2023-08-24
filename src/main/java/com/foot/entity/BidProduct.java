@@ -1,7 +1,7 @@
 package com.foot.entity;
 
+import com.foot.dto.BidProductRequestDto;
 import jakarta.persistence.*;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -22,7 +22,7 @@ public class BidProduct extends Timestamped{
     private Long id;
 
     @Column(name = "expiration_period" , nullable = false)
-    private LocalDateTime ExpirationPeriod;
+    private LocalDateTime expirationPeriod;
 
     @Column(name = "start_price" , nullable = false)
     private Long startPrice;
@@ -33,19 +33,21 @@ public class BidProduct extends Timestamped{
     @Column(name = "description")
     private String description;
 
+    @Column(name = "footpicture")
+    private String footpicture;
 
-    /**
-     * 생성자 - 약속된 형태로만 생성가능하도록 합니다.
-     */
-    @Builder
-    public BidProduct(LocalDateTime ExpirationPeriod , Long startPrice , String name , String description  ,User user , Brand brand){
-        this.ExpirationPeriod = ExpirationPeriod;
-        this.startPrice =startPrice;
-        this.name =name;
-        this.description = description;
-        this.user = user;
-        this.brand = brand;
-    }
+    @Column(name = "predictfootpicture")
+    private String predictfootpicture;
+
+    @Column(name = "footsize")
+    private Long footsize;
+
+    @Column(name = "feetsize")
+    private Long feetsize;
+
+    // status가 0이면 진행중 1이면 마감됨
+    @Column(name = "status")
+    private int status;
 
 
     /**
@@ -56,16 +58,45 @@ public class BidProduct extends Timestamped{
     @OneToMany(mappedBy = "bidProduct", cascade = CascadeType.REMOVE)
     private List<Bid> bids = new ArrayList<>();
 
-    @OneToMany(mappedBy = "bidProduct", cascade = CascadeType.REMOVE)
-    private List<BidProductFoot> bidProductFoots = new ArrayList<>();
-
     @ManyToOne
-    @JoinColumn(name = "userId", nullable = false)
+    @JoinColumn(name = "userId")
     private User user;
 
     @ManyToOne
     @JoinColumn(name = "brandId", nullable = false)
     private Brand brand;
+
+
+    /**
+     * 생성자 - 약속된 형태로만 생성가능하도록 합니다.
+     */
+
+    public BidProduct(BidProductRequestDto requestDto, Brand brand) {
+        this.expirationPeriod = requestDto.getExpirationPeriod();
+        this.startPrice = requestDto.getStartPrice();
+        this.name = requestDto.getName();
+        this.description = requestDto.getDescription();
+        this.footpicture = requestDto.getFootPicture();
+        this.footsize = requestDto.getFootSize();
+        this.feetsize = requestDto.getFeetSize();
+        this.brand = brand;
+        this.status = 0;
+    }
+
+    public void update(BidProductRequestDto requestDto) {
+        this.expirationPeriod = requestDto.getExpirationPeriod();
+        this.startPrice = requestDto.getStartPrice();
+        this.name = requestDto.getName();
+        this.description = requestDto.getDescription();
+        this.footpicture = requestDto.getFootPicture();
+        this.footsize = requestDto.getFootSize();
+        this.feetsize = requestDto.getFeetSize();
+    }
+
+    public void changeToSell() {
+        this.status = 1;
+    }
+
 
     /**
      * 연관관계 편의 메소드 - 반대쪽에는 연관관계 편의 메소드가 없도록 주의합니다.

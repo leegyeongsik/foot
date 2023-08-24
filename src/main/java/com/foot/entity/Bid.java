@@ -1,5 +1,6 @@
 package com.foot.entity;
 
+import com.foot.dto.BidRequestDto;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -21,26 +22,28 @@ public class Bid extends Timestamped{
     @Column(name = "bidprice" , nullable = false)
     private Long bidPrice;
 
-    /**
-     * 생성자 - 약속된 형태로만 생성가능하도록 합니다.
-     */
-    @Builder
-    public Bid(Long bidPrice , User user , BidProduct bidProduct){
-        this.bidPrice = bidPrice;
-        this.user = user;
-        this.bidProduct = bidProduct;
-    }
+
     /**
      * 연관관계 - Foreign Key 값을 따로 컬럼으로 정의하지 않고 연관 관계로 정의합니다.
      */
     @ManyToOne
-    @JoinColumn(name = "userId", nullable = false)
+    @JoinColumn(name = "userId")
     private User user;
 
     @ManyToOne
     @JoinColumn(name = "bidproductId", nullable = false)
     private BidProduct bidProduct;
 
+
+
+    /**
+     * 생성자 - 약속된 형태로만 생성가능하도록 합니다.
+     */
+
+    public Bid(BidRequestDto requestDto, BidProduct bidProduct) {
+        bidPrice = requestDto.getBidPrice();
+        this.bidProduct = bidProduct;
+    }
 
     /**
      * 연관관계 편의 메소드 - 반대쪽에는 연관관계 편의 메소드가 없도록 주의합니다.
