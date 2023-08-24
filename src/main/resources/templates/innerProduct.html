@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <link rel="shortcut icon" href="#">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <script src="https://code.jquery.com/jquery-3.7.0.min.js"
+          integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g="
+          crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+  <!--  <link rel="stylesheet" href="/css/main-page.css">-->
+  <title>foot</title>
+  <style>
+    .Header {
+      width: 1850px;
+      height: 39.10px;
+      position: absolute;
+      left: 0;
+      top: 0;
+      background-color: #ffffff;
+      display: flex;
+      align-items: center;
+      padding: 0 20px;
+    }
+
+    .Logo {
+      color: black;
+      font-size: 24px;
+      font-family: Poppins, sans-serif;
+      font-weight: 900;
+      margin-right: 0px;
+      margin-top: 70px; /* 로고와 상단 바 사이의 간격 조정 */
+
+    }
+
+    .NavList {
+      position: absolute;
+      left: 516px;
+      top: 23px;
+      display: flex;
+      gap: 180px;
+    }
+
+    .NavItem {
+      padding: 25px 0;
+      text-align: center;
+      color: #EE312F;
+      font-size: 23.71px;
+      font-family: Inter, sans-serif;
+      font-weight: 400;
+      text-transform: uppercase;
+      line-height: 1.1;
+      word-wrap: break-word;
+      cursor: pointer;
+    }
+
+    .Sidebar {
+      position: absolute;
+      left: 0;
+      top: 120px;
+      width: 200px;
+      background-color: #ffffff;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .SidebarTitle {
+      font-size: 18px;
+      font-weight: bold;
+      color: #EE312F;
+      margin-bottom: 5px;
+    }
+
+    .SortText {
+      font-size: 14px;
+      color: #999;
+      margin-left: 5px;
+    }
+
+    .SortButtons {
+      margin-top: 10px;
+      display: none;
+    }
+
+    .SortIcon {
+      font-size: 14px;
+      color: #EE312F;
+      transition: transform 0.2s ease-in-out;
+    }
+
+    .SortIcon.opened {
+      transform: rotate(180deg);
+    }
+
+
+    .SidebarItem {
+      padding: 10px 0;
+      font-size: 18px;
+      color: #EE312F;
+      cursor: pointer;
+    }
+
+    .SearchBox {
+      width: 200px;
+      padding: 0px;
+      background-color: #fff;
+      display: flex;
+      flex-direction: column;
+      margin-top: 20px;
+    }
+
+    .SearchContainer {
+      display: flex;
+      align-items: center;
+    }
+
+    .SearchBox input[type="text"] {
+      flex: 1;
+      padding: 8px;
+      border: 1px solid #000;
+      border-radius: 4px;
+      margin-right: 10px;
+    }
+
+    .SearchBox button {
+      height: 35px;
+      width: 25px;
+      padding: 8px 16px;
+      background-color: #ffffff;
+      color: #ffffff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .DivOLayouts {
+      /* 원하는 크기와 위치 값으로 조정하세요 */
+      display: grid;
+      width: 1300px;
+      height: 650px;
+      left: 420px;
+      top: 200px;
+      position: absolute;
+
+    }
+
+    .DivOLayouts .item {
+      background-color: #fff;
+      border: 1px solid #fff;
+      aspect-ratio: 1;
+      border-radius: 10px;
+    }
+
+    .Link {
+      /* 원하는 위치 값으로 조정하세요 */
+      margin-right: 20px;
+      margin-bottom: 20px;
+      position: relative;
+      display: inline-flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: flex-start;
+    }
+
+    .item img {
+      width: 395px;
+      height: 320px;
+      border-radius: 3%;
+    }
+
+
+    .ItemDetails hr {
+      margin: 0;
+    }
+
+    .DivCThumbnailInfo {
+      position: relative;
+      top: 18px;
+    }
+
+    .Heading3 {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .Barand1,
+    .PCThumbnailPrice {
+      margin: 5px; /* 브랜드 이름과 가격의 여백 조절 */
+      color: #EE312F;
+    }
+
+    .Laangels {
+      margin-left: 5px;
+      color: #EE312F;
+    }
+
+    :root {
+      accent-color: #EE312F;
+    }
+
+    input[type="checkbox"] {
+
+      width: 15px; /*Desired width*/
+
+      height: 15px; /*Desired height*/
+
+      cursor: pointer;
+
+    }
+    .item-content {
+      display: flex;
+      align-items: center;
+    }
+
+    .item-text {
+      margin-left: 20px; /* Adjust the spacing between image and text */
+      font-size: 18px; /* Customize text font size */
+      color: #333; /* Customize text color */
+    }
+    /* .rectangle {
+    width: 100%;
+    height: 100%;
+    background-color: gray;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+  } */
+    .DivOLayout {
+      /* 원하는 크기와 위치 값으로 조정하세요 */
+      display: grid;
+      grid-template-columns: 103px 103px 103px 103px 103px;
+      gap: 30px;
+      position: relative;
+      top: 50px;
+    }
+
+    .DivOLayout .item {
+      background-color: #fff;
+      border: 1px solid #fff;
+      aspect-ratio: 1;
+      border-radius: 10px;
+    }
+
+
+    .DivOLayoutss {
+      /* 원하는 크기와 위치 값으로 조정하세요 */
+      display: grid;
+      grid-template-columns: 103px 103px 103px 103px 103px;
+      gap: 30px;
+      position: relative;
+      top: 80px;
+
+    }
+    .DivOLayoutss .item {
+      border: 1px solid #fff;
+      background-color: #ffffff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .DivOLayoutss .Label {
+      width: 96px;
+      height: 96px;
+      background: #F7F7F7;
+      box-shadow: 0px 0px 0px 1px #E5E5E5;
+      border-radius: 4px;
+      overflow: hidden;
+      color: #111111;
+      font-size: 16px;
+      font-family: Noto Sans KR;
+      font-weight: 350;
+      line-height: 28px;
+      word-wrap: break-word;
+      display: flex;
+      justify-content: center; align-items: center;
+    }
+    .Buttons {
+      position: relative;
+      top: 120px;
+      width: 418px;
+      height: 67px;
+      padding-top: 19.50px;
+      padding-left: 125.63px;
+      padding-right: 125.37px;
+      padding-bottom: 19.50px;
+      background: #111111;
+      border-radius: 30px;
+      justify-content: center;
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      padding-bottom: 19.50px;
+    }
+
+    .Buttons .ButtonText {
+      text-align: center;
+      color: white;
+      font-size: 16px;
+      font-family: Noto Sans KR;
+      font-weight: 500;
+      line-height: 28px;
+      word-wrap: break-word;
+    }
+    .wishbutton{
+      position: relative;
+      top: 140px;
+      width: 418px;
+      height: 67px;
+      padding-top: 19.50px;
+      padding-left: 125.63px;
+      padding-right: 125.37px;
+      padding-bottom: 19.50px;
+      background: #E6E1E5;
+      border-radius: 30px;
+      justify-content: center;
+      display: inline-flex;
+      align-items: center;
+      padding-bottom: 19.50px;
+    }
+    .wishbutton .ButtonText {
+      text-align: center;
+      color: #000;
+      font-size: 16px;
+      font-family: Noto Sans KR;
+      font-weight: 500;
+      line-height: 28px;
+      word-wrap: break-word;
+    }
+    .Footer {
+      width: 100%;
+      padding: 20px;
+      background-color: #fff;
+      text-align: center;
+      font-size: 14px;
+      position: absolute;
+      bottom: 0;
+    }
+
+  </style>
+
+  </style>
+</head>
+<body>
+<div class="HomePage" style="width: 1800px; height: 1200px; position: relative; background: white; border: 0.50px">
+
+  <div class="Header">
+    <div class="Logo">
+      <img src="owl_image.png" alt="Owl Image" style="height: 30px; width: auto; margin-right: 10px;">
+      foot
+    </div>
+    <div class="NavList">
+      <div class="NavItem" id = "shoes_page">shoes</div>
+      <div class="NavItem">Auction</div>
+      <div class="NavItem">favourite</div>
+      <div class="NavItem">signup</div>
+      <div class="NavItem">signin</div>
+    </div>
+  </div>
+
+  <div class="DivOLayouts" style="display: flex;flex-direction: row; ">
+    <div class="image-container" style="flex: 1; "> <!-- 신발 이미지 -->
+    </div>
+
+    <div class="text-container" style="flex: 1; padding: 20px; text-align: left; display: flex; flex-direction: column; line-height: 0.5;"> <!-- 신발 정보  -->
+      <div class="temp-info"></div>
+      <div class="main-content">
+      </div>
+
+
+      <div class="DivOLayout"> <!-- 신발 색 사진 -->
+      </div>
+
+      <div class="TextContainers" style="position: relative; top: 70px;">  <!-- 제목 -->
+        <h2>사이즈 선택</h2>
+      </div>
+
+      <div class="DivOLayoutss"> <!-- 신발 사이즈 -->
+      </div>
+
+      <div class="Buttons"> <!-- 버튼 -->
+        <div class="ButtonText">로그인 후 구매하기</div>
+      </div>
+      <div class="wishbutton"> <!-- 위시리스트 -->
+        <div class="ButtonText">위시리스트</div>
+        <div class="check_wrap" style="left: 5px;">
+          <input type="checkbox" />
+          <label htmlFor="check_btn"></label>
+        </div>
+      </div>
+
+      <div class="TextContainer" style="position: relative; top: 160px; line-height: 1.5;"> <!-- 설명 -->
+      </div>
+
+
+      <details style="position: relative; top: 180px;"> <!-- 댓글 -->
+        <summary>
+          review
+        </summary>
+        <p>
+          text
+        </p>
+
+      </details>
+
+      <details style="position: relative; top: 220px;"> <!-- 사이즈 비교 -->
+        <summary>
+          Shoses size confirm
+        </summary>
+        <p>
+          two picture
+        </p>
+      </details>
+
+
+      <div class="Footer" style="position: relative; top: 250px ;width: 100%;">
+      </div>
+      <p id="targetIdParagraph" style="display: none;">targetId: <span th:text="${productId}"></span></p>
+
+    </div>
+
+
+  </div>
+
+</div>
+
+</body>
+<script>
+  var productId = document.getElementById('targetIdParagraph').querySelector('span').innerText;
+  const itemDict = {};
+
+  $(document).ready(function () {
+    $.ajax({
+      url: `/api/product/${productId}`,
+      type: 'GET',
+      contentType: 'application/json',
+      headers: {
+        // 'Authorization': Cookies.get('Authorization') // 클라이언트 쿠키의 값을 전달
+      },
+      success: function (response) {
+        if (response) {
+          // console.log(response)
+          var Products = `
+                              <img src=${response.productResponseDto.modelPicture} alt="Your Image Alt Text" style="max-width: 100%; height: auto; border-radius: 3%;" />
+`
+          $('.image-container').append(Products);
+          var Productsss=`
+                          <hgroup>
+                                <p style="color: #EE312F;">나이키</p>
+                                <h2>${response.productResponseDto.modelName}</h2>
+                              </hgroup>`
+          var Productss=`<p>${response.productResponseDto.price}</p>`
+
+          $('.temp-info').append(Productsss);
+          $('.main-content').append(Productss);
+          var text=`<div class="1"
+             style="color: #111111; font-size: 16px; font-family: Noto Sans KR; font-weight: 350; line-height: 28px; word-wrap: break-word">
+          ${response.productResponseDto.modelDescription}
+        </div>`
+          $('.TextContainer').append(text);
+
+
+          var list = response.productColors
+
+          for (var i = 0; i < list.length; i++) {
+            var Products = `
+                              <div class="item" style="border: 1px solid #fff; background-color: #ffffff;">
+                                <img class ="click_img_color" src=${list[i].colorImg} id=${list[i].colorId} style="width:96px; height:96px; border-radius: 3%;" >
+                              </div>
+
+                           `
+            const item = list[i]
+            itemDict[item.colorId] = item;
+            $('.DivOLayout').append(Products);
+          }
+        }
+      },
+      error: function () {
+        console.log("실패")
+      }
+    })
+
+    $(document).on('click',"img[class='click_img_color']" , function (e) { // 신발 누르면 해당 사이즈 출력
+      e.preventDefault();
+      var tagId = e.target.id
+      // console.log(itemDict[tagId]);
+
+      lists=itemDict[tagId].productSizeResponseDtos;
+      // console.log(lists)
+      $('.DivOLayoutss').empty();
+
+      for (let i = 0; i < lists.length; i++) {
+        var size = `<div class="item" style="border: 1px solid #fff; background-color: #ffffff;">
+                        <div class="Label">
+                         <div>${lists[i].size}</div>
+                         </div>
+                        </div>`
+        $('.DivOLayoutss').append(size);
+      }
+    })
+    $(document).on('click',"div[id='shoes_page']" , function (e) { // 신발 누르면 해당 사이즈 출력
+      window.location.href=`http://localhost:8080`
+
+    })
+
+
+    // 해야할거 장바구니 , 댓글 , 각종 헤드 연결 , Shoses_size_confirm 데이터 주기 , 장바구니에 담을때 해당 신발 id값 으로 찾아서 담아주기
+    // 나중에 jwt 쿠키 있는지 확인하고 로그인 후 구매하기 -> 장바구니 담기
+
+  })
+</script>
+</html>

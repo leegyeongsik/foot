@@ -5,11 +5,14 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Getter
 @NoArgsConstructor
-@Table(name = "productsales")
-public class ProductSale extends Timestamped {
+@Table(name = "productcolorImg")
+public class ProductColorImg {
     /**
      * 컬럼 - 연관관계 컬럼을 제외한 컬럼을 정의합니다.
      */
@@ -17,33 +20,34 @@ public class ProductSale extends Timestamped {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "discountrate")
-    private String discountRate;
-    @Column(name = "discountprice")
-    private Long discountPrice;
-    // 세일 기간이 들어갈수있음
+    @Column(name = "colorimg")
+    private String colorimg;
+    @Column(name = "colorname")
+    private String colorname;
+
+    @Builder
+    public ProductColorImg(String colorimg,String colorname ,Product product ){
+        this.colorimg = colorimg;
+        this.colorname =colorname;
+        this.product = product;
+    }
 
     /**
      * 생성자 - 약속된 형태로만 생성가능하도록 합니다.
      */
-    @Builder
-    public ProductSale(String discountRate ,  Long discountPrice,  Product product , User user){
-        this.discountPrice = discountPrice;
-        this.discountRate = discountRate;
-        this.product = product;
-        this.user = user;
-    }
+
 
     /**
      * 연관관계 - Foreign Key 값을 따로 컬럼으로 정의하지 않고 연관 관계로 정의합니다.
      */
-    @ManyToOne // 원투원으로 어떻게해줘야할지 공부
+
+    @OneToMany(mappedBy = "productColorImg", cascade = CascadeType.REMOVE)
+    private List<ProductColor> productColors = new ArrayList<>();
+
+    @ManyToOne
     @JoinColumn(name = "productId", nullable = false)
     private Product product;
 
-    @ManyToOne
-    @JoinColumn(name = "userId", nullable = false)
-    private User user;
 
     /**
      * 연관관계 편의 메소드 - 반대쪽에는 연관관계 편의 메소드가 없도록 주의합니다.

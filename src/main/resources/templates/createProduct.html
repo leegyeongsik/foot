@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+  <head>
+    <link rel="icon" href="https://cdn-icons-png.flaticon.com/128/2675/2675848.png"/>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
+
+<!--    <link rel="stylesheet" href="/css/board-page.css">-->
+    <title>Board</title>
+  </head>
+    <style>
+        .Header {
+            width: 1850px;
+            height: 39.10px;
+            position: absolute;
+            left: 0;
+            top: 0;
+            background-color: #ffffff;
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        .Logo {
+            color: black;
+            font-size: 24px;
+            font-family: Poppins, sans-serif;
+            font-weight: 900;
+            margin-right: 0px;
+            margin-top: 70px; /* 로고와 상단 바 사이의 간격 조정 */
+
+        }
+
+        .NavList {
+            position: absolute;
+            left: 516px;
+            top: 23px;
+            display: flex;
+            gap: 180px;
+        }
+
+        .NavItem {
+            padding: 25px 0;
+            text-align: center;
+            color: #EE312F;
+            font-size: 23.71px;
+            font-family: Inter, sans-serif;
+            font-weight: 400;
+            text-transform: uppercase;
+            line-height: 1.1;
+            word-wrap: break-word;
+            cursor: pointer;
+        }
+
+        .Sidebar {
+            position: absolute;
+            left: 0;
+            top: 120px;
+            width: 200px;
+            background-color: #ffffff;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .SidebarTitle {
+            font-size: 18px;
+            font-weight: bold;
+            color: #EE312F;
+            margin-bottom: 5px;
+        }
+
+        .SortText {
+            font-size: 14px;
+            color: #999;
+            margin-left: 5px;
+        }
+
+        .SortButtons {
+            margin-top: 10px;
+            display: none;
+        }
+
+        .SortIcon {
+            font-size: 14px;
+            color: #EE312F;
+            transition: transform 0.2s ease-in-out;
+        }
+
+        .SortIcon.opened {
+            transform: rotate(180deg);
+        }
+
+
+        .SidebarItem {
+            padding: 10px 0;
+            font-size: 18px;
+            color: #EE312F;
+            cursor: pointer;
+        }
+
+        .SearchBox {
+            width: 200px;
+            padding: 0px;
+            background-color: #fff;
+            display: flex;
+            flex-direction: column;
+            margin-top: 20px;
+        }
+
+        .SearchContainer {
+            display: flex;
+            align-items: center;
+        }
+
+        .SearchBox input[type="text"] {
+            flex: 1;
+            padding: 8px;
+            border: 1px solid #000;
+            border-radius: 4px;
+            margin-right: 10px;
+        }
+
+        .SearchBox button {
+            height: 35px;
+            width: 25px;
+            padding: 8px 16px;
+            background-color: #ffffff;
+            color: #ffffff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .DivOLayouts {
+            /* 원하는 크기와 위치 값으로 조정하세요 */
+            display: grid;
+            width: 1300px;
+            height: 650px;
+            left: 420px;
+            top: 200px;
+            position: absolute;
+
+        }
+
+        .DivOLayouts .item {
+            background-color: #fff;
+            border: 1px solid #fff;
+            aspect-ratio: 1;
+            border-radius: 10px;
+        }
+
+        .Link {
+            /* 원하는 위치 값으로 조정하세요 */
+            margin-right: 20px;
+            margin-bottom: 20px;
+            position: relative;
+            display: inline-flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: flex-start;
+        }
+
+        .item img {
+            width: 395px;
+            height: 320px;
+            border-radius: 3%;
+        }
+
+
+        .ItemDetails hr {
+            margin: 0;
+        }
+
+        .DivCThumbnailInfo {
+            position: relative;
+            top: 18px;
+        }
+
+        .Heading3 {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .Barand1,
+        .PCThumbnailPrice {
+            margin: 5px; /* 브랜드 이름과 가격의 여백 조절 */
+            color: #EE312F;
+        }
+
+        .Laangels {
+            margin-left: 5px;
+            color: #EE312F;
+        }
+
+        :root {
+            accent-color: #EE312F;
+        }
+
+        input[type="checkbox"] {
+
+            width: 15px; /*Desired width*/
+
+            height: 15px; /*Desired height*/
+
+            cursor: pointer;
+
+        }
+
+        .item-content {
+            display: flex;
+            align-items: center;
+        }
+
+        .item-text {
+            margin-left: 20px; /* Adjust the spacing between image and text */
+            font-size: 18px; /* Customize text font size */
+            color: #333; /* Customize text color */
+        }
+
+        /* .rectangle {
+        width: 100%;
+        height: 100%;
+        background-color: gray;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+      } */
+        .DivOLayout {
+            /* 원하는 크기와 위치 값으로 조정하세요 */
+            display: grid;
+            grid-template-columns: 103px 103px 103px 103px 103px;
+            gap: 30px;
+            position: relative;
+            top: 50px;
+        }
+
+        .DivOLayout .item {
+            background-color: #fff;
+            border: 1px solid #fff;
+            aspect-ratio: 1;
+            border-radius: 10px;
+        }
+
+
+        .DivOLayoutss {
+            /* 원하는 크기와 위치 값으로 조정하세요 */
+            display: grid;
+            grid-template-columns: 103px 103px 103px 103px 103px;
+            gap: 30px;
+            position: relative;
+            top: 80px;
+
+        }
+
+        .DivOLayoutss .item {
+            border: 1px solid #fff;
+            background-color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .DivOLayoutss .Label {
+            width: 96px;
+            height: 96px;
+            background: #F7F7F7;
+            box-shadow: 0px 0px 0px 1px #E5E5E5;
+            border-radius: 4px;
+            overflow: hidden;
+            color: #111111;
+            font-size: 16px;
+            font-family: Noto Sans KR;
+            font-weight: 350;
+            line-height: 28px;
+            word-wrap: break-word;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .Buttons {
+            position: relative;
+            top: 120px;
+            width: 418px;
+            height: 67px;
+            padding-top: 19.50px;
+            padding-left: 125.63px;
+            padding-right: 125.37px;
+            padding-bottom: 19.50px;
+            background: #111111;
+            border-radius: 30px;
+            justify-content: center;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            padding-bottom: 19.50px;
+        }
+
+        .Buttons .ButtonText {
+            text-align: center;
+            color: white;
+            font-size: 16px;
+            font-family: Noto Sans KR;
+            font-weight: 500;
+            line-height: 28px;
+            word-wrap: break-word;
+        }
+
+        .wishbutton {
+            position: relative;
+            top: 140px;
+            width: 418px;
+            height: 67px;
+            padding-top: 19.50px;
+            padding-left: 125.63px;
+            padding-right: 125.37px;
+            padding-bottom: 19.50px;
+            background: #E6E1E5;
+            border-radius: 30px;
+            justify-content: center;
+            display: inline-flex;
+            align-items: center;
+            padding-bottom: 19.50px;
+        }
+
+        .wishbutton .ButtonText {
+            text-align: center;
+            color: #000;
+            font-size: 16px;
+            font-family: Noto Sans KR;
+            font-weight: 500;
+            line-height: 28px;
+            word-wrap: break-word;
+        }
+
+        .Footer {
+            width: 100%;
+            padding: 20px;
+            background-color: #fff;
+            text-align: center;
+            font-size: 14px;
+            position: absolute;
+            bottom: 0;
+        }
+
+        .button {
+            display: flex;
+            justify-content: center;
+        }
+
+        label {
+            cursor: pointer;
+            font-size: 1em;
+        }
+
+        #root {
+            width: 100%;
+            margin: 0 auto;
+            max-width: 800px;
+        }
+
+        .title {
+            text-align: center;
+        }
+
+        .contents {
+            display: flex;
+            flex-direction: row;
+            margin-top: 30px;
+        }
+
+        .contents .upload-box {
+            width: 100%;
+            margin-right: 30px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .contents .upload-box .drag-file {
+            position: relative;
+            width: 100%;
+            height: 360px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            border: 3px dashed #dbdbdb;
+        }
+
+        .contents .upload-box .drag-file.highlight {
+            border: 3px dashed red;
+        }
+
+        .contents .upload-box .drag-file .image {
+            width: 40px;
+        }
+
+        .contents .upload-box .drag-file .message {
+            margin-bottom: 0;
+        }
+
+        .contents .upload-box .drag-file .preview {
+            display: none;
+            position: absolute;
+            left: 0;
+            height: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .contents .upload-box .file-label {
+            margin-top: 30px;
+            background-color: #5b975b;
+            color: #fff;
+            text-align: center;
+            padding: 10px 0;
+            width: 65%;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .contents .upload-box .file {
+            display: none;
+        }
+
+        @media (max-width: 700px) {
+            .contents {
+                display: flex;
+                flex-direction: column;
+                margin-top: 30px;
+            }
+
+            .contents .upload-box {
+                width: 100%;
+                box-sizing: border-box;
+                margin-right: 0;
+            }
+
+            .contents .upload-box .drag-file {
+                height: 150px;
+            }
+
+            .contents .files {
+                width: 100%;
+                box-sizing: border-box;
+                margin-right: 0;
+                overflow: initial;
+            }
+        }
+
+        #boxWrap {
+            width: auto;
+            height: auto;
+            display: grid;
+            grid-template-columns: 103px;
+            gap: 2px;
+            position: relative;
+            top: 80px;
+        }
+
+        /* #boxWrap : after {
+          content: "";
+          display: block;
+          clear: both;
+        } */
+
+        /* #boxWrap p+p{margin-left:5px;} */
+
+
+        .btnWrap {
+            width: 100%;
+        }
+
+        .colors {
+            position: relative;
+            top: 220px;
+        }
+
+        .button-container {
+            position: relative;
+            top: 240px;
+        }
+
+        .color-box {
+            margin-top: 50px; /* 원하는 간격 조정 */
+            display: flex;
+            align-items: center;
+        }
+
+
+        .file-input {
+            margin-right: 10px;
+        }
+
+        .text-input {
+            flex: 1;
+        }
+
+        .add-color-button {
+            background-color: #007bff;
+            border-color: #007bff;
+            color: #fff;
+            border-radius: 10px;
+            padding: 8px 12px;
+            cursor: pointer;
+        }
+
+        .add-color-button:hover {
+            background-color: #0056b3;
+            border-color: #0056b3;
+        }
+
+    </style>
+
+    </style>
+</head>
+<body>
+<div class="HomePage" style="width: 1800px; height: 1200px; position: relative; background: white; border: 0.50px">
+
+    <div class="Header">
+        <div class="Logo">
+            <img src="owl_image.png" alt="Owl Image" style="height: 30px; width: auto; margin-right: 10px;">
+            foot
+        </div>
+        <div class="NavList">
+            <div class="NavItem">shoes</div>
+            <div class="NavItem">Auction</div>
+            <div class="NavItem">favourite</div>
+            <div class="NavItem">signup</div>
+            <div class="NavItem">signin</div>
+        </div>
+    </div>
+
+    <div class="DivOLayouts" style="display: flex;flex-direction: row; ">
+        <div class="image-container" style="flex: 1; "> <!-- 신발 이미지 -->
+            <div id="root">
+                <div class="contents">
+                    <div class="upload-box">
+                        <div id="drop-file" class="drag-file">
+                            <img src="https://img.icons8.com/pastel-glyph/2x/image-file.png" alt="파일 아이콘" class="image">
+                            <p class="message">Drag files to upload</p>
+                            <img src="" alt="미리보기 이미지" class="preview">
+                        </div>
+                        <label class="file-label" for="chooseFile">Choose File</label>
+                        <input class="file" id="chooseFile" type="file" onchange="dropFile.handleFiles(this.files)"
+                               accept="image/png, image/jpeg, image/gif"/>
+
+                    </div>
+                </div>
+
+                <p style="position: relative; top: 40px;">브랜드명 <input type="text" id="mark27" placeholder="Enter name"/>
+                </p>
+                <p style="position: relative; top: 55px;">모델명 <input type="text" id="mark25" placeholder="Enter name"/>
+                </p>
+                <p style="position: relative; top: 70px;">모델설명 <input type="text" id="mark28" placeholder="Enter name"/>
+                </p>
+
+
+                <div class="main-content">
+                    <p style="position: relative; top: 85px;">가격 <input type="text" id="mark29"
+                                                                        placeholder="Enter name"/></p>
+                    <p style="position: relative; top: 90px;">총 재고 <input type="text" id="mark26"
+                                                                          placeholder="Enter name"/></p>
+
+                </div>
+            </div>
+            <form id="uploadForm" style="position: relative; left: 500px; top: 0px;">
+                <button type="button" id="uploadBtn">상품 생성</button>
+            </form>
+        </div>
+
+        <div class="text-container"
+             style="flex: 1; padding: 20px; text-align: left; display: flex; flex-direction: column; line-height: 0.5;">
+            <!-- 신발 정보  -->
+
+            <div class="btnWrap">
+                <button class="buttons">사이즈 추가</button>
+            </div>
+
+            <!-- 박스 추가되는 영역 -->
+            <div id="boxWrap">
+            </div>
+
+            <div class="button-container">
+                <button class="add-color-button buttonss">컬러 추가</button>
+                <button class="add_color" style="position: relative; left: 50px;">확정</button>
+            </div>
+            <div class="colors">
+                <!-- 컬러 박스 추가되는 영역 -->
+            </div>
+
+            <div class="Footer" style="position: relative; top: 250px ;width: 100%;">
+            </div>
+        </div>
+
+
+    </div>
+
+</div>
+
+</body>
+<script>
+    const ProductFootSize = [];
+    const ProductFeetSize = [];
+    const ProductAmount = [];
+    const ProductSize = [];
+
+    const ProductColorImg = [];
+    const ProductColor = [];
+
+    const ProductColorOfSize = {};
+    const ProductColorOfAmount = {};
+
+    $(document).ready(function () {
+      var i = 0;
+
+      $(".buttons").click(function () {
+        var newSizes = document.createElement("div");
+        newSizes.className = "Sizes";
+        newSizes.id = `Sizes_${i}`;
+        newSizes.innerHTML = `
+            <div style="width: 600px; height: 54px; background: #FAFAFA; border-radius: 37px; display: flex; align-items: center; padding: 0 20px; box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1); position: relative;">
+                <div  style="flex: 1; margin-right: 25px;">
+                    <input id = "size_id_${i}" type="text" placeholder="사이즈" style="width: 100%; padding: 10px; border: none; background-color: #F0F0F0; border-radius: 10px;">
+                </div>
+                <div  style="flex: 1; margin-right: 25px;">
+                    <input id =  "amount_id_${i}" type="text" placeholder="재고" style="width: 100%; padding: 10px; border: none; background-color: #F0F0F0; border-radius: 10px;">
+                </div>
+                <div  style="flex: 1; margin-right: 25px;">
+                    <input id = "foot_id_${i}" type="text" placeholder="신발길이" style="width: 100%; padding: 10px; border: none; background-color: #F0F0F0; border-radius: 10px;">
+                </div>
+                <div  style="flex: 1;">
+                    <input id = "feet_id_${i}" type="text" placeholder="발볼길이" style="width: 100%; padding: 10px; border: none; background-color: #F0F0F0; border-radius: 10px;">
+                </div>
+                <button id="sizeButton_${i}" style="position: relative; left: 22px; top: 35%; transform: translateY(-50%); padding: 8px 12px; background-color: #007BFF; color: white; border: none; border-radius: 10px; cursor: pointer;">컬러</button>
+                <button class = "btnsssss" id= "${i}" style="position: relative; left: 23px; top: 35%; transform: translateY(-50%); padding: 8px 12px; background-color: #007BFF; color: white; border: none; border-radius: 10px; cursor: pointer;">확정</button>
+            </div>
+        `;
+
+        var boxWrap = document.getElementById("boxWrap");
+        boxWrap.appendChild(newSizes); // 새로운 영역을 맨 아래에 추가
+
+        i++;
+      });
+
+
+      $(document).on('click', "button[id^='sizeButton']", function (e) {
+        e.preventDefault();
+        var tagId = e.target.id;
+        var sizeButtonIndex = tagId.split('_')[1];
+        const clickedButton = document.getElementById(`sizeButton_${sizeButtonIndex}`);
+        const rectangle2389 = clickedButton.closest(".Sizes");
+
+        const newDiv = document.createElement("div");
+        newDiv.className = "Rectangle23890";
+        newDiv.innerHTML = `
+            <input type="text" placeholder="컬러이름" style="flex: 0.5; padding: 8px; border: 1px solid #ccc; border-radius: 16px; outline: none;">
+            <input type="text" placeholder="재고" style="flex: 0.5; padding: 10px; background-color: lightgray; border-radius: 16px;">
+        `;
+
+        newDiv.style.cssText = "width: 600px; background: #FAFAFA; border-radius: 37px; display: flex; align-items: center; padding: 10px; box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1); position: relative;";
+
+        rectangle2389.appendChild(newDiv); // 새로운 영역을 클릭한 영역에 추가
+      });
+
+
+      $(function () {
+
+        $('#uploadBtn').on('click', function () {
+          uploadFile();
+        });
+
+      });
+
+      function uploadFile() {
+        const productImg = document.getElementById("chooseFile"); // 파일 input 요소
+        const productName = document.getElementById("mark25").value; // 파일 input 요소
+        const producttotalAmount = document.getElementById("mark26").value; // 파일 input 요소
+        const productPrice = document.getElementById("mark29").value; // 파일 input 요소
+
+        const productdescription = document.getElementById("mark28").value; // 파일 input 요소
+
+
+        const formData = new FormData();
+        formData.append('ModelPicture', productImg.files[0]);
+        formData.append('name', productName);
+        formData.append('price', productPrice);
+        // formData.append('price', productPrice); 브랜드
+        formData.append('description', productdescription);
+        formData.append('totalAmount', producttotalAmount);
+        formData.append('modelSize', ProductSize);
+        formData.append('modelAmount', ProductAmount);
+        formData.append('modelFeetSize', ProductFeetSize);
+        formData.append('modelFootSize', ProductFootSize);
+
+        for (let i = 0; i < Object.keys(ProductColorOfSize).length; i++) {
+          formData.append(`modelColorAmount[${i}]`, ProductColorOfAmount[i]);
+        }
+
+        for (let i = 0; i < Object.keys(ProductColorOfSize).length; i++) {
+          formData.append(`modelColor[${i}]`, ProductColorOfSize[i]);
+        }
+
+        for (let i = 0; i < ProductColorImg.length; i++) {
+          formData.append('modelColorImg', ProductColorImg[i]);
+        }
+
+        formData.append('modelColorName', ProductColor); // 'files' 필드 이름 사용
+
+
+        // for (const x of formData) {
+        //   console.log(x);
+        //   }
+
+        $.ajax({
+          url: `/api/product`,
+          type: 'POST',
+          contentType: 'application/json',
+          data: formData,
+          headers: {
+            // ' "Content-Type": "multipart/form-data", // 클라이언트 쿠키의 값을 전달
+          },
+          contentType: false,               // * 중요 *
+          processData: false,               // * 중요 *
+          enctype : 'multipart/form-data',  // * 중요 *
+
+          success: function (response) {
+              window.location.href = `http://localhost:8080`
+          }
+        })
+
+      }
+
+      $(document).on('click', "button[class='btnsssss']", function (e) { // 유처 초대
+        e.preventDefault();
+        var size_id = e.target.id
+        console.log(size_id)
+        ProductFootSize.push(parseInt(document.getElementById(`size_id_${size_id}`).value))
+        ProductFeetSize.push(parseInt(document.getElementById(`feet_id_${size_id}`).value))
+        ProductAmount.push(parseInt(document.getElementById(`amount_id_${size_id}`).value))
+        ProductSize.push(parseInt(document.getElementById(`size_id_${size_id}`).value))
+        // console.log(ProductFootSize)
+        // console.log(ProductFeetSize)
+        // console.log(ProductAmount)
+        // console.log(ProductSize)
+        color_list = []
+        color_amount_list = []
+        var a = $(`#Sizes_${size_id}`).find('input'); // return 'li' 배열(li 두개)
+        for (let index = 4; index < a.length; index++) {
+          const element = a[index]
+          if (index % 2 == 0) {
+            color_list.push(element.value)
+          } else {
+            color_amount_list.push(parseInt(element.value))
+          }
+        }
+        ProductColorOfSize[Object.keys(ProductColorOfSize).length] = color_list
+        ProductColorOfAmount[Object.keys(ProductColorOfAmount).length] = color_amount_list
+        // console.log(ProductColorOfSize)
+        // console.log(ProductColorOfAmount)
+      })
+
+
+      $(document).on('click', "button[class='add_color']", function (e) { // 유처 초대
+        e.preventDefault();
+        var a = $(".colors").find('input'); // return 'li' 배열(li 두개)
+        console.log(a)
+        for (let index = 0; index < a.length; index++) {
+          const element = a[index]
+          if (index % 2 == 0) {
+            ProductColorImg.push(element.files[0])
+          } else {
+            ProductColor.push(element.value)
+          }
+        }
+      })
+    });
+
+    function DropFile(dropAreaId, fileListId) {
+        let dropArea = document.getElementById(dropAreaId);
+        let fileList = document.getElementById(fileListId);
+
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        function highlight(e) {
+            preventDefaults(e);
+            dropArea.classList.add("highlight");
+        }
+
+        function unhighlight(e) {
+            preventDefaults(e);
+            dropArea.classList.remove("highlight");
+        }
+
+        function handleDrop(e) {
+            unhighlight(e);
+            let dt = e.dataTransfer;
+            let files = dt.files;
+
+            handleFiles(files);
+
+            const fileList = document.getElementById(fileListId);
+            if (fileList) {
+                fileList.scrollTo({top: fileList.scrollHeight});
+            }
+        }
+
+        function handleFiles(files) {
+            files = [...files];
+            // files.forEach(uploadFile);
+            files.forEach(previewFile);
+        }
+
+        function previewFile(file) {
+            console.log(file);
+            renderFile(file);
+        }
+
+        function renderFile(file) {
+            let reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onloadend = function () {
+                let img = dropArea.getElementsByClassName("preview")[0];
+                img.src = reader.result;
+                img.style.display = "block";
+            };
+        }
+
+        dropArea.addEventListener("dragenter", highlight, false);
+        dropArea.addEventListener("dragover", highlight, false);
+        dropArea.addEventListener("dragleave", unhighlight, false);
+        dropArea.addEventListener("drop", handleDrop, false);
+
+        return {
+            handleFiles
+        };
+    }
+
+    const dropFile = new DropFile("drop-file", "files");
+
+    document.addEventListener("DOMContentLoaded", function () {
+        var i = 0;
+        document.querySelector(".buttonss").addEventListener("click", function () {
+            var colorsContainer = document.querySelector(".colors");
+
+            var colorBox = document.createElement("div");
+            colorBox.className = "color-box";
+
+            var fileInput = document.createElement("input");
+            fileInput.type = "file";
+            fileInput.className = "file-input";
+            fileInput.id = `inputGroupFile_${i}`;
+
+            var textInput = document.createElement("input");
+            textInput.type = "text";
+            textInput.className = "text-input";
+            textInput.id = `textInput_${i}`;
+            textInput.placeholder = "컬러이름";
+
+            colorBox.appendChild(fileInput);
+            colorBox.appendChild(textInput);
+            colorsContainer.appendChild(colorBox);
+
+            i++;
+        });
+    });
+</script>
+</html>

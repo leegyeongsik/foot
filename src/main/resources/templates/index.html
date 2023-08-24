@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <link rel="shortcut icon" href="#">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <script src="https://code.jquery.com/jquery-3.7.0.min.js"
+          integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g="
+          crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+<!--  <link rel="stylesheet" href="/css/main-page.css">-->
+  <title>foot</title>
+    <style>
+        .Header {
+            width: 1850px;
+            height: 39.10px;
+            position: absolute;
+            left: 0;
+            top: 0;
+            background-color: #ffffff;
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        .Logo {
+            color: black;
+            font-size: 24px;
+            font-family: Poppins, sans-serif;
+            font-weight: 900;
+            margin-right: 0px;
+            margin-top: 70px; /* 로고와 상단 바 사이의 간격 조정 */
+
+        }
+
+        .NavList {
+            position: absolute;
+            left: 516px;
+            top: 23px;
+            display: flex;
+            gap: 180px;
+        }
+
+        .NavItem {
+            padding: 25px 0;
+            text-align: center;
+            color: #EE312F;
+            font-size: 23.71px;
+            font-family: Inter, sans-serif;
+            font-weight: 400;
+            text-transform: uppercase;
+            line-height: 1.1;
+            word-wrap: break-word;
+            cursor: pointer;
+        }
+
+        .Sidebar {
+            position: absolute;
+            left: 0;
+            top: 120px;
+            width: 200px;
+            background-color: #ffffff;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .SidebarTitle {
+            font-size: 18px;
+            font-weight: bold;
+            color: #EE312F;
+            margin-bottom: 5px;
+        }
+
+        .SortText {
+            font-size: 14px;
+            color: #999;
+            margin-left: 5px;
+        }
+
+        .SortButtons {
+            margin-top: 10px;
+            display: none;
+        }
+
+        .SortIcon {
+            font-size: 14px;
+            color: #EE312F;
+            transition: transform 0.2s ease-in-out;
+        }
+
+        .SortIcon.opened {
+            transform: rotate(180deg);
+        }
+
+
+        .SidebarItem {
+            padding: 10px 0;
+            font-size: 18px;
+            color: #EE312F;
+            cursor: pointer;
+        }
+
+        .SearchBox {
+            width: 200px;
+            padding: 0px;
+            background-color: #fff;
+            display: flex;
+            flex-direction: column;
+            margin-top: 20px;
+        }
+
+        .SearchContainer {
+            display: flex;
+            align-items: center;
+        }
+
+        .SearchBox input[type="text"] {
+            flex: 1;
+            padding: 8px;
+            border: 1px solid #000;
+            border-radius: 4px;
+            margin-right: 10px;
+        }
+
+        .SearchBox button {
+            height: 35px;
+            width: 25px;
+            padding: 8px 16px;
+            background-color: #ffffff;
+            color: #ffffff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .DivOLayout {
+            /* 원하는 크기와 위치 값으로 조정하세요 */
+            display: grid;
+            grid-template-columns: 400px 400px 400px;
+            gap: 70px;
+            width: 1300px;
+            height: 650px;
+            left: 420px;
+            top: 145px;
+            position: absolute;
+
+        }
+
+        .DivOLayout .item {
+            background-color: #fff;
+            border: 1px solid #fff;
+            aspect-ratio: 1;
+            border-radius: 10px;
+        }
+
+        .Link {
+            /* 원하는 위치 값으로 조정하세요 */
+            margin-right: 20px;
+            margin-bottom: 20px;
+            position: relative;
+            display: inline-flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: flex-start;
+        }
+
+        .item img {
+            width: 395px;
+            height: 320px;
+            border-radius: 3%;
+        }
+
+
+        .ItemDetails hr {
+            margin: 0;
+        }
+
+        .DivCThumbnailInfo {
+            position: relative;
+            top: 18px;
+        }
+
+        .Heading3 {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .Barand1,
+        .PCThumbnailPrice {
+            margin: 5px; /* 브랜드 이름과 가격의 여백 조절 */
+            color: #EE312F;
+        }
+
+        .Laangels {
+            margin-left: 5px;
+            color: #EE312F;
+        }
+
+        :root {
+            accent-color: #EE312F;
+        }
+
+        input[type="checkbox"] {
+
+            width: 15px; /*Desired width*/
+
+            height: 15px; /*Desired height*/
+
+            cursor: pointer;
+
+        }
+    </style>
+</head>
+<body>
+<div class="HomePage" style="width: 1800px; height: 1200px; position: relative; background: white; border: 0.50px">
+
+    <div class="Header">
+        <div class="Logo">
+            <img src="owl_image.png" alt="Owl Image" style="height: 30px; width: auto; margin-right: 10px;">
+            foot
+        </div>
+        <div class="NavList">
+            <div class="NavItem">shoes</div>
+            <div class="NavItem">Auction</div>
+            <div class="NavItem">favourite</div>
+            <div class="NavItem">signup</div>
+            <div class="NavItem">signin</div>
+        </div>
+    </div>
+    <div class="Sidebar">
+        <div class="SidebarTitle">
+            brand
+            <!-- <span class="SortText">정렬 기준</span> -->
+        </div>
+        <!-- <div class="SortButtons" id="sortButtons">
+            <div>높은 가격</div>
+            <div>낮은 가격</div>
+        </div>
+        <div class="SortButtons">
+            <label><input type="radio" name="sort" value="high">높은 가격</label>
+            <label><input type="radio" name="sort" value="low">낮은 가격</label>
+        </div> -->
+        <div class="SidebarItem">Category 1</div>
+        <div class="SidebarItem">Category 2</div>
+        <div class="SidebarItem">Category 3</div>
+        <div class="SearchBox">
+            <div class="SearchContainer">
+                <input id="gettext"type="text" placeholder="Search...">
+                <button class="search">
+                    <img src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png" style="height: 25px; width: 25px; left:222px;bottom: 23px; position: absolute" >
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="DivOLayout">
+
+    </div>
+
+
+</div>
+
+</div>
+
+
+</body>
+<script>
+    $(document).ready(function () {
+        $.ajax({
+            url: `/api/product`,
+            type: 'GET',
+            contentType: 'application/json',
+            headers: {
+                // 'Authorization': Cookies.get('Authorization') // 클라이언트 쿠키의 값을 전달
+            },
+            success: function (response) {
+                if (response) {
+                    var list = response
+                    for (var i = 0; i < list.length; i++) {
+                        var Products= `
+                            <div class="item"  style="border: 1px solid #EE312F; background-color: #ffffff;">
+                                <img class ="click_img" id = ${list[i].productId} src=${list[i].modelPicture}>
+                                <div class="ItemDetails"> <!-- 선을 div로 감싸서 스타일을 제어 -->
+                                    <hr> <!-- 선 추가 -->
+                                    <div class="DivCThumbnailInfo">
+                                        <div class="Heading3" style="display: flex; justify-content: space-between; align-items: center;">
+                                            <div class="Barand1" style="margin-left: 5px; color: #EE312F;">Brand Name 1</div>
+                                            <div class="PriceAndCheckbox"
+                                                 style="display: flex; align-items: center; display: flex;align-items: center;flex-direction: row-reverse;">
+                                                <div class="PCThumbnailPrice" style="margin-right: 5px; color: #EE312F;">${list[i].price}</div>
+                                                <div class="check_wrap" style="left: 5px;">
+                                                    <input type="checkbox" />
+                                                    <label htmlFor="check_btn"></label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="Laangels">${list[i].modelName}</div>
+                                    </div>
+                                </div>
+                            </div>`
+                        $('.DivOLayout').append(Products);
+                    }
+                }
+            },
+            error: function () {
+                console.log("실패")
+            }
+        })
+        $(document).on('click',"button[class='search']" , function (e) { // 유저 검색
+            e.preventDefault();
+            var text =document.getElementById("gettext").value;
+            // console.log(text)
+            $.ajax({
+                url: `/api/product/search?name=${text}`,
+                type: 'GET',
+                contentType: 'application/json',
+                headers: {
+                    // 'Authorization': Cookies.get('Authorization') // 클라이언트 쿠키의 값을 전달
+                },
+                success: function (response) {
+                    if (response) {
+                        // console.log(response)
+                        var list = response
+                        $('.DivOLayout').empty();
+                        for (var i = 0; i < list.length; i++) {
+                            var Products= `
+                            <div class="item" style="border: 1px solid #EE312F; background-color: #ffffff;">
+                                <img class ="click_img" id = ${list[i].productId} src=${list[i].modelPicture}>
+                                <div class="ItemDetails"> <!-- 선을 div로 감싸서 스타일을 제어 -->
+                                    <hr> <!-- 선 추가 -->
+                                    <div class="DivCThumbnailInfo">
+                                        <div class="Heading3" style="display: flex; justify-content: space-between; align-items: center;">
+                                            <div class="Barand1" style="margin-left: 5px; color: #EE312F;">Brand Name 1</div>
+                                            <div class="PriceAndCheckbox"
+                                                 style="display: flex; align-items: center; display: flex;align-items: center;flex-direction: row-reverse;">
+                                                <div class="PCThumbnailPrice" style="margin-right: 5px; color: #EE312F;">${list[i].price}</div>
+                                                <div class="check_wrap" style="left: 5px;">
+                                                    <input type="checkbox" />
+                                                    <label htmlFor="check_btn"></label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="Laangels">${list[i].modelName}</div>
+                                    </div>
+                                </div>
+                            </div>`
+                            $('.DivOLayout').append(Products);
+                        }
+                    }
+                }
+            })
+        })
+        $(document).on('click',"img[class='click_img']" , function (e) { // 보드 상세 페이지 이동
+            e.preventDefault();
+            var tagId = e.target.id
+            // console.log(tagId);
+            window.location.href = `/Product/${tagId}`;
+        })
+    })
+
+
+    // 해야할거: 브랜드 받아오기 브랜드연결 각종 헤드 연결
+</script>
+</html>
