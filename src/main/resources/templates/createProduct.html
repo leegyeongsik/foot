@@ -530,11 +530,12 @@
             foot
         </div>
         <div class="NavList">
-            <div class="NavItem">shoes</div>
+            <div class="NavItem" id = "shoes_id">shoes</div>
             <div class="NavItem">Auction</div>
             <div class="NavItem">favourite</div>
-            <div class="NavItem">signup</div>
-            <div class="NavItem">signin</div>
+            <div class="NavItem" id = "signup">signup</div>
+            <div class="NavItem" id = "signin">signin</div>
+
         </div>
     </div>
 
@@ -672,7 +673,6 @@
 
 
       $(function () {
-
         $('#uploadBtn').on('click', function () {
           uploadFile();
         });
@@ -781,7 +781,24 @@
           }
         }
       })
+
+        $(document).on('click',"div[id='shoes_id']" , function (e) { // 신발 누르면 해당 사이즈 출력
+            window.location.href=`http://localhost:8080`
+
+        })
+        $(document).on('click',"div[id='signup']" , function (e) { // 보드 상세 페이지 이동
+            e.preventDefault();
+            window.location.href = `/view/signup`;
+        })
+
+        $(document).on('click',"div[id='signin']" , function (e) { // 보드 상세 페이지 이동
+            e.preventDefault();
+            window.location.href = `/view/login-page`;
+        })
+
+
     });
+
 
     function DropFile(dropAreaId, fileListId) {
         let dropArea = document.getElementById(dropAreaId);
@@ -873,6 +890,8 @@
 
             i++;
         });
+
+
     });
 </script>
 </html>

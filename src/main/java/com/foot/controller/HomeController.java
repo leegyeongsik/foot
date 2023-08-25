@@ -1,5 +1,7 @@
 package com.foot.controller;
 
+import com.foot.entity.UserRoleEnum;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,10 +20,13 @@ public class HomeController {
         model.addAttribute("productId" ,productId);
         return "innerProduct";
     }
-    @GetMapping("/Product/Create")
+    @Secured(UserRoleEnum.Authority.ADMIN)
+    @GetMapping("/Product/create")
     public String CreateProductPage(){
         return "createProduct";
     }
+
+    @Secured(UserRoleEnum.Authority.ADMIN)
     @GetMapping("/Product/update/{productId}")
     public String UpdateProductPage(@PathVariable Long productId , Model model){
         model.addAttribute("productId" ,productId);

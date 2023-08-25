@@ -356,11 +356,12 @@
       foot
     </div>
     <div class="NavList">
-      <div class="NavItem" id = "shoes_page">shoes</div>
+      <div class="NavItem" id = "shoes_id">shoes</div>
       <div class="NavItem">Auction</div>
       <div class="NavItem">favourite</div>
-      <div class="NavItem">signup</div>
-      <div class="NavItem">signin</div>
+      <div class="NavItem" id = "signup">signup</div>
+      <div class="NavItem" id = "signin">signin</div>
+
     </div>
   </div>
 
@@ -385,7 +386,7 @@
       </div>
 
       <div class="Buttons"> <!-- 버튼 -->
-        <div class="ButtonText">로그인 후 구매하기</div>
+        <div class="ButtonText" id="inner_login">로그인 후 구매하기</div>
       </div>
       <div class="wishbutton"> <!-- 위시리스트 -->
         <div class="ButtonText">위시리스트</div>
@@ -434,8 +435,25 @@
 <script>
   var productId = document.getElementById('targetIdParagraph').querySelector('span').innerText;
   const itemDict = {};
+  const auth = Cookies.get('Authorization');
+  console.log(auth)
 
   $(document).ready(function () {
+    if (auth != null) {
+      $('.NavList').empty();
+      temp_Navi = `<div class="NavItem" id="shoes_id">shoes</div>
+            <div class="NavItem">Auction</div>
+            <div class="NavItem">favourite</div>
+            <div class="NavItem" id="signup">signup</div>
+            <div class="NavItem" id="signout">signOut</div>`
+      $('.NavList').append(temp_Navi)
+
+      $('.Buttons').empty()
+      temp_basket = `        <div class="ButtonText" id = "basket_add">장바구니 추가</div>`
+      $('.Buttons').append(temp_basket)
+    }
+
+
     $.ajax({
       url: `/api/product/${productId}`,
       type: 'GET',
@@ -504,11 +522,29 @@
         $('.DivOLayoutss').append(size);
       }
     })
-    $(document).on('click',"div[id='shoes_page']" , function (e) { // 신발 누르면 해당 사이즈 출력
+    $(document).on('click',"div[id='shoes_id']" , function (e) { // 신발 누르면 해당 사이즈 출력
       window.location.href=`http://localhost:8080`
 
     })
+    $(document).on('click',"div[id='signup']" , function (e) { // 보드 상세 페이지 이동
+      e.preventDefault();
+      window.location.href = `/view/signup`;
+    })
 
+    $(document).on('click',"div[id='signin']" , function (e) { // 보드 상세 페이지 이동
+      e.preventDefault();
+      window.location.href = `/view/login-page`;
+    })
+
+    $(document).on('click',"div[id='inner_login']" , function (e) { // 보드 상세 페이지 이동
+      e.preventDefault();
+      window.location.href = `/view/login-page`;
+    })
+    $(document).on('click',"div[id='signout']" , function (e) { // 보드 상세 페이지 이동
+      e.preventDefault();
+      Cookies.remove('Authorization', {path: '/'});
+      window.location.href = ""
+    })
 
     // 해야할거 장바구니 , 댓글 , 각종 헤드 연결 , Shoses_size_confirm 데이터 주기 , 장바구니에 담을때 해당 신발 id값 으로 찾아서 담아주기
     // 나중에 jwt 쿠키 있는지 확인하고 로그인 후 구매하기 -> 장바구니 담기
