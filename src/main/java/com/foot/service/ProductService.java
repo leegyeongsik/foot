@@ -23,6 +23,7 @@ public class ProductService {
     private final S3UploadService s3UploadService;
 
     public void createProduct(ProductRequestDto requestDto, User user) { // 상품등록
+//        confirmAdminToken(user);
         List<MultipartFile> modelColorImg = requestDto.getModelColorImg();
         List<String> modelColorName = requestDto.getModelColorName();
 
@@ -43,7 +44,7 @@ public class ProductService {
                 .TotalAmount(requestDto.getTotalAmount())
                 .Description(requestDto.getDescription())
                 .modelpicture(s3UploadService.uploadImage(requestDto.getModelPicture())) // 들어온거 업로드해서 주소 넣어줌
-                .user(user.getUserid;)
+                .user(user)
                 .build();
 
         productRepository.save(product);
@@ -127,7 +128,9 @@ public class ProductService {
     }
 
 
-    public void updateProduct(Long productId, UpdateProductResponseDto updateProductResponseDto) {
+    public void updateProduct(Long productId, UpdateProductResponseDto updateProductResponseDto, User user) {
+//        confirmAdminToken(user);
+
         Product product=productRepository.findById(productId).get();
         product.updateProduct(updateProductResponseDto.getName() , updateProductResponseDto.getDescription(),
                 updateProductResponseDto.getPrice() , updateProductResponseDto.getTotalAmount());
@@ -153,7 +156,9 @@ public class ProductService {
 
     }
 
-    public void deleteProduct(Long productId) {
+    public void deleteProduct(Long productId, User user) {
+//        confirmAdminToken(user);
+
         Product product=productRepository.findById(productId).get();
         s3UploadService.deleteFile(product.getModelpicture());
         List<ProductColorImg> productColorImgs = productRepository.getModelColors(productId);
@@ -163,12 +168,16 @@ public class ProductService {
         productRepository.delete(product);
     }
 
-    public void updateSaleProduct(Long productId, SaleProductRequestDto requestDto) {
+    public void updateSaleProduct(Long productId, SaleProductRequestDto requestDto, User user) {
+//        confirmAdminToken(user);
+
         Product product=productRepository.findById(productId).get();
         product.addSale(requestDto);
     }
 
-    public void updateFootProduct(FootProductRequestDto requestDto, Long footId) {
+    public void updateFootProduct(FootProductRequestDto requestDto, Long footId, User user) {
+//        confirmAdminToken(user);
+
         ProductSize productSize = productSizeRepository.findById(footId).get();
 
         productSize.updateFootSize(requestDto);
@@ -182,5 +191,13 @@ public class ProductService {
             productResponseDtos.add(new ProductResponseDto(product));
         }
         return productResponseDtos;
+    }
+
+
+    private void confirmAdminToken(User user){
+        if (user.getRole().equals(UserRoleEnum.ADMIN)) {
+        } else {
+            throw new IllegalArgumentException("어드민유저만 접근할수 있습니다");
+        }
     }
 }
