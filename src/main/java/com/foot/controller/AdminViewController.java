@@ -16,6 +16,7 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
@@ -31,13 +32,24 @@ public class AdminViewController {
 
     // 전체 회원 목록 조회
     @Secured(UserRoleEnum.Authority.ADMIN)
-    @GetMapping("/users")
-    public String getUserList(Model model, @PageableDefault(page = 0, size = 10, sort = "id", direction = Sort.Direction.ASC) Pageable pageable) {
-        Page<User> userList = adminService.getUserList(pageable);
+    @GetMapping("/user-list")
+    public String getUserList(Model model,
+                              @PageableDefault(page = 0, size = 10, sort = "id", direction = Sort.Direction.ASC)
+                              Pageable pageable,
+                              String searchKeyword) {
+
+        Page<User> userList = null;
+
+        if(searchKeyword == null) {
+            userList = adminService.getUserList(pageable);
+
+        } else {
+            userList = adminService.userSearchList(searchKeyword, pageable);
+        }
 
         int nowPage = userList.getPageable().getPageNumber() + 1;
         int startPage = Math.max(nowPage - 4, 1);
-        int endPage = Math.min(nowPage + 5, userList.getTotalPages());
+        int endPage = Math.min(nowPage + 4, userList.getTotalPages());
 
         model.addAttribute("list", userList);
         model.addAttribute("nowPage", nowPage);
@@ -46,5 +58,16 @@ public class AdminViewController {
 
         return "userlist";
     }
+
+    // 회원 상세 조회
+    @Secured(UserRoleEnum.Authority.ADMIN)
+    @GetMapping("/users/{id}")
+    public String getUser(@PathVariable Long id, Model model) {
+        User user = adminService.getUser(id);
+        model.addAttribute("user", user);
+        return "adminUser";
+    }
+
+
 
 }

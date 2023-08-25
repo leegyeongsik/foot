@@ -25,7 +25,7 @@
         }
 
         .admin-content {
-            width: 80%; /* 내용 영역 너비 조정 */
+            width: 85%; /* 내용 영역 너비 조정 */
             padding: 20px;
         }
 
@@ -64,6 +64,30 @@
         .page-number {
             margin-top: 20px; /* 원하는 여백 값으로 조정 */
         }
+
+        .search-form {
+            display: flex;
+            align-items: center;
+            flex-direction: row; /* 가로 방향으로 배치 */
+        }
+
+        .search-form input {
+            padding: 10px;
+            margin-top: 10px;
+            margin-right: 10px; /* 검색 버튼과의 간격을 설정 */
+            border: 1.5px solid #f2f2f2;
+            border-radius: 5px;
+        }
+
+        .search-btn {
+            padding: 10px 16px;
+            border: none;
+            border-radius: 5px;
+            background-color: #333;
+            color: #fff;
+            font-weight: 700;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -86,7 +110,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="user : ${list}">
+                <tr th:each="user : ${list}" th:attr="data-user-id=${user.id}" onclick="goToUserDetailPage(this)">
                     <td th:text="${user.id}"></td>
                     <td th:text="${user.name}"></td>
                     <td th:text="${user.email}"></td>
@@ -97,9 +121,15 @@
 
             <div class="page-number">
                 <th:block th:each="page : ${#numbers.sequence(startPage, endPage)}">
-                    <a th:if="${page != nowPage}" th:href="@{/view/admin/users(page = ${page -1})}" th:text="${page}"></a>
-                    <strong th:if="${page == nowPage}" th:text="${page}" style="color : red"></strong>
+                    <a th:if="${page != nowPage}" th:href="@{/view/admin/users(page = ${page -1}, searchKeyword = ${param.searchKeyword})}" th:text="${page}"></a>
+                    <strong th:if="${page == nowPage}" th:text="${page}" style="color : #fff"></strong>
                 </th:block>
+            </div>
+            <div class="search-form">
+                <form th:action="@{/view/admin/users}" method="get">
+                    <input type="text" name="searchKeyword">
+                    <button class="search-btn" type="submit">Search</button>
+                </form>
             </div>
 
         </div>
@@ -108,4 +138,11 @@
 </div>
 
 </body>
+<script>
+    function goToUserDetailPage(row) {
+        var userId = row.getAttribute("data-user-id");
+        console.log(userId);
+        window.location.href = "/view/admin/users/" + userId;
+    }
+</script>
 </html>

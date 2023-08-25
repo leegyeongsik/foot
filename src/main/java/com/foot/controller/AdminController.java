@@ -35,17 +35,6 @@ public class AdminController {
     private final UserRepository userRepository;
 
 
-    // 회원 상세 조회
-    @Secured(UserRoleEnum.Authority.ADMIN)
-    @GetMapping("/users/{id}")
-    public ProfileResponseDto getUser(@PathVariable Long id) {
-        return adminService.getUser(id);
-    }
-
-
-
     // 회원 탈퇴
-
-
 
 }

@@ -25,15 +25,13 @@ public class AdminService {
     }
 
     // 회원 상세 조회
-    public ProfileResponseDto getUser(Long id) {
+    public User getUser(Long id) {
         User user = findUser(id);
-        return new ProfileResponseDto(user);
+        return user;
 
     }
-    public UserListResponseDto searchUsers(String keyword) {
-        List<ProfileResponseDto> userList = userRepository.findByEmailContaining(keyword).stream().map(ProfileResponseDto::new).collect(Collectors.toList());
-
-        return new UserListResponseDto(userList);
+    public Page<User> userSearchList(String keyword, Pageable pageable) {
+        return userRepository.findByNameContaining(keyword, pageable);
     }
 
     // 회원 강제 탈퇴
