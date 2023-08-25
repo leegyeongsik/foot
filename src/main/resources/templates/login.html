@@ -151,22 +151,10 @@
             data: JSON.stringify({name: name, password: password}),
         })
             .done(function (res, status, xhr) {
-                const token = xhr.getResponseHeader('Authorization');
-
-                Cookies.set('Authorization', token, {path: '/'})
-
-                $.ajaxPrefilter(function (options, originalOptions, jqXHR) {
-                    jqXHR.setRequestHeader('Authorization', token);
-                });
-
                 window.location.href = host + '/view/profile'
             })
-            .fail(function (jqXHR, textStatus) {
-                // swal('로그인 실패!','warning');
-                Swal.fire({
-                    icon: 'error',                         // Alert 타입
-                    title: '회원이 아닙니다!'        // Alert 제목
-                })
+            .fail(function (xhr, textStatus, errorThrown) {
+                console.log('statusCode: ' + xhr.status);
             });
     }
 
