@@ -32,7 +32,7 @@ public class AdminViewController {
 
     // 전체 회원 목록 조회
     @Secured(UserRoleEnum.Authority.ADMIN)
-    @GetMapping("/user-list")
+    @GetMapping("/users")
     public String getUserList(Model model,
                               @PageableDefault(page = 0, size = 10, sort = "id", direction = Sort.Direction.ASC)
                               Pageable pageable,
@@ -61,7 +61,7 @@ public class AdminViewController {
 
     // 회원 상세 조회
     @Secured(UserRoleEnum.Authority.ADMIN)
-    @GetMapping("/users/{id}")
+    @GetMapping("/user/{id}")
     public String getUser(@PathVariable Long id, Model model) {
         User user = adminService.getUser(id);
         model.addAttribute("user", user);
