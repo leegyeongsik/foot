@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+  <script src="https://code.jquery.com/jquery-3.7.0.min.js"
+          integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
+  <title>User Page</title>
+</head>
+<body>
+<div>
+  <table>
+    <thead>
+    <!-- Table header content here -->
+    </thead>
+    <tbody>
+    <tr th:each="user : ${userList}">
+      <td th:text="${user.name}"></td>
+      <!-- Other user fields -->
+    </tr>
+    </tbody>
+  </table>
+</div>
+
+<div th:if="${page.totalPages > 1}" class="pagination">
+  <ul>
+    <li th:each="i : ${#numbers.sequence(0, page.totalPages - 1)}">
+      <a th:href="@{'/user-list?pageNumber=' + i}">[[${i}]]</a>
+    </li>
+  </ul>
+</div>
+</body>
+</html>

@@ -6,6 +6,8 @@ import com.foot.entity.User;
 import com.foot.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,10 +20,8 @@ public class AdminService {
     private final UserRepository userRepository;
 
     // 전체 회원 목록 조회
-    public UserListResponseDto getUserList() {
-        List<ProfileResponseDto> userList = userRepository.findAll().stream().map(ProfileResponseDto::new).collect(Collectors.toList());
-
-        return new UserListResponseDto(userList);
+    public Page<User> getUserList(Pageable pageable) {
+        return userRepository.findAll(pageable);
     }
 
     // 회원 상세 조회
@@ -41,7 +41,6 @@ public class AdminService {
         User user = findUser(id);
         userRepository.delete(user);
     }
-
 
 
     public User findUser(Long id) {
