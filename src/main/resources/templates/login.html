@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -132,6 +132,7 @@
        Cookies.remove('Authorization', {path: '/'});
     });
 
+
     const href = location.href;
     const queryString = href.substring(href.indexOf("?") + 1)
     if (queryString === 'error') {
@@ -153,8 +154,11 @@
             .done(function (res, status, xhr) {
                 window.location.href = host + '/view/profile'
             })
-            .fail(function (xhr, textStatus, errorThrown) {
-                console.log('statusCode: ' + xhr.status);
+            .fail(function (jqXHR, textStatus) {
+                Swal.fire({
+                    icon: 'error',                         // Alert 타입
+                    title: '비밀번호를 확인해주세요!'        // Alert 제목
+                })
             });
     }
 
