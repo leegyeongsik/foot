@@ -9,7 +9,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-@RestController
+@Controller
 @RequiredArgsConstructor
 @RequestMapping("/api/auth")
 public class AuthController {
@@ -18,7 +18,7 @@ public class AuthController {
     @PostMapping("/signup") // 회원가입
     public String signup(SignupRequestDto requestDto) {
         userService.userSignup(requestDto);
-        return "redirect:/view/login";
+        return "redirect:/view/login-page";
     }
 
     // 로그아웃

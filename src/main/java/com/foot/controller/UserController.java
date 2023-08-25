@@ -1,16 +1,15 @@
 package com.foot.controller;
 
-import com.foot.dto.*;
+import com.foot.dto.PasswordRequestDto;
+import com.foot.dto.ProfileRequestDto;
+import com.foot.dto.ProfileResponseDto;
+import com.foot.dto.SignupRequestDto;
 import com.foot.security.UserDetailsImpl;
 import com.foot.service.UserService;
-import jakarta.validation.Valid;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
@@ -35,10 +34,10 @@ public class UserController {
     }
 
 
-    // 탈퇴
+    // 회원 탈퇴
     @DeleteMapping("/profile")
-    public void deleteUser(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody PasswordRequestDto requestDto) {
-        userService.deleteUser(userDetails.getUser(), requestDto);
+    public void deleteUser(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+        userService.deleteUser(userDetails.getUser());
     }
 
     @PutMapping("/{userId}/foot")
