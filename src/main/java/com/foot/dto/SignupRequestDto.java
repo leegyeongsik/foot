@@ -18,6 +18,10 @@ public class SignupRequestDto {
 
     private String cellphone;
 
+    private boolean admin = false;
+
+    private String adminToken = "";
+
    //private String userImage;
 
     //private UserRoleEnum role;

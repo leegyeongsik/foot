@@ -119,6 +119,10 @@
             <input type="password" name="password" placeholder="Password">
             <input type="text" name="address" placeholder="Your Address">
             <input type="text" name="cellphone" placeholder="Your Cell Phone Number">
+            <div>
+                <input id="admin-check" type="checkbox" name="admin" onclick="onclickAdmin()" style="margin-top: 40px;"> Admin
+                <input id="admin-token" type="password" name="adminToken" placeholder="관리자 암호" class="login-input-box" style="display:none">
+            </div>
             <button type="submit" class="signup-button">Register</button>
         </form>
         <div class="social-signup">
@@ -130,4 +134,19 @@
     </div>
 </div>
 </body>
+<script>
+    function onclickAdmin() {
+        // Get the checkbox
+        var checkBox = document.getElementById("admin-check");
+        // Get the output text
+        var box = document.getElementById("admin-token");
+
+        // If the checkbox is checked, display the output text
+        if (checkBox.checked == true){
+            box.style.display = "block";
+        } else {
+            box.style.display = "none";
+        }
+    }
+</script>
 </html>
