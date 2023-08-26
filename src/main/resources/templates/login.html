@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -132,6 +132,7 @@
        Cookies.remove('Authorization', {path: '/'});
     });
 
+
     const href = location.href;
     const queryString = href.substring(href.indexOf("?") + 1)
     if (queryString === 'error') {
@@ -151,21 +152,12 @@
             data: JSON.stringify({name: name, password: password}),
         })
             .done(function (res, status, xhr) {
-                const token = xhr.getResponseHeader('Authorization');
-
-                Cookies.set('Authorization', token, {path: '/'})
-
-                $.ajaxPrefilter(function (options, originalOptions, jqXHR) {
-                    jqXHR.setRequestHeader('Authorization', token);
-                });
-
                 window.location.href = host + '/view/profile'
             })
             .fail(function (jqXHR, textStatus) {
-                // swal('로그인 실패!','warning');
                 Swal.fire({
                     icon: 'error',                         // Alert 타입
-                    title: '회원이 아닙니다!'        // Alert 제목
+                    title: '비밀번호를 확인해주세요!'        // Alert 제목
                 })
             });
     }
