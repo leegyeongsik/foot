@@ -10,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.*;
 
 @Service
@@ -22,7 +24,7 @@ public class ProductService {
     private final ProductSizeRepository productSizeRepository;
     private final S3UploadService s3UploadService;
 
-    public void createProduct(ProductRequestDto requestDto, User user) { // 상품등록
+    public void createProduct(ProductRequestDto requestDto , User user) throws IOException { // 상품등록
 //        confirmAdminToken(user);
         List<MultipartFile> modelColorImg = requestDto.getModelColorImg();
         List<String> modelColorName = requestDto.getModelColorName();
@@ -128,7 +130,7 @@ public class ProductService {
     }
 
 
-    public void updateProduct(Long productId, UpdateProductResponseDto updateProductResponseDto, User user) {
+    public void updateProduct(Long productId, UpdateProductResponseDto updateProductResponseDto) {
 //        confirmAdminToken(user);
 
         Product product=productRepository.findById(productId).get();
@@ -156,7 +158,7 @@ public class ProductService {
 
     }
 
-    public void deleteProduct(Long productId, User user) {
+    public void deleteProduct(Long productId) {
 //        confirmAdminToken(user);
 
         Product product=productRepository.findById(productId).get();
