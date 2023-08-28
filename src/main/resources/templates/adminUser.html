@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -166,7 +166,7 @@
     <label for="name">
       Your ID
     </label>
-    <input type="text" id="name" name="name" th:value="${user.email}">
+    <input type="text" id="name" name="name" th:value="${user.name}">
     <label for="password">
       Your Password
     </label>
@@ -194,4 +194,55 @@
 </div>
 
 </body>
+<script th:inline="javascript">
+
+  var userId = [[${user.id}]];
+
+
+  // 회원 정보 수정
+  function onUpdating() {
+    let email = $('#email').val();
+    let name = $('#name').val();
+    let password = $('#password').val();
+    let address = $('#address').val();
+    let cellphone = $('#cellphone').val();
+    let role = $('#role').val();
+    console.log(userId, email, name, address, cellphone, role);
+
+    $.ajax({
+      type: "PUT",
+      url: `/api/admin/profile`,
+      contentType: "application/json",
+      data: JSON.stringify({
+        userId : userId,
+        newPassword: password,
+        email: email,
+        name: name,
+        address: address,
+        cellphone: cellphone,
+        role : role
+      }),
+      success: function (response) {
+        Swal.fire({
+          icon: 'success',                         // Alert 타입
+          title: '변경 완료!'        // Alert 제목
+        }).then((result) => {
+          if (result.isConfirmed) {
+            window.location.href = "http://localhost:8080/view/admin/users";
+          }
+        });
+      },
+      error: function (xhr, status, error) {
+        Swal.fire({
+          icon: 'error',                         // Alert 타입
+          title: '변경 실패!'        // Alert 제목
+        }).then((result) => {
+          if (result.isConfirmed) {
+            window.location.href = "http://localhost:8080/view/admin/users";
+          }
+        });
+      }
+    });
+  }
+</script>
 </html>
