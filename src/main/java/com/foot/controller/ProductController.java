@@ -8,6 +8,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -16,8 +17,8 @@ import java.util.List;
 public class ProductController {
     private final ProductService productService;
     @PostMapping(value = "",consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE) // 상품생성
-    public void createProduct(@ModelAttribute ProductRequestDto requestDto , @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        productService.createProduct(requestDto , userDetails.getUser());
+    public void createProduct(@ModelAttribute ProductRequestDto requestDto ,@AuthenticationPrincipal UserDetailsImpl userDetails) throws IOException { //
+        productService.createProduct(requestDto ,userDetails.getUser()); //
     }
 
     @GetMapping("") // 전체 상품 조회
@@ -31,20 +32,19 @@ public class ProductController {
     }
 
     @PutMapping("/{productId}") // 특정 상품 수정
-    public void updateProduct(@PathVariable Long productId , @ModelAttribute UpdateProductResponseDto updateProductResponseDto
-    , @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public void updateProduct(@PathVariable Long productId , @ModelAttribute UpdateProductResponseDto updateProductResponseDto) {
 //        System.out.println(updateProductResponseDto.getName());
 //        System.out.println(updateProductResponseDto.getDescription());
 //        System.out.println(updateProductResponseDto.getPrice());
 //        System.out.println(updateProductResponseDto.getTotalAmount());
 //        System.out.println(updateProductResponseDto.getProductSizeInfo());
 //        System.out.println(updateProductResponseDto.getProductColorAmount());
-        productService.updateProduct(productId,updateProductResponseDto , userDetails.getUser());
+        productService.updateProduct(productId,updateProductResponseDto );
     }
 
     @DeleteMapping("/{productId}") // 특정 상품 삭제
-    public void deleteProduct(@PathVariable Long productId , @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        productService.deleteProduct(productId , userDetails.getUser());
+    public void deleteProduct(@PathVariable Long productId) {
+        productService.deleteProduct(productId);
     }
 
 //    @GetMapping("/") // 카테고리 상품 조회

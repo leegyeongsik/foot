@@ -1,8 +1,10 @@
 package com.foot.service;
 
+import com.amazonaws.AmazonServiceException;
 import com.amazonaws.SdkClientException;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
+import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
@@ -17,6 +19,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.awt.*;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.List;
 import java.util.UUID;
 
@@ -32,7 +36,7 @@ public class S3UploadService {
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
 
-    public String uploadImage(MultipartFile multipartFile) {
+    public String uploadImage(MultipartFile multipartFile) throws IOException  {
         // 메타데이터 설정
         ObjectMetadata objectMetadata = new ObjectMetadata();
         objectMetadata.setContentType(multipartFile.getContentType());
@@ -43,19 +47,20 @@ public class S3UploadService {
         String fileName = S3_BUCKET_DIRECTORY_NAME + "/" + UUID.randomUUID() + "." + multipartFile.getOriginalFilename();
 
         try (InputStream inputStream = multipartFile.getInputStream()) {
-            amazonS3Client.putObject(new PutObjectRequest(bucket, fileName, inputStream, objectMetadata)
+            amazonS3Client.putObject(new PutObjectRequest(bucket, fileName, multipartFile.getInputStream(), objectMetadata)
                     .withCannedAcl(CannedAccessControlList.PublicRead));
         } catch (IOException e) {
             log.error("S3 파일 업로드에 실패했습니다. {}", e.getMessage());
             throw new IllegalStateException("S3 파일 업로드에 실패했습니다.");
         }
-        return amazonS3Client.getUrl(bucket, fileName).toString();
+        return URLDecoder.decode(amazonS3Client.getUrl(bucket, fileName).toString(), "utf-8");
     }
 
     public void deleteFile(String fileName)  {
         String splitStr = ".com/";
+
         String filename = fileName.substring(fileName.lastIndexOf(splitStr) + splitStr.length());
+        System.out.println(filename);
         amazonS3Client.deleteObject(new DeleteObjectRequest(bucket, filename));
     }
-
 }
