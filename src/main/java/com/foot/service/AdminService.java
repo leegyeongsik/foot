@@ -29,6 +29,11 @@ public class AdminService {
         return userRepository.findAll(pageable);
     }
 
+    // 회원 검색
+    public Page<User> userSearchList(String keyword, Pageable pageable) {
+        return userRepository.findByNameContaining(keyword, pageable);
+    }
+
     // 회원 상세 조회
     public User getUser(Long id) {
         User user = findUser(id);
@@ -36,27 +41,24 @@ public class AdminService {
 
     }
 
-    // 회원 검색
-    public Page<User> userSearchList(String keyword, Pageable pageable) {
-        return userRepository.findByNameContaining(keyword, pageable);
-    }
 
     // 회원 정보 수정
-    @Transactional
     public void updateUser(AdminUserRequestDto requestDto) {
         User user = findUser(requestDto.getUserId());
-        String newPassword = passwordEncoder.encode(requestDto.getNewPassword());
 
+        // 비밀번호 변경창에 아무것도 입력하지 않았을 경우 변경하지 않고 유지
+        if (!requestDto.getNewPassword().isEmpty()) {
+            String newPassword = passwordEncoder.encode(requestDto.getNewPassword());
+            user.setPassword(newPassword);
+        }
         user.setName(requestDto.getName());
-        user.setPassword(newPassword);
         user.setEmail(requestDto.getEmail());
         user.setAddress(requestDto.getAddress());
         user.setCellphone(requestDto.getCellphone());
-        if (requestDto.getRole() == "USER") {
-            user.setRole(UserRoleEnum.USER);
-        } else if (requestDto.getRole() == "ADMIN") {
-            user.setRole(UserRoleEnum.ADMIN);
-        }
+        user.setRole(requestDto.getRole());
+
+        userRepository.save(user);
+
     }
 
     // 회원 강제 탈퇴

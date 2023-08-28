@@ -43,7 +43,21 @@ public class AdminController {
         return ResponseEntity.ok().body("변경 성공");
     }
 
-
     // 회원 탈퇴
+//    @DeleteMapping("/profile/{id}")
+//    public void deleteUser(@PathVariable Long id) {
+//        adminService.deleteUser(id);
+//    }
+
+    @Secured(UserRoleEnum.Authority.ADMIN)
+    @DeleteMapping("/profile/{id}")
+    public ResponseEntity<String> deleteUser(@PathVariable Long id) {
+        try {
+            adminService.deleteUser(id);
+            return ResponseEntity.ok("회원 탈퇴 성공");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("회원 탈퇴 실패");
+        }
+    }
 
 }

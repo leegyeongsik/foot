@@ -13,5 +13,5 @@ public class AdminUserRequestDto {
     private String email;
     private String address;
     private String cellphone;
-    private String role;
+    private UserRoleEnum role;
 }

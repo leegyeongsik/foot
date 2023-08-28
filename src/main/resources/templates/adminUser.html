@@ -152,6 +152,17 @@
       font-weight: 700;
     }
 
+    #role,
+    .profile-form select {
+      width: 100%;
+      padding: 8px;
+      margin-top: 10px;
+      margin-bottom: 10px;
+      border: 1.5px solid #575dfb;
+      border-radius: 16px;
+    }
+
+
   </style>
 </head>
 
@@ -179,10 +190,11 @@
       Your Cell Phone
     </label>
     <input type="text" id="cellphone" name="cellphone" th:value="${user.cellphone}">
-    <label for="role">
-      Role
-    </label>
-    <input type="text" id="role" name="role" th:value="${user.role}">
+    <label for="role">Role:</label>
+    <select id="role" name="role">
+      <option value="USER">User</option>
+      <option value="ADMIN">Admin</option>
+    </select>
     <button onclick="onUpdating()" class="profile-button">Confirm</button>
     <div class="register-link">
       <span onclick="logoutUser()">Logout</span>
@@ -207,7 +219,7 @@
     let address = $('#address').val();
     let cellphone = $('#cellphone').val();
     let role = $('#role').val();
-    console.log(userId, email, name, address, cellphone, role);
+    console.log(userId, email, name, password, address, cellphone, role);
 
     $.ajax({
       type: "PUT",
@@ -244,5 +256,43 @@
       }
     });
   }
+
+  // 회원 탈퇴
+  function deleteUser() {
+    Swal.fire({
+      icon: 'warning',
+      title: '회원 탈퇴',
+      text: '정말로 해당 회원을 탈퇴시키시겠습니까?',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: '예, 탈퇴합니다',
+      cancelButtonText: '아니오, 취소합니다'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        $.ajax({
+          type: "DELETE",
+          url: `/api/admin/profile/${userId}` ,
+          success: function (response) {
+            Toast.fire({
+              icon: 'success',
+              title: '회원 탈퇴가 완료되었습니다.'
+            }).then(function () {
+              logoutUser(); // 탈퇴 후 자동 로그아웃
+            });
+          },
+          error: function (xhr, status, error) {
+            Swal.fire({
+              icon: 'error',
+              title: '회원 탈퇴 실패',
+              text: '회원 탈퇴를 처리하는 중에 문제가 발생했습니다.'
+            });
+          }
+        });
+      }
+    });
+  }
+
+
 </script>
 </html>
