@@ -37,19 +37,6 @@ public class Product extends Timestamped {
     @Column(name = "discountprice" , nullable = true)
     private Long discountPrice;
 
-    /**
-     * 생성자 - 약속된 형태로만 생성가능하도록 합니다.
-     */
-//    @Builder
-//    public Product(Long TotalAmount , String Description , Long price , User user , Brand brand , String model , String modelpicture){
-//        this.TotalAmount = TotalAmount;
-//        this.Description =Description;
-//        this.price =price;
-//        this.user = user;
-//        this.brand = brand;
-//        this.model = model;
-//        this.modelpicture = modelpicture;
-//    }
     @Builder
     public Product(Long TotalAmount , String Description , Long price  , String model , String modelpicture , User user){
         this.TotalAmount = TotalAmount;

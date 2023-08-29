@@ -1,6 +1,7 @@
 package com.foot.controller;
 
 import com.foot.dto.ProfileResponseDto;
+import com.foot.entity.Product;
 import com.foot.entity.User;
 import com.foot.entity.UserRoleEnum;
 import com.foot.repository.UserRepository;
@@ -67,6 +68,37 @@ public class AdminViewController {
         model.addAttribute("user", user);
         return "adminUser";
     }
+
+
+    // 전체 상품 조회
+    @Secured(UserRoleEnum.Authority.ADMIN)
+    @GetMapping("/products")
+    public String getProductList(Model model,
+                              @PageableDefault(page = 0, size = 10, sort = "id", direction = Sort.Direction.ASC)
+                              Pageable pageable,
+                              String searchKeyword) {
+
+        Page<Product> productList = null;
+
+        if(searchKeyword == null) {
+            productList = adminService.getProductList(pageable);
+
+        } else {
+            productList = adminService.productSearchList(searchKeyword, pageable);
+        }
+
+        int nowPage = productList.getPageable().getPageNumber() + 1;
+        int startPage = Math.max(nowPage - 4, 1);
+        int endPage = Math.min(nowPage + 4, productList.getTotalPages());
+
+        model.addAttribute("list", productList);
+        model.addAttribute("nowPage", nowPage);
+        model.addAttribute("startPage", startPage);
+        model.addAttribute("endPage", endPage);
+
+        return "adminProductList";
+    }
+
 
 
 

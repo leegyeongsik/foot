@@ -22,7 +22,7 @@ public class HomeController {
     }
 
     @Secured(UserRoleEnum.Authority.ADMIN)
-    @GetMapping("/view/create")
+    @GetMapping("/Product/create")
     public String CreateProductPage(){
         return "createProduct";
     }

@@ -3,9 +3,11 @@ package com.foot.service;
 import com.foot.dto.AdminUserRequestDto;
 import com.foot.dto.ProfileResponseDto;
 import com.foot.dto.UserListResponseDto;
+import com.foot.entity.Product;
 import com.foot.entity.User;
 import com.foot.entity.UserRoleEnum;
 import com.foot.repository.UserRepository;
+import com.foot.repository.products.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -22,6 +24,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class AdminService {
     private final UserRepository userRepository;
+    private final ProductRepository productRepository;
     private final PasswordEncoder passwordEncoder;
 
     // 전체 회원 목록 조회
@@ -74,5 +77,14 @@ public class AdminService {
         );
     }
 
+    // 상품 전체 목록 조회
+    public Page<Product> getProductList(Pageable pageable) {
+        return productRepository.findAll(pageable);
+    }
 
+
+    // 상품 검색
+    public Page<Product> productSearchList(String searchKeyword, Pageable pageable) {
+        return productRepository.findByModelContaining(searchKeyword, pageable);
+    }
 }
