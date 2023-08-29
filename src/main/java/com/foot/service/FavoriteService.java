@@ -25,7 +25,7 @@ public class FavoriteService {
     public void unlikeProduct(Long productId, User user) {
         Product product = productRepository.findById(productId).orElseThrow();
 
-        Favorite favorite = favoriteRepository.findByProductIdAndUserId(productId, user.getId()).orElseThrow();
+        Favorite favorite = favoriteRepository.findByProductIdAndUserId(productId, user.getId());
 
         favoriteRepository.delete(favorite);
     }

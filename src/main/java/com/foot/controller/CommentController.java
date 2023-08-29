@@ -25,7 +25,7 @@ public class CommentController {
 
     }
 
-    //댓글 작성
+    //댓글 작성 -> 구매한 사용자만 댓글을 달게 해야되지 않을까..?
     @PostMapping("/{productId}/comment")
     public ResponseEntity<ApiResponseDto> createComment(@PathVariable Long productId, @AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody CommentRequestDto requestDto) {
         commentService.createComment(productId, userDetails.getUser(), requestDto);
