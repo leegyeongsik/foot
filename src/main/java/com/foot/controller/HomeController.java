@@ -20,6 +20,7 @@ public class HomeController {
         model.addAttribute("productId" ,productId);
         return "innerProduct";
     }
+
     @Secured(UserRoleEnum.Authority.ADMIN)
     @GetMapping("/Product/create")
     public String CreateProductPage(){

@@ -31,6 +31,11 @@
 
         .menu-item {
             margin-bottom: 10px;
+            text-align: start;
+        }
+        .menu-item:hover {
+            text-decoration: underline;
+            cursor: pointer;
         }
 
         .list-container {
@@ -61,8 +66,14 @@
             background-color: #f2f2f2;
         }
 
+        .user-name:hover {
+            text-decoration: underline;
+            cursor: pointer;
+        }
+
         .page-number {
             margin-top: 20px; /* 원하는 여백 값으로 조정 */
+            margin-bottom: 20px;
         }
 
         .search-form {
@@ -93,7 +104,7 @@
 <body>
 <div class="admin-container">
     <div class="admin-menu">
-        <div class="menu-item">메뉴 항목 1</div>
+        <div class="menu-item" onclick="location.href='/view/admin/products'">상품관리</div>
         <div class="menu-item">메뉴 항목 2</div>
         <!-- 원하는 메뉴 항목들을 추가 -->
     </div>
@@ -110,19 +121,18 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="user : ${list}" th:attr="data-user-id=${user.id}" onclick="goToUserDetailPage(this)">
+                <tr th:each="user : ${list}">
                     <td th:text="${user.id}"></td>
-                    <td th:text="${user.name}"></td>
+                    <td class="user-name" th:text="${user.name}" th:attr="data-user-id=${user.id}" onclick="goToUserDetailPage(this)"></td>
                     <td th:text="${user.email}"></td>
                     <td th:text="${user.role}"></td>
                 </tr>
                 </tbody>
             </table>
-
             <div class="page-number">
                 <th:block th:each="page : ${#numbers.sequence(startPage, endPage)}">
                     <a th:if="${page != nowPage}" th:href="@{/view/admin/users(page = ${page -1}, searchKeyword = ${param.searchKeyword})}" th:text="${page}"></a>
-                    <strong th:if="${page == nowPage}" th:text="${page}" style="color : #fff"></strong>
+                    <strong th:if="${page == nowPage}" th:text="${page}" style="color : #333"></strong>
                 </th:block>
             </div>
             <div class="search-form">

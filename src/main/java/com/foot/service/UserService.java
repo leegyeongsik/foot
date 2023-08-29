@@ -81,22 +81,22 @@ public class UserService {
     }
 
     // 회원 정보 수정
-    @Transactional
     public ProfileResponseDto updateUser(User user, ProfileRequestDto requestDto) {
 
         User currentUser = userRepository.findByName(user.getName()).orElseThrow(
                 () -> new IllegalArgumentException("존재하지 않는 유저입니다.")
         );
 
-
-        String newPassword = passwordEncoder.encode(requestDto.getNewPassword());
+        // 비밀번호 변경창에 아무것도 입력하지 않았을 경우 변경하지 않고 유지
+        if (!requestDto.getNewPassword().isEmpty()) {
+            String newPassword = passwordEncoder.encode(requestDto.getNewPassword());
+            user.setPassword(newPassword);
+        }
 
         currentUser.setName(requestDto.getName());
-        currentUser.setPassword(newPassword);
         currentUser.setEmail(requestDto.getEmail());
         currentUser.setAddress(requestDto.getAddress());
         currentUser.setCellphone(requestDto.getCellphone());
-        //currentUser.setUserImage(requestDto.getUserImage());
         userRepository.save(currentUser);
         return new ProfileResponseDto(currentUser);
     }
