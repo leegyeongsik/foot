@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -22,6 +23,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
+@EnableMethodSecurity(securedEnabled = true)
 public class WebSecurityConfig {
 
     private final JwtUtil jwtUtil;
@@ -62,18 +64,19 @@ public class WebSecurityConfig {
 
         // 토큰이 없어도 접근가능하도록
         http.authorizeHttpRequests((authorizeHttpRequests) ->
-                        authorizeHttpRequests
-                                .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll() // resources 접근 허용 설정
-                                .requestMatchers("/").permitAll()
-                                .requestMatchers("/api/auth/**").permitAll() // 회원가입, 로그인으로 시작하는 요청 모두 접근 허가
-                                .requestMatchers("/view/**").permitAll()
-                                .requestMatchers("/api/users/**").permitAll()
-                                .requestMatchers("/api/product/**").permitAll()
-                                .anyRequest().authenticated() // 그 외 모든 요청 인증처리
-
-                );
+                authorizeHttpRequests
+                        .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll() // resources 접근 허용 설정
+                        .requestMatchers("/").permitAll()
+                        .requestMatchers("/api/auth/**").permitAll() // 회원가입, 로그인으로 시작하는 요청 모두 접근 허가
+                        .requestMatchers("/view/**").permitAll()
+                        //.requestMatchers("/api/users/**").permitAll()
+                        .requestMatchers("/api/product/**").permitAll()
+                        .requestMatchers("/Product/**").permitAll()
 
 
+                        .anyRequest().authenticated() // 그 외 모든 요청 인증처리
+
+        );
 
         http.formLogin((formLogin) ->
                 formLogin
