@@ -197,6 +197,19 @@
 
 </body>
 <script>
+    const Toast = Swal.mixin({
+        toast: true,
+        position: 'center-center',
+        showConfirmButton: false,
+        timer: 600,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+            toast.addEventListener('mouseenter', Swal.stopTimer)
+            toast.addEventListener('mouseleave', Swal.resumeTimer)
+        }
+    })
+
+
     $(document).ready(function () {
         $("#selectAll").click(function () {
             toggleSelectAll();
@@ -238,7 +251,7 @@
         }
 
         // 프롬프트 창을 이용하여 할인율 입력 받기
-        var discountRate = parseFloat(prompt("Enter the discount rate:"));
+        var discountRate = parseFloat(prompt("할인율 입력 : "));
 
         if (discountRate === null) {
             return; // 사용자가 취소 버튼을 눌렀을 경우 처리 중단
@@ -271,13 +284,29 @@
             contentType: "application/json",
             data: JSON.stringify(requestData),
             success: function(data) {
-                alert("Selected products' discount rates updated successfully.");
-                // 페이지 리로드 또는 다른 작업 수행
+                successMsg("할인율 변경 성공");
             },
             error: function(jqXHR, textStatus, errorThrown) {
-                alert("Error updating selected products' discount rates.");
+                errorMsg("할인율 변경 실패")
             }
         });
+    }
+
+
+    function successMsg(msg) {
+        Toast.fire({
+            icon: 'success',
+            title: msg
+        }).then(function () {
+            window.location.reload();
+        })
+    }
+
+    function errorMsg(msg){
+        Toast.fire({
+            icon: 'error',
+            title: msg
+        })
     }
 
 </script>

@@ -109,7 +109,8 @@ public class AdminService {
 
                 // 할인된 가격 계산 및 업데이트
                 double discountedPrice = product.getPrice() * (1 - discountRate / 100);
-                product.setDiscountPrice(discountedPrice);
+                Long price = Math.round(discountedPrice);
+                product.setDiscountPrice(price);
 
                 // 상품 저장
                 productRepository.save(product);

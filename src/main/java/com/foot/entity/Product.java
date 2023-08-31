@@ -36,7 +36,7 @@ public class Product extends Timestamped {
     private double discountRate;
 
     @Column(name = "discountprice" , nullable = true)
-    private double discountPrice;
+    private Long discountPrice;
 
     @Builder
     public Product(Long TotalAmount , String Description , Long price  , String model , String modelpicture , User user){
@@ -98,7 +98,7 @@ public class Product extends Timestamped {
         this.discountRate = discountRate;
     }
 
-    public void setDiscountPrice(double discountPrice) {
+    public void setDiscountPrice(Long discountPrice) {
         this.discountPrice = discountPrice;
     }
 
