@@ -308,6 +308,7 @@
 
 
     // 상품 삭제
+    // 상품 삭제
     function deleteProduct() {
         var selectedProductIds = [];
 
@@ -317,16 +318,33 @@
             selectedProductIds.push(productId);
         });
 
-        console.log(selectedProductIds);
-
         if (selectedProductIds.length === 0) {
             alert("Please select at least one product.");
             return;
         }
 
-        // 선택한 상품 ID와 할인율 정보를 JSON으로 변환하여 POST 요청 보내기
+        // SweetAlert2를 사용하여 확인 창 띄우기
+        Swal.fire({
+            title: "상품 삭제",
+            text: "정말 선택하신 상품들을 삭제하시겠습니까?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "예, 삭제합니다.",
+            cancelButtonText: '아니오, 취소합니다'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // 사용자가 확인을 선택한 경우 상품 삭제 처리
+                deleteProducts(selectedProductIds);
+            }
+        });
+    }
+
+    // 선택한 상품들 삭제
+    function deleteProducts(productIds) {
         var requestData = {
-            productIds: selectedProductIds
+            productIds: productIds
         };
 
         $.ajax({
@@ -341,9 +359,6 @@
                 errorMsg("삭제 실패")
             }
         });
-
-
-
     }
 
     function successMsg(msg) {
