@@ -3,6 +3,7 @@ package com.foot.service;
 import com.foot.dto.AdminUserRequestDto;
 import com.foot.dto.ProfileResponseDto;
 import com.foot.dto.UserListResponseDto;
+import com.foot.dto.products.SaleProductRequestDto;
 import com.foot.entity.Product;
 import com.foot.entity.User;
 import com.foot.entity.UserRoleEnum;
@@ -26,6 +27,7 @@ public class AdminService {
     private final UserRepository userRepository;
     private final ProductRepository productRepository;
     private final PasswordEncoder passwordEncoder;
+    private final ProductService productService;
 
     // 전체 회원 목록 조회
     public Page<User> getUserList(Pageable pageable) {
@@ -77,6 +79,12 @@ public class AdminService {
         );
     }
 
+    public Product getProductById(Long id) {
+        return productRepository.findById(id).orElseThrow(() ->
+                new IllegalArgumentException("상품이 존재하지 않습니다.")
+                );
+    }
+
     // 상품 전체 목록 조회
     public Page<Product> getProductList(Pageable pageable) {
         return productRepository.findAll(pageable);
@@ -86,5 +94,26 @@ public class AdminService {
     // 상품 검색
     public Page<Product> productSearchList(String searchKeyword, Pageable pageable) {
         return productRepository.findByModelContaining(searchKeyword, pageable);
+    }
+
+    // 상품 할인율 변경
+    public void updateProductDiscountRates(SaleProductRequestDto requestDto) {
+        List<Long> productIds = requestDto.getProductIds();
+        double discountRate = requestDto.getDiscountRate();
+
+        for (Long productId : productIds) {
+            Product product = getProductById(productId);
+            if (product != null) {
+                // 할인율 업데이트
+                product.setDiscountRate(discountRate);
+
+                // 할인된 가격 계산 및 업데이트
+                double discountedPrice = product.getPrice() * (1 - discountRate / 100);
+                product.setDiscountPrice(discountedPrice);
+
+                // 상품 저장
+                productRepository.save(product);
+            }
+        }
     }
 }

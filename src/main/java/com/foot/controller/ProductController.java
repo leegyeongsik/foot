@@ -52,11 +52,11 @@ public class ProductController {
 //        productService.getCategoryProduct(brand);
 //    }
 
-    @PostMapping("/{productId}") // 특정 상품 세일 추가
-    public void updateSaleProduct (@PathVariable Long productId , @RequestBody SaleProductRequestDto requestDto
-            , @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        productService.updateSaleProduct(productId,requestDto , userDetails.getUser());
-    }
+//    @PostMapping("/{productId}") // 특정 상품 세일 추가
+//    public void updateSaleProduct (@PathVariable Long productId , @RequestBody SaleProductRequestDto requestDto
+//            , @AuthenticationPrincipal UserDetailsImpl userDetails) {
+//        productService.updateSaleProduct(productId,requestDto , userDetails.getUser());
+//    }
 
     @PostMapping("foot/{footId}") // 상품 신발정보수정
     public void updateFootProduct (@RequestBody FootProductRequestDto requestDto ,@PathVariable Long footId

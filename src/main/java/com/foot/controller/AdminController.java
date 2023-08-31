@@ -4,6 +4,7 @@ import com.foot.dto.AdminUserRequestDto;
 import com.foot.dto.ProfileRequestDto;
 import com.foot.dto.ProfileResponseDto;
 import com.foot.dto.UserListResponseDto;
+import com.foot.dto.products.SaleProductRequestDto;
 import com.foot.entity.User;
 import com.foot.entity.UserRoleEnum;
 import com.foot.repository.UserRepository;
@@ -54,6 +55,15 @@ public class AdminController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("회원 탈퇴 실패");
         }
+    }
+
+
+
+    @Secured(UserRoleEnum.Authority.ADMIN)
+    @PostMapping("/updateDiscountRates")
+    public ResponseEntity<String> updateDiscountRates(@RequestBody SaleProductRequestDto requestDto) {
+        adminService.updateProductDiscountRates(requestDto);
+        return ResponseEntity.ok("Discount rates updated successfully");
     }
 
 }

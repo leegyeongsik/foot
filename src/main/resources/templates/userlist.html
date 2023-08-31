@@ -14,7 +14,7 @@
             display: flex;
             flex-direction: row;
             height: 100vh;
-            background-color: #f2f2f2;
+            background-color: white;
         }
 
         .admin-menu {
@@ -114,6 +114,7 @@
             <table>
                 <thead>
                 <tr>
+                    <th><input type="checkbox" id="selectAll" /></th>
                     <th>회원 번호</th>
                     <th>ID</th>
                     <th>Email</th>
@@ -122,6 +123,7 @@
                 </thead>
                 <tbody>
                 <tr th:each="user : ${list}">
+                    <td><input type="checkbox" class="user-checkbox" th:id="${'checkbox-' + user.id}" /></td>
                     <td th:text="${user.id}"></td>
                     <td class="user-name" th:text="${user.name}" th:attr="data-user-id=${user.id}" onclick="goToUserDetailPage(this)"></td>
                     <td th:text="${user.email}"></td>
@@ -149,6 +151,19 @@
 
 </body>
 <script>
+    $(document).ready(function () {
+        $("#selectAll").click(function () {
+            toggleSelectAll();
+        });
+    });
+    function toggleSelectAll() {
+        var selectAllCheckbox = document.getElementById('selectAll');
+        var userCheckboxes = document.getElementsByClassName('user-checkbox');
+
+        for (var i = 0; i < userCheckboxes.length; i++) {
+            userCheckboxes[i].checked = selectAllCheckbox.checked;
+        }
+    }
     function goToUserDetailPage(row) {
         var userId = row.getAttribute("data-user-id");
         console.log(userId);

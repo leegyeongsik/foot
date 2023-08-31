@@ -134,6 +134,9 @@
         <div class="list-container">
             <div class="btn-container">
                 <button class="product-btn" onclick="location.href='/Product/create'">상품 추가</button>
+                <!-- 할인율 변경 버튼 -->
+                <button class="discount-btn" onclick="openDiscountPrompt()">할인율 변경</button>
+
             </div>
 
             <table>
@@ -152,9 +155,9 @@
                 </thead>
                 <tbody>
                 <tr th:each="product : ${list}">
-                    <td><input type="checkbox" class="product-checkbox" th:id="${'checkbox-' + product.id}" /></td>
+                    <td><input type="checkbox" class="product-checkbox" th:attr="data-product-id=${product.id}" /></td>
                     <td th:text="${product.id}"></td>
-                    <td><img th:src="${product.modelpicture}" alt="Product Image" /></td>
+                    <td><img th:src="${product.modelpicture}" alt="Product Image" width="50" height="50" /></td>
                     <td th:text="${product.model}"  th:attr="data-product-id=${product.id}" onclick="goToProductDetailPage(this)" class="product-model"></td>
                     <td th:text="${product.brand}"></td>
                     <td th:text="${product.price}"></td>
@@ -189,6 +192,8 @@
             toggleSelectAll();
         });
     });
+
+    // 상품 전체 선택
     function toggleSelectAll() {
         var selectAllCheckbox = document.getElementById('selectAll');
         var productCheckboxes = document.getElementsByClassName('product-checkbox');
@@ -197,10 +202,73 @@
             productCheckboxes[i].checked = selectAllCheckbox.checked;
         }
     }
+
+    // 상품 상세 페이지로 이동
     function goToProductDetailPage(row) {
         var productId = row.getAttribute("data-product-id");
         console.log(productId);
         window.location.href = "/Product/update/" + productId;
     }
+
+    // 상품 할인율을 입력하는 창
+    function openDiscountPrompt() {
+        var selectedProductIds = [];
+
+        // 선택한 체크 박스의 상품 ID 수집
+        $('.product-checkbox:checked').each(function() {
+            var productId = $(this).data('product-id'); // data-product-id 속성 값 가져오기
+            selectedProductIds.push(productId);
+        });
+
+        console.log(selectedProductIds);
+
+        if (selectedProductIds.length === 0) {
+            alert("Please select at least one product.");
+            return;
+        }
+
+        // 프롬프트 창을 이용하여 할인율 입력 받기
+        var discountRate = parseFloat(prompt("Enter the discount rate:"));
+
+        if (discountRate === null) {
+            return; // 사용자가 취소 버튼을 눌렀을 경우 처리 중단
+        }
+
+        console.log(discountRate);
+
+        if (isNaN(discountRate) || discountRate < 0 || discountRate > 100) {
+            alert("Please enter a valid discount rate between 0 and 100.");
+            return;
+        }
+
+        // 선택한 상품들의 할인율을 업데이트하는 작업 수행
+        updateDiscountRates(selectedProductIds, discountRate);
+    }
+
+    function updateDiscountRates(productIds, discountRate) {
+
+        // 선택한 상품 ID와 할인율 정보를 JSON으로 변환하여 POST 요청 보내기
+        var requestData = {
+            productIds: productIds,
+            discountRate: discountRate
+        };
+
+        console.log(requestData.productIds, requestData.discountRate)
+
+        $.ajax({
+            type: "POST",
+            url: "/api/admin/updateDiscountRates", // 업데이트 처리를 담당하는 서버의 URL
+            contentType: "application/json",
+            data: JSON.stringify(requestData),
+            success: function(data) {
+                alert("Selected products' discount rates updated successfully.");
+                // 페이지 리로드 또는 다른 작업 수행
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                alert("Error updating selected products' discount rates.");
+            }
+        });
+    }
+
 </script>
 </html>

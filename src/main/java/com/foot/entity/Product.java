@@ -33,9 +33,10 @@ public class Product extends Timestamped {
     private String modelpicture;
 
     @Column(name = "discountrate" , nullable = true)
-    private String discountRate;
+    private double discountRate;
+
     @Column(name = "discountprice" , nullable = true)
-    private Long discountPrice;
+    private double discountPrice;
 
     @Builder
     public Product(Long TotalAmount , String Description , Long price  , String model , String modelpicture , User user){
@@ -93,9 +94,17 @@ public class Product extends Timestamped {
 //        this.brand =
     }
 
-    public void addSale(SaleProductRequestDto requestDto){
-        this.discountRate = requestDto.getDiscountRate();
-        this.discountPrice = requestDto.getDiscountPrice();
+    public void setDiscountRate(double discountRate) {
+        this.discountRate = discountRate;
     }
+
+    public void setDiscountPrice(double discountPrice) {
+        this.discountPrice = discountPrice;
+    }
+
+//    public void addSale(SaleProductRequestDto requestDto){
+//        this.discountRate = requestDto.getDiscountRate();
+//        this.discountPrice = requestDto.getDiscountPrice();
+//    }
 
 }
