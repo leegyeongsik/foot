@@ -10,6 +10,9 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     <title>product List</title>
     <style>
+        body {
+            margin: 0;
+        }
         .admin-container {
             display: flex;
             flex-direction: row;
@@ -42,6 +45,17 @@
             cursor: pointer;
             display: block;
 
+        }
+
+        .delete-btn {
+            padding: 10px 16px;
+            border: none;
+            border-radius: 5px;
+            background-color: #333;
+            color: #fff;
+            font-weight: 700;
+            cursor: pointer;
+            display: block;
         }
 
         .admin-menu {
@@ -144,9 +158,8 @@
         <div class="list-container">
             <div class="btn-container">
                 <button class="product-btn" onclick="location.href='/Product/create'">상품 추가</button>
-                <!-- 할인율 변경 버튼 -->
                 <button class="discount-btn" onclick="openDiscountPrompt()">할인율 변경</button>
-
+                <button class="delete-btn" onclick="deleteProduct()">상품 삭제</button>
             </div>
 
             <table>
@@ -268,6 +281,7 @@
         updateDiscountRates(selectedProductIds, discountRate);
     }
 
+    // 할인율 수정
     function updateDiscountRates(productIds, discountRate) {
 
         // 선택한 상품 ID와 할인율 정보를 JSON으로 변환하여 POST 요청 보내기
@@ -280,7 +294,7 @@
 
         $.ajax({
             type: "POST",
-            url: "/api/admin/updateDiscountRates", // 업데이트 처리를 담당하는 서버의 URL
+            url: "/api/admin/products/updateDiscountRates", // 업데이트 처리를 담당하는 서버의 URL
             contentType: "application/json",
             data: JSON.stringify(requestData),
             success: function(data) {
@@ -292,6 +306,45 @@
         });
     }
 
+
+    // 상품 삭제
+    function deleteProduct() {
+        var selectedProductIds = [];
+
+        // 선택한 체크 박스의 상품 ID 수집
+        $('.product-checkbox:checked').each(function() {
+            var productId = $(this).data('product-id'); // data-product-id 속성 값 가져오기
+            selectedProductIds.push(productId);
+        });
+
+        console.log(selectedProductIds);
+
+        if (selectedProductIds.length === 0) {
+            alert("Please select at least one product.");
+            return;
+        }
+
+        // 선택한 상품 ID와 할인율 정보를 JSON으로 변환하여 POST 요청 보내기
+        var requestData = {
+            productIds: selectedProductIds
+        };
+
+        $.ajax({
+            type: "DELETE",
+            url: "/api/admin/products", // 업데이트 처리를 담당하는 서버의 URL
+            contentType: "application/json",
+            data: JSON.stringify(requestData),
+            success: function(data) {
+                successMsg("삭제 성공")
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                errorMsg("삭제 실패")
+            }
+        });
+
+
+
+    }
 
     function successMsg(msg) {
         Toast.fire({

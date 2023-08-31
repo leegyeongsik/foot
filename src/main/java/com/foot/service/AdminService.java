@@ -4,6 +4,7 @@ import com.foot.dto.AdminUserRequestDto;
 import com.foot.dto.ProfileResponseDto;
 import com.foot.dto.UserListResponseDto;
 import com.foot.dto.products.SaleProductRequestDto;
+import com.foot.dto.products.SelectedProductRequestDto;
 import com.foot.entity.Product;
 import com.foot.entity.User;
 import com.foot.entity.UserRoleEnum;
@@ -114,6 +115,18 @@ public class AdminService {
 
                 // 상품 저장
                 productRepository.save(product);
+            }
+        }
+    }
+
+    // 상품 삭제
+    public void deleteProducts(SelectedProductRequestDto requestDto) {
+        List<Long> productIds = requestDto.getProductIds();
+
+        for (Long productId : productIds) {
+            Product product = getProductById(productId);
+            if (product != null) {
+                productRepository.delete(product);
             }
         }
     }

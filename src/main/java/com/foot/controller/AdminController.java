@@ -5,6 +5,7 @@ import com.foot.dto.ProfileRequestDto;
 import com.foot.dto.ProfileResponseDto;
 import com.foot.dto.UserListResponseDto;
 import com.foot.dto.products.SaleProductRequestDto;
+import com.foot.dto.products.SelectedProductRequestDto;
 import com.foot.entity.User;
 import com.foot.entity.UserRoleEnum;
 import com.foot.repository.UserRepository;
@@ -59,11 +60,23 @@ public class AdminController {
 
 
 
+    // 상품 할인율 변경
     @Secured(UserRoleEnum.Authority.ADMIN)
-    @PostMapping("/updateDiscountRates")
+    @PostMapping("/products/updateDiscountRates")
     public ResponseEntity<String> updateDiscountRates(@RequestBody SaleProductRequestDto requestDto) {
         adminService.updateProductDiscountRates(requestDto);
         return ResponseEntity.ok("Discount rates updated successfully");
     }
+
+
+    // 상품 삭제
+    @Secured(UserRoleEnum.Authority.ADMIN)
+    @DeleteMapping("/products")
+    public ResponseEntity<String> deleteProducts(@RequestBody SelectedProductRequestDto requestDto) {
+        adminService.deleteProducts(requestDto);
+        return ResponseEntity.ok("Discount rates updated successfully");
+    }
+
+
 
 }

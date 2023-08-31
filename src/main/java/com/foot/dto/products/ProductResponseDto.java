@@ -12,7 +12,7 @@ public class ProductResponseDto {
     Long price;
     String ModelPicture;
     double discountRate;
-    double discountPrice;
+    Long discountPrice;
 //    String brand;
 
     public ProductResponseDto(Product product){
