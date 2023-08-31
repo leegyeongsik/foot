@@ -1,7 +1,10 @@
 package com.foot.controller;
 
+import com.foot.entity.User;
 import com.foot.entity.UserRoleEnum;
+import com.foot.security.UserDetailsImpl;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,6 +16,16 @@ public class HomeController {
     @GetMapping("")
     public String HomePage() {
         return "index";
+    }
+
+    @GetMapping("/view/home")
+    public String LoginHome(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+        User user = userDetails.getUser();
+        if(user.getRole() == UserRoleEnum.ADMIN) {
+            return "redirect:/view/admin/users";
+        } else {
+            return "index";
+        }
     }
 
     @GetMapping("/Product/{productId}")

@@ -152,7 +152,7 @@
             data: JSON.stringify({name: name, password: password}),
         })
             .done(function (res, status, xhr) {
-                window.location.href = host
+                window.location.href = "/view/home"
             })
             .fail(function (jqXHR, textStatus) {
                 Swal.fire({
