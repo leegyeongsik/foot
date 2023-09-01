@@ -17,6 +17,7 @@
             align-items: center;
             height: 100vh;
         }
+
         .mainMenu {
             display: flex;
             flex-direction: column;
@@ -28,6 +29,7 @@
             display: flex;
             justify-content: space-between;
         }
+
         .menuBox:hover p {
             text-decoration: underline;
             cursor: pointer;
@@ -47,6 +49,7 @@
         .title {
             margin: 0;
         }
+
         .myPageTitle {
             display: flex;
             justify-content: center;
@@ -76,19 +79,21 @@
         <div class="menuBox infoModify">
             <p class="title" onclick="location.href='/view/profile'">회원정보수정</p>
         </div>
-        <div class="menuBox orderList">
-            <p class="title">주문내역</p>
-        </div>
-    </div>
-    <div class="menuRow">
         <div class="menuBox basket">
             <p class="title">장바구니</p>
         </div>
+    </div>
+    <div class="menuRow">
+        <div class="menuBox orderList">
+            <p class="title">주문내역</p>
+        </div>
         <div class="menuBox favorite">
-            <p class="title">찜한상품</p>
+            <p class="title">판매내역</p>
         </div>
     </div>
 </div>
-
 </body>
+<script>
+    var userId = [[${userId}]];
+</script>
 </html>

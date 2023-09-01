@@ -45,7 +45,7 @@ public class AuthViewController {
     public String getMyPage(@AuthenticationPrincipal UserDetailsImpl userDetails, Model model) {
         User user = userDetails.getUser();
         model.addAttribute("name", user.getName());
-        model.addAttribute("Userid", user.getId());
+        model.addAttribute("userId", user.getId());
         return "myPage";
     }
 
