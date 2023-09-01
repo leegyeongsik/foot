@@ -20,13 +20,17 @@
         .mainMenu {
             display: flex;
             flex-direction: column;
-            width: 80%;
-            border: 2px solid white;
+            width: 70%;
+            border: transparent;
         }
 
         .menuRow {
             display: flex;
             justify-content: space-between;
+        }
+        .menuBox:hover {
+            text-decoration: underline;
+            cursor: pointer;
         }
 
         .menuBox {
@@ -36,7 +40,8 @@
             justify-content: center;
             width: 100px;
             height: 100px;
-            border: 1px solid white;
+            border: 1px solid #f2f2f2;
+            background-color: white;
         }
 
         .title {
@@ -49,8 +54,15 @@
             font-size: 32px;
             font-weight: 700;
             color: #575dfb;
-            border: 1px solid white;
+            border: 1px solid #f2f2f2;
+            background-color: white;
             margin-bottom: 5px;
+        }
+
+        /* 링크 스타일 */
+        a {
+            text-decoration: none; /* 밑줄 제거 */
+            color: inherit; /* 링크 색상을 상위 요소의 색상으로 상속 */
         }
 
     </style>
@@ -58,30 +70,22 @@
 <body>
 <div class="mainMenu">
     <div class="menuRow myPageTitle">
-        <p>user님의 My page</p>
+        <p th:text="|${name}님의 My Page|"></p>
     </div>
     <div class="menuRow">
         <div class="menuBox infoModify">
-            <a href="">
-                <p class="title">회원정보수정</p>
-            </a>
+            <p class="title" onclick="location.href='/view/profile'">회원정보수정</p>
         </div>
         <div class="menuBox orderList">
-            <a href="">
-                <p class="title">주문내역</p>
-            </a>
+            <p class="title">주문내역</p>
         </div>
     </div>
     <div class="menuRow">
         <div class="menuBox basket">
-            <a href="">
-                <p class="title">장바구니</p>
-            </a>
+            <p class="title">장바구니</p>
         </div>
         <div class="menuBox favorite">
-            <a href="">
-                <p class="title">찜한상품</p>
-            </a>
+            <p class="title">찜한상품</p>
         </div>
     </div>
 </div>

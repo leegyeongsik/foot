@@ -4,6 +4,7 @@ import com.foot.entity.Favorite;
 import com.foot.entity.Product;
 import com.foot.entity.User;
 import com.foot.repository.FavoriteRepository;
+import com.foot.repository.products.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
