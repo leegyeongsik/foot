@@ -465,7 +465,7 @@
         if (response) {
           // console.log(response)
           var Products = `
-                              <img src=${response.productResponseDto.modelPicture} alt="Your Image Alt Text" style="max-width: 100%; height: auto; border-radius: 3%;" />
+                              <img src="${response.productResponseDto.modelPicture}" alt="Your Image Alt Text" style="max-width: 100%; height: auto; border-radius: 3%;" />
 `
           $('.image-container').append(Products);
           var Productsss=`
@@ -489,7 +489,7 @@
           for (var i = 0; i < list.length; i++) {
             var Products = `
                               <div class="item" style="border: 1px solid #fff; background-color: #ffffff;">
-                                <img class ="click_img_color" src=${list[i].colorImg} id=${list[i].colorId} style="width:96px; height:96px; border-radius: 3%;" >
+                                <img class ="click_img_color" src="${list[i].colorImg}" id=${list[i].colorId} style="width:96px; height:96px; border-radius: 3%;" >
                               </div>
 
                            `

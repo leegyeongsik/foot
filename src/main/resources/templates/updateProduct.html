@@ -596,7 +596,7 @@
             success: function (response) {
                 if (response) {
                     var Products = `
-                            <img src=${response.productResponseDto.modelPicture} alt="미리보기 이미지" class="preview">
+                            <img src="${response.productResponseDto.modelPicture}" alt="미리보기 이미지" class="preview">
                        `
 
                     $('.drag-file').append(Products);

@@ -8,11 +8,14 @@ import com.foot.repository.products.ProductRepository;
 import com.foot.repository.products.ProductSizeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -24,6 +27,7 @@ public class ProductService {
     private final ProductSizeRepository productSizeRepository;
     private final S3UploadService s3UploadService;
 
+    @Transactional
     public void createProduct(ProductRequestDto requestDto , User user) throws IOException { // 상품등록
 //        confirmAdminToken(user);
         List<MultipartFile> modelColorImg = requestDto.getModelColorImg();
