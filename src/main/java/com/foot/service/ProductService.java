@@ -7,6 +7,7 @@ import com.foot.repository.products.ProductColorRepository;
 import com.foot.repository.products.ProductRepository;
 import com.foot.repository.products.ProductSizeRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -19,7 +20,7 @@ import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
-
+@Slf4j
 public class ProductService {
     private final ProductRepository productRepository;
     private final ProductColorImgRepository productColorImgRepository;
@@ -51,6 +52,7 @@ public class ProductService {
                 .Description(requestDto.getDescription())
                 .modelpicture(s3UploadService.uploadImage(requestDto.getModelPicture())) // 들어온거 업로드해서 주소 넣어줌
                 .user(user)
+                .discountPrice(requestDto.getPrice())
                 .build();
 
         productRepository.save(product);
@@ -174,12 +176,6 @@ public class ProductService {
         productRepository.delete(product);
     }
 
-//    public void updateSaleProduct(Long productId, SaleProductRequestDto requestDto, User user) {
-////        confirmAdminToken(user);
-//
-//        Product product=productRepository.findById(productId).get();
-//        product.addSale(requestDto);
-//    }
 
     public void updateFootProduct(FootProductRequestDto requestDto, Long footId, User user) {
 //        confirmAdminToken(user);

@@ -1,11 +1,10 @@
 package com.foot.entity;
 
-import com.foot.dto.products.ProductRequestDto;
-import com.foot.dto.products.SaleProductRequestDto;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,20 +31,22 @@ public class Product extends Timestamped {
     @Column(name = "modelpicture")
     private String modelpicture;
 
-    @Column(name = "discountrate" , nullable = true)
+    @Column(name = "discountrate" )
+    @ColumnDefault("0")
     private double discountRate;
 
-    @Column(name = "discountprice" , nullable = true)
+    @Column(name = "discountprice")
     private Long discountPrice;
 
     @Builder
-    public Product(Long TotalAmount , String Description , Long price  , String model , String modelpicture , User user){
+    public Product(Long TotalAmount , String Description , Long price  , String model , String modelpicture , User user , Long discountPrice){
         this.TotalAmount = TotalAmount;
         this.Description =Description;
         this.price =price;
         this.model = model;
         this.modelpicture = modelpicture;
         this.user = user;
+        this.discountPrice = discountPrice;
     }
 
 
