@@ -174,12 +174,12 @@ public class ProductService {
         productRepository.delete(product);
     }
 
-    public void updateSaleProduct(Long productId, SaleProductRequestDto requestDto, User user) {
-//        confirmAdminToken(user);
-
-        Product product=productRepository.findById(productId).get();
-        product.addSale(requestDto);
-    }
+//    public void updateSaleProduct(Long productId, SaleProductRequestDto requestDto, User user) {
+////        confirmAdminToken(user);
+//
+//        Product product=productRepository.findById(productId).get();
+//        product.addSale(requestDto);
+//    }
 
     public void updateFootProduct(FootProductRequestDto requestDto, Long footId, User user) {
 //        confirmAdminToken(user);

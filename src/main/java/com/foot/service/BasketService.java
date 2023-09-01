@@ -6,6 +6,7 @@ import com.foot.entity.Basket;
 import com.foot.entity.ProductSize;
 import com.foot.entity.User;
 import com.foot.repository.BasketRepository;
+import com.foot.repository.products.ProductSizeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

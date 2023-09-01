@@ -1,6 +1,7 @@
 package com.foot.controller;
 
 import com.foot.dto.ProfileResponseDto;
+import com.foot.entity.User;
 import com.foot.security.UserDetailsImpl;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -38,6 +39,17 @@ public class AuthViewController {
         model.addAttribute("profile", profile);
         return "profile";
     }
+
+    // 마이 페이지
+    @GetMapping("/myPage")
+    public String getMyPage(@AuthenticationPrincipal UserDetailsImpl userDetails, Model model) {
+        User user = userDetails.getUser();
+        model.addAttribute("name", user.getName());
+        model.addAttribute("userId", user.getId());
+        return "myPage";
+    }
+
+
 
 
 
