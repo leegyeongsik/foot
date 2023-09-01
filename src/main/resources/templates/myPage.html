@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        body {
+            display: flex;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            color: #000;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .mainMenu {
+            display: flex;
+            flex-direction: column;
+            width: 80%;
+            border: 2px solid white;
+        }
+
+        .menuRow {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .menuBox {
+            flex-grow: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100px;
+            height: 100px;
+            border: 1px solid white;
+        }
+
+        .title {
+            margin: 0;
+        }
+        .myPageTitle {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 32px;
+            font-weight: 700;
+            color: #575dfb;
+            border: 1px solid white;
+            margin-bottom: 5px;
+        }
+
+    </style>
+</head>
+<body>
+<div class="mainMenu">
+    <div class="menuRow myPageTitle">
+        <p>user님의 My page</p>
+    </div>
+    <div class="menuRow">
+        <div class="menuBox infoModify">
+            <a href="">
+                <p class="title">회원정보수정</p>
+            </a>
+        </div>
+        <div class="menuBox orderList">
+            <a href="">
+                <p class="title">주문내역</p>
+            </a>
+        </div>
+    </div>
+    <div class="menuRow">
+        <div class="menuBox basket">
+            <a href="">
+                <p class="title">장바구니</p>
+            </a>
+        </div>
+        <div class="menuBox favorite">
+            <a href="">
+                <p class="title">찜한상품</p>
+            </a>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

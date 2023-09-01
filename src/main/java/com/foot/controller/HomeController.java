@@ -18,6 +18,8 @@ public class HomeController {
         return "index";
     }
 
+
+    // 로그인 시 일반유저는 홈으로, 관리자는 관리자 페이지로 리다이렉트
     @GetMapping("/view/home")
     public String LoginHome(@AuthenticationPrincipal UserDetailsImpl userDetails) {
         User user = userDetails.getUser();

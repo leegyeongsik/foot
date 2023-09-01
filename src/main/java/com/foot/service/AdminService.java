@@ -44,7 +44,6 @@ public class AdminService {
     public User getUser(Long id) {
         User user = findUser(id);
         return user;
-
     }
 
 
@@ -71,19 +70,6 @@ public class AdminService {
     public void deleteUser(Long id) {
         User user = findUser(id);
         userRepository.delete(user);
-    }
-
-
-    public User findUser(Long id) {
-        return userRepository.findById(id).orElseThrow(() ->
-                new IllegalArgumentException("유저가 존재하지 않습니다.")
-        );
-    }
-
-    public Product getProductById(Long id) {
-        return productRepository.findById(id).orElseThrow(() ->
-                new IllegalArgumentException("상품이 존재하지 않습니다.")
-                );
     }
 
     // 상품 전체 목록 조회
@@ -129,5 +115,21 @@ public class AdminService {
                 productRepository.delete(product);
             }
         }
+    }
+
+
+
+
+
+    public User findUser(Long id) {
+        return userRepository.findById(id).orElseThrow(() ->
+                new IllegalArgumentException("유저가 존재하지 않습니다.")
+        );
+    }
+
+    public Product getProductById(Long id) {
+        return productRepository.findById(id).orElseThrow(() ->
+                new IllegalArgumentException("상품이 존재하지 않습니다.")
+        );
     }
 }
