@@ -5,7 +5,7 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>My Page</title>
+    <title>관리자 페이지</title>
     <style>
         body {
             display: flex;
@@ -50,7 +50,7 @@
             margin: 0;
         }
 
-        .myPageTitle {
+        .adminTitle {
             display: flex;
             justify-content: center;
             align-items: center;
@@ -72,28 +72,27 @@
 </head>
 <body>
 <div class="mainMenu">
-    <div class="menuRow myPageTitle">
-        <p th:text="|${name}님의 My Page|"></p>
+    <div class="menuRow adminTitle">
+        <p>관리자 메뉴</p>
     </div>
     <div class="menuRow">
-        <div class="menuBox infoModify">
-            <p class="title" onclick="location.href='/view/profile'">회원정보수정</p>
+        <div class="menuBox brand">
+            <p class="title" onclick="location.href='/view/admin/users'">회원관리</p>
         </div>
-        <div class="menuBox basket">
-            <p class="title">장바구니</p>
+        <div class="menuBox user">
+            <p class="title" onclick="location.href='/view/admin/products'">상품관리</p>
         </div>
     </div>
     <div class="menuRow">
-        <div class="menuBox orderList">
-            <p class="title">주문내역</p>
+        <div class="menuBox product">
+            <p class="title"></p>
         </div>
-        <div class="menuBox favorite">
-            <p class="title">판매내역</p>
+        <div class="menuBox bidProduct">
+            <p class="title"></p>
         </div>
     </div>
 </div>
 </body>
 <script>
-    var userId = [[${userId}]];
 </script>
 </html>

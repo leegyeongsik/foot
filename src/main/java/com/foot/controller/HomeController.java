@@ -24,7 +24,7 @@ public class HomeController {
     public String LoginHome(@AuthenticationPrincipal UserDetailsImpl userDetails) {
         User user = userDetails.getUser();
         if(user.getRole() == UserRoleEnum.ADMIN) {
-            return "redirect:/view/admin/users";
+            return "redirect:/view/admin";
         } else {
             return "index";
         }
