@@ -29,7 +29,6 @@ public class Comment extends Timestamped{
         this.product = product;
     }
 
-
     /**
      * 연관관계 - Foreign Key 값을 따로 컬럼으로 정의하지 않고 연관 관계로 정의합니다.
      */
@@ -51,4 +50,7 @@ public class Comment extends Timestamped{
      * 서비스 메소드 - 외부에서 엔티티를 수정할 메소드를 정의합니다. (단일 책임을 가지도록 주의합니다.)
      * ex (update 메소드)
      */
+    public void setComment(String comment) {
+        this.comments = comment;
+    }
 }
