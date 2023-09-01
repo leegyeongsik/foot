@@ -259,7 +259,7 @@
         console.log(selectedProductIds);
 
         if (selectedProductIds.length === 0) {
-            alert("Please select at least one product.");
+            alert("할인율을 변경할 상품을 선택해 주세요.");
             return;
         }
 
@@ -294,7 +294,7 @@
 
         $.ajax({
             type: "POST",
-            url: "/api/admin/products/updateDiscountRates", // 업데이트 처리를 담당하는 서버의 URL
+            url: "/api/admin/products/updateDiscountRates",
             contentType: "application/json",
             data: JSON.stringify(requestData),
             success: function(data) {
@@ -307,7 +307,6 @@
     }
 
 
-    // 상품 삭제
     // 상품 삭제
     function deleteProduct() {
         var selectedProductIds = [];
@@ -323,7 +322,7 @@
             return;
         }
 
-        // SweetAlert2를 사용하여 확인 창 띄우기
+        // 삭제 확인창
         Swal.fire({
             title: "상품 삭제",
             text: "정말 선택하신 상품들을 삭제하시겠습니까?",
@@ -349,7 +348,7 @@
 
         $.ajax({
             type: "DELETE",
-            url: "/api/admin/products", // 업데이트 처리를 담당하는 서버의 URL
+            url: "/api/admin/products",
             contentType: "application/json",
             data: JSON.stringify(requestData),
             success: function(data) {
