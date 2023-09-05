@@ -72,16 +72,28 @@ public class CartService {
         return cartResponseDtoList;
     }
 
+    // 장바구니 아이템 수량 변경
+    public void updateCartItemCount(Long cartItemId, int count) {
+        CartItem cartItem = cartItemRepository.findById(cartItemId)
+                .orElseThrow(
+                        () -> new IllegalArgumentException("존재하지 않는 상품입니다.")
+                );
+        cartItem.updateCount(count);
+    }
+
 
     // CartItem 엔티티를 CartResponseDto로 매핑하는 메서드
     private CartResponseDto mapToCartResponseDto(CartItem cartItem) {
         ProductSize productSize = cartItem.getProductSize();
         Product product = productSize.getProduct();
 
+        // 할인중일 경우 할인된 가격을 매핑하고 할인중이 아니면 그냥 price를 매핑한다.
+        Long price = product.getDiscountPrice() != null ? product.getDiscountPrice() : product.getPrice();
+
         return new CartResponseDto(
                 cartItem.getId(),
                 product.getModel(),
-                product.getPrice(),
+                price,
                 cartItem.getCount(),
                 product.getModelpicture()
         );
