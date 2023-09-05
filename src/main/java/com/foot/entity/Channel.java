@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +14,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @Table(name = "channels")
-
+@Setter
 public class Channel extends Timestamped{
     /**
      * 컬럼 - 연관관계 컬럼을 제외한 컬럼을 정의합니다.
@@ -20,6 +22,16 @@ public class Channel extends Timestamped{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(name = "enter_user")
+    @ColumnDefault("0")
+    private int enterUser;
+
+    @Column(name = "enter_admin")
+    @ColumnDefault("0")
+    private int enterAdmin;
+
+
 
     /**
      * 생성자 - 약속된 형태로만 생성가능하도록 합니다.

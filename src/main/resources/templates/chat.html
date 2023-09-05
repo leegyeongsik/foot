@@ -140,8 +140,12 @@
 <body>
 
 <div class="chat-container">
+
   <div class="header">
     chat
+    <div class="exit_header" style="display: flex;" >
+      →
+    </div>
   </div>
 
   <div id="chat">
@@ -165,15 +169,23 @@
 </div>
 <p id="targetIdParagraph" style="display: none;">targetId: <span th:text="${ChannelId}"></span></p>
 <p id="targetIdParagraphss" style="display: none;">targetId: <span th:text="${username}"></span></p>
+<p id="targetIdParagraphssss" style="display: none;">targetId: <span th:text="${role}"></span></p>
 
 </body>
 <script>
   // Your existing scripts here
   var ChannelId = document.getElementById('targetIdParagraph').querySelector('span').innerText;
   var username = document.getElementById('targetIdParagraphss').querySelector('span').innerText;
+  var role = document.getElementById('targetIdParagraphssss').querySelector('span').innerText;
 
 
   $(document).ready(function () {
+    window.onbeforeunload = function() {
+      wsss.disconnect()
+
+      wsss.send("/pub/chat/exit", {}, JSON.stringify({channelIDs: ChannelId, userRole: role}));
+    };
+
     $.ajax({
       url: `/api/channel/${ChannelId}`,
       type: 'GET',
@@ -243,10 +255,12 @@
   //
   //   $("#baseFile").trigger("change");
   //
+
+
   })
 
-  let sock = new SockJS("/ws/chat"); //new SockJS()를 사용하여 아까 핸들러에서 지정해준 endPoint를 사용하여 연결을 해준다.
-  let ws = Stomp.over(sock);
+  var sock = new SockJS("/ws/chat"); //new SockJS()를 사용하여 아까 핸들러에서 지정해준 endPoint를 사용하여 연결을 해준다.
+  var ws = Stomp.over(sock);
 
   ws.connect({}, function(frame) {
     ws.subscribe("/topic/api/channel/" + ChannelId, function(message) {
@@ -281,11 +295,25 @@
       // document.getElementById(sendText).value = null;
       $('#baseFile').val('');
       $('#sendText').val('');
-
-
     }
   }
-  function receiveMessage(receive) {
+
+
+
+
+
+
+  $(document).on('click',"div[class='exit_header']" , function (e) { // 보드 상세 페이지 이동
+    wsss.send("/pub/chat/exit", {'Authorization': Cookies.get('Authorization')}, JSON.stringify({channelIDs: ChannelId , userRole: role})); //receiver:participant,
+
+    $('#footersSSS').empty();
+    $('#chatButtonssss').remove();
+
+  })
+
+
+
+    function receiveMessage(receive) {
     let tempHtml;
     if (username == receive.user) {
       tempHtml = makeHtmlMessageRight(receive);

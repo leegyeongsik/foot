@@ -59,6 +59,16 @@
       border-radius: 50%;
     }
 
+    #notificationBubbles {
+      position: fixed;
+      bottom: 43px; /* Adjust the top position */
+      right: 10px;
+      background-color: red;
+      color: white;
+      padding: 2px 7px;
+      border-radius: 50%;
+    }
+
 
     /* Chat header styles */
     #chatHeader {
@@ -282,16 +292,13 @@
 <div id = "xxxxxxxxx">
   <div id="footersSSS"></div>
 </div>
+<p id="targetIdParagraphss" style="display: none;">targetId: <span th:text="${role}"></span></p>
+
 </body>
 <script>
-  var chatWrapVisible = false;
+  var role = document.getElementById('targetIdParagraphss').querySelector('span').innerText;
 
   function toggleChatWrap() {
-    var openChatButton = document.getElementById("openChatButton");
-
-    chatWrapVisible = !chatWrapVisible;
-    console.log(chatWrapVisible)
-    if (chatWrapVisible) {
         $.ajax({
           url: `/api/channel/infos`,
           type: 'GET',
@@ -301,15 +308,11 @@
           },
           success: function (response) {
             if (response) {
+              wsss.send("/pub/chat/enter", {'Authorization': Cookies.get('Authorization')}, JSON.stringify({channelIDs: `${response.channelNum}` , userRole: role})); //receiver:participant,
               $("#footersSSS").load(`/Chats/${response.channelNum}`);
-              openChatButton.innerText = "Close";
             }
           },
         });
-      } else {
-      $('#footersSSS').empty();
-      openChatButton.innerText = "Open Chat";
-    }
   }
 
 
@@ -338,11 +341,11 @@
             for (let i = 0; i < response.length; i++) {
               chatlist=`<li id = ${response[i].channelId} class="chat_infos">
                   <img src="https://placekitten.com/50/50" class = "chat_infoss" id=${response[i].channelId} alt="Chat User">
-                  <div class="chat-info" id = ${response[i].channelId}>
+                  <div class="chat-info">
                     <h3>${response[i].channelOwner}</h3>
-               <p>안녕하세요!</p> <!-- 마지막 채팅기록-->
-                  </div>
-                  <span class="unread-count">3</span> <!-- 안읽은 채팅수 -->
+                   <p id = channel_${response[i].channelId}>${response[i].latestMsg}</p> <!-- 마지막 채팅기록-->
+                      </div>
+                      <span class="unread-count" id = chatcnt_${response[i].channelId}>${response[i].yetMessageCnt}</span> <!-- 안읽은 채팅수 -->
                 </li>`
               $('.chatlistsssss').append(chatlist);
             }
@@ -354,6 +357,7 @@
     } else {
       chatList.style.display = "none";
       chatButton.textContent = "채팅방 목록 보기"; // Change button text
+      ws.disconnect();
     }
   }
 
@@ -381,22 +385,60 @@
             $('#openChatButtonContainer').empty();
             $('#chatlistContainer').empty();
             openchatButton=`<button id="openChatButton" onclick="toggleChatWrap()">Open Chat</button>
-             <div id="notificationBubble">3</div>`
+             <div id="notificationBubble">${response.userLeadCnt}</div>`
             $('#openChatButtonContainer').append(openchatButton);
+            var sockss = new SockJS("/ws/chat"); //new SockJS()를 사용하여 아까 핸들러에서 지정해준 endPoint를 사용하여 연결을 해준다.
+            var userSock = Stomp.over(sockss);
 
+            userSock.connect({}, function(frame) {
+              userSock.subscribe(`/topic/api/user/channel/${response.channelNum}`, function(message) {
+                let receive = JSON.parse(message.body);
+                let tempssss=document.getElementById(`notificationBubble`)
+                tempssss.innerText=receive.userCnt;
+              });
+            }, function(error) {
+              alert("error"+error);
+            });
           }
           else if(response.responseDto.role == "ADMIN"){
             $('#contentCover').empty();
             $('#openChatButtonlistContainer').empty();
-            adminbutton =`<button id="chatButton" onclick="toggleChatList()">채팅방 목록 보기</button>`
+            adminbutton =`<button id="chatButton" onclick="toggleChatList()">채팅방 목록 보기</button>
+             <div id="notificationBubbles">${response.adminLeadTotalCnt}</div>`
             $('#openChatButtonlistContainer').append(adminbutton);
+            var sock = new SockJS("/ws/chat"); //new SockJS()를 사용하여 아까 핸들러에서 지정해준 endPoint를 사용하여 연결을 해준다.
+            var ws = Stomp.over(sock);
+
+            ws.connect({}, function(frame) {
+              ws.subscribe("/topic/api/channel", function(message) {
+                let receive = JSON.parse(message.body);
+                let tempssss=document.getElementById(`channel_${receive.channelId}`)
+                let tempssssssss=document.getElementById(`chatcnt_${receive.channelId}`)
+
+                tempssss.innerText =`${receive.message}`
+                tempssssssss.innerText = `${receive.adminChannelCnt}`
+              });
+            }, function(error) {
+              alert("error"+error);
+            });
+
+            var socksssss = new SockJS("/ws/chat"); //new SockJS()를 사용하여 아까 핸들러에서 지정해준 endPoint를 사용하여 연결을 해준다.
+            var sssssssssss = Stomp.over(socksssss);
+
+            sssssssssss.connect({}, function(frame) {
+              sssssssssss.subscribe("/topic/api/Admin", function(message) {
+                let receive = JSON.parse(message.body);
+                let tempssss=document.getElementById(`notificationBubbles`)
+                tempssss.innerText=receive.AdminTotalCnt;
+              });
+            }, function(error) {
+              alert("error"+error);
+            });
           }
-
         }
-
       },
-
     })
+  })
 
     $(document).on('click',"button[class='createChatButton']" , function (e) { // 보드 상세 페이지 이동
       e.preventDefault();
@@ -416,18 +458,30 @@
     $(document).on('click',"img[class='chat_infoss']" , function (e) { // 보드 상세 페이지 이동
       e.preventDefault();
       var tagId = e.target.id
-      adminbutton =`<button id="chatButtonssss">X</button>`
-      $("#openChatButtonlistContainer").append(adminbutton)
+      wsss.send("/pub/chat/enter", {'Authorization': Cookies.get('Authorization')}, JSON.stringify({channelIDs: tagId , userRole: role})); //receiver:participant,
+      console.log(tagId)
+      $("#footersSSS").load(`/Chats/${tagId}`)
+    }
+  )
 
-      $("#footersSSS").load(`/Chats/${tagId}`);
-    })
 
 
     $(document).on('click',"button[id='chatButtonssss']" , function (e) { // 보드 상세 페이지 이동
       e.preventDefault();
       $('#footersSSS').empty();
       $('#chatButtonssss').remove();
-    })
   })
+  var sockss = new SockJS("/ws/chat"); //new SockJS()를 사용하여 아까 핸들러에서 지정해준 endPoint를 사용하여 연결을 해준다.
+  var wsss = Stomp.over(sockss);
+
+  wsss.connect({}, function (frame) {
+    wsss.subscribe("/topic/api/channel/enter", function (message) {
+      let receive = JSON.parse(message.body);
+      console.log(receive)
+    });
+  }, function (error) {
+    alert("error" + error);
+  });
+
 </script>
 </html>

@@ -5,7 +5,7 @@ import com.foot.entity.Channel;
 import com.foot.entity.ChatLog;
 import com.foot.entity.User;
 import com.foot.repository.ChannelRepository;
-import com.foot.repository.ChatLogRepository;
+import com.foot.repository.chat.ChatLogRepository;
 import com.foot.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,7 +16,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Base64;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -62,19 +61,79 @@ public class MessageService {
         }
 
         message.setMessageImg(awsS3ImageUrl);
-        save(message);
+        ChatLog chatLog=save(message);
+
+        return setMessage(chatLog , message);
+    }
+    public ChatMessageRequestDto setMessage(ChatLog chatLog , ChatMessageRequestDto message){
+        message.setTimeStamp(chatLog.getCreatedAt());
+        message.setIsAdminRead(chatLog.getAdminRead());
+        message.setIsUserRead(chatLog.getUserRead());
+
+        if(chatLog.getAdminRead() == 1){
+            Long readCnt=getAdminCnt(message.getChannelId());
+            message.setTotalRead(readCnt);
+            Long TotalCnt = getAdminTotalCnt();
+            message.setAdminTotalRead(TotalCnt);
+        } else if (chatLog.getUserRead() == 1) {
+            Long readCnt=getUserCnt(message.getChannelId());
+            message.setTotalRead(readCnt);
+        }
         return message;
     }
 
-    public void save(ChatMessageRequestDto message) {
+    public ChatLog save(ChatMessageRequestDto message) {
         User user=userRepository.findByName(message.getWriter()).get();
         Channel channel = channelRepository.findById(message.getChannelId()).get();
-        ChatLog chatLog = ChatLog.builder()
-                .user(user)
-                .channel(channel)
-                .message(message.getMessage())
-                .messageImg(message.getMessageImg())
-                .datetime(message.getTimeStamp()).build();
-        chatLogRepository.save(chatLog);
+        if(channel.getEnterAdmin() != 0 && channel.getEnterUser() !=0){ // 둘다 0이 아니라면 두명다 접속해있다는거 변화 없어도됨
+            ChatLog chatLog = ChatLog.builder()
+                    .user(user)
+                    .channel(channel)
+                    .message(message.getMessage())
+                    .messageImg(message.getMessageImg())
+                    .adminRead(0)
+                    .userRead(0)
+                    .build();
+            chatLogRepository.save(chatLog);
+            return chatLog;
+        } else if (channel.getEnterAdmin() == 0 && channel.getEnterUser() !=0) { // 어드민은 접속해 있지 않고 유저만 접속해 있는 경우 어드민에 토탈 전해줘서 변화시켜줌
+            ChatLog chatLog = ChatLog.builder()
+                    .user(user)
+                    .channel(channel)
+                    .message(message.getMessage())
+                    .messageImg(message.getMessageImg())
+                    .adminRead(1)
+                    .userRead(0)
+                    .build();
+            chatLogRepository.save(chatLog);
+            return chatLog;
+        } else if (channel.getEnterAdmin() != 0 && channel.getEnterUser() ==0) { // 어드민은 접속해있는데 유저가 접속해있지 않은경우
+            ChatLog chatLog = ChatLog.builder()
+                    .user(user)
+                    .channel(channel)
+                    .message(message.getMessage())
+                    .messageImg(message.getMessageImg())
+                    .adminRead(0)
+                    .userRead(1)
+                    .build();
+            chatLogRepository.save(chatLog);
+            return chatLog;
+        } else {
+            System.out.println("존재할수없음");
+        }
+        return null;
     }
+    public Long getAdminCnt(Long channelId) {
+        Long readCnt = chatLogRepository.getMessageLeadCount(channelId);
+        return readCnt;
+    }
+    public Long getAdminTotalCnt(){
+        Long TotalCnt = chatLogRepository.getMessageTotalLeadCount();
+        return TotalCnt;
+    }
+    public Long getUserCnt(Long channelId) {
+        Long readCnt = chatLogRepository.getMessageUserLeadCount(channelId);
+        return readCnt;
+    }
+
 }

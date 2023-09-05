@@ -7,10 +7,12 @@ import com.foot.dto.chats.IsExistChannelResponseDto;
 import com.foot.entity.Channel;
 import com.foot.entity.ChatLog;
 import com.foot.entity.User;
+import com.foot.entity.UserRoleEnum;
 import com.foot.repository.ChannelRepository;
-import com.foot.repository.ChatLogRepository;
+import com.foot.repository.chat.ChatLogRepository;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -19,7 +21,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-
+@Slf4j
 public class ChannelService {
     private final ChannelRepository channelRepository;
     private final ChatLogRepository chatLogRepository;
@@ -33,7 +35,15 @@ public class ChannelService {
         List<Channel> channelList = channelRepository.findAll();
         ArrayList<ChannelResponseDto> channelResponseDtoArrayList = new ArrayList<>();
         for (Channel channel : channelList) {
-            channelResponseDtoArrayList.add(new ChannelResponseDto(channel));
+            Long readCnt=chatLogRepository.getMessageLeadCount(channel.getId());
+            Optional<ChatLog>  chatLog= chatLogRepository.getChannelLastMsg(channel.getId());
+            if(chatLog.isEmpty()){
+                String none = "";
+                channelResponseDtoArrayList.add(new ChannelResponseDto(channel ,none));
+            } else {
+                channelResponseDtoArrayList.add(new ChannelResponseDto(channel,readCnt , chatLog.get()));
+
+            }
         }
         return channelResponseDtoArrayList;
     }
@@ -48,14 +58,18 @@ public class ChannelService {
     }
 
     public IsExistChannelResponseDto getInfo(User user) {
-        boolean isExist;
         Optional<Channel> channel=channelRepository.findByUser_id(user.getId());
-        if (!channel.isEmpty()){
-            isExist = true;
+        if (channel.isPresent() && user.getRole().equals(UserRoleEnum.USER)){
+            Long userLeadCount=chatLogRepository.getMessageUserLeadCount(channel.get().getId());
+            return new IsExistChannelResponseDto(true,new ProfileResponseDto(user) , channel.get().getId() ,userLeadCount);
+
+        } else if (!channel.isPresent() && user.getRole().equals(UserRoleEnum.USER)) {
+
+            return new IsExistChannelResponseDto(false,new ProfileResponseDto(user));
         } else {
-            isExist = false;
+            Long AdminLeadTotalCnt=chatLogRepository.getMessageTotalLeadCount();
+            return new IsExistChannelResponseDto(new ProfileResponseDto(user) ,AdminLeadTotalCnt);
         }
-        return new IsExistChannelResponseDto(isExist,new ProfileResponseDto(user));
     }
 
     public IsExistChannelResponseDto getChannelInfo(User user) {

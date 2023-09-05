@@ -4,14 +4,17 @@ import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor
 @Table(name = "chatlogs")
-public class ChatLog{ // 채팅방 기능 구현할때 생각
+public class ChatLog extends Timestamped{ // 채팅방 기능 구현할때 생각
     /**
      * 컬럼 - 연관관계 컬럼을 제외한 컬럼을 정의합니다.
      */
@@ -25,19 +28,24 @@ public class ChatLog{ // 채팅방 기능 구현할때 생각
     @Column(name = "message_img" , nullable = true)
     private String messageImg;
 
-    @Column(name ="timeStamp")
-    private Long datetime;
+    @Column(name = "user_Read")
+    @ColumnDefault("1")
+    private int userRead;
 
+    @Column(name = "admin_Read")
+    @ColumnDefault("1")
+    private int adminRead;
     /**
      * 생성자 - 약속된 형태로만 생성가능하도록 합니다.
      */
     @Builder
-    public ChatLog(User user , Channel channel , String message , String messageImg , Long datetime){
+    public ChatLog(User user , Channel channel , String message , String messageImg , int userRead , int adminRead){
         this.user = user;
         this.channel = channel;
         this.message = message;
         this.messageImg = messageImg;
-        this.datetime = datetime;
+        this.userRead = userRead;
+        this.adminRead = adminRead;
     }
 
     /**
@@ -60,4 +68,6 @@ public class ChatLog{ // 채팅방 기능 구현할때 생각
      * 서비스 메소드 - 외부에서 엔티티를 수정할 메소드를 정의합니다. (단일 책임을 가지도록 주의합니다.)
      * ex (update 메소드)
      */
+
+
 }
