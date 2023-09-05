@@ -73,6 +73,7 @@ public class CartService {
     }
 
     // 장바구니 아이템 수량 변경
+    @Transactional
     public void updateCartItemCount(Long cartItemId, int count) {
         CartItem cartItem = cartItemRepository.findById(cartItemId)
                 .orElseThrow(

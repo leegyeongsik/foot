@@ -5,6 +5,7 @@ import com.foot.dto.CartResponseDto;
 import com.foot.security.UserDetailsImpl;
 import com.foot.service.CartService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -31,7 +32,10 @@ public class CartController {
         return "cart";
     }
 
-//    // 장바구니 아이템 수량 변경
-//    @PatchMapping("/api/cart/{cartItemId}")
-//    public
+    // 장바구니 아이템 수량 변경
+    @PatchMapping("/api/cart")
+    public ResponseEntity<String> updateCartAmount(@RequestBody CartItemDto cartItemDto) {
+        cartService.updateCartItemCount(cartItemDto.getItemId(), cartItemDto.getCount());
+        return ResponseEntity.ok("CartItem updated successfully");
+    }
 }

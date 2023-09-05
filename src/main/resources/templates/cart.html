@@ -174,7 +174,7 @@
             <table>
                 <thead>
                 <tr>
-                    <th><input type="checkbox" id="selectAll"/></th>
+                    <th><input type="checkbox" id="checkall" onclick="checkAll()"></th>
                     <th>상품 번호</th>
                     <th>상품 이미지</th>
                     <th>상품 모델</th>
@@ -229,22 +229,19 @@
 
 
     $(document).ready(function () {
-        $("#selectAll").click(function () {
-            toggleSelectAll();
-        });
         $("input[name=cartChkBox]").change( function(){
             getOrderTotalPrice();
         });
     });
 
     // 상품 전체 선택
-    function toggleSelectAll() {
-        var selectAllCheckbox = document.getElementById('selectAll');
-        var productCheckboxes = document.getElementsByClassName('product-checkbox');
-
-        for (var i = 0; i < productCheckboxes.length; i++) {
-            productCheckboxes[i].checked = selectAllCheckbox.checked;
+    function checkAll(){
+        if($("#checkall").prop("checked")){
+            $("input[name=cartChkBox]").prop("checked",true);
+        }else{
+            $("input[name=cartChkBox]").prop("checked",false);
         }
+        getOrderTotalPrice();
     }
 
     // 상품 상세 페이지로 이동
@@ -254,14 +251,44 @@
         window.location.href = "/Product/update/" + productId;
     }
 
-    // 수량 변경
+    // 상품 수량 변경
     function changeCount(obj) {
         var count = obj.value;
         var cartItemId = obj.id.split('_')[1];
         var price = $("#price_" + cartItemId).data("price");
         var totalPrice = count * price;
         $("#totalPrice_" + cartItemId).html(totalPrice + "원");
+        getOrderTotalPrice();
+        updateItemCount(cartItemId, count);
+
     }
+
+    // 상품 개수 수정
+    function updateItemCount(cartItemId, count) {
+
+        // 선택한 상품 ID와 할인율 정보를 JSON으로 변환하여 POST 요청 보내기
+        var requestData = {
+            itemId: cartItemId,
+            count: count
+        };
+
+        console.log(requestData.itemId, requestData.count)
+
+        $.ajax({
+            type: "PATCH",
+            url: "/api/cart",
+            contentType: "application/json",
+            data: JSON.stringify(requestData),
+            success: function(data) {
+                console.log("cartItem count update success");
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.log("cartItem count update failed");
+            }
+        });
+    }
+
+
 
     // 총 주문 금액 업데이트
     function getOrderTotalPrice(){
