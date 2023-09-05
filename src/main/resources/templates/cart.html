@@ -64,7 +64,7 @@
 
         .cart-menu {
             width: 15%; /* 메뉴 너비 조정 */
-            background-color: #333;
+            background-color:#333;
             color: white;
             padding: 20px;
         }
@@ -87,7 +87,7 @@
             display: flex;
             justify-content: center;
             /*align-items: center;*/
-            height: 70vh;
+            height: 60vh;
             flex-direction: column;
             padding: 20px;
             border: 1.5px solid transparent;;
@@ -123,19 +123,10 @@
             width: 50px; /* 원하는 가로 폭 값으로 조정 */
         }
 
-        .page-number {
-            margin-top: 20px; /* 원하는 여백 값으로 조정 */
+        .order-total-price {
             display: flex;
             justify-content: center;
             flex-direction: row; /* 가로 방향으로 배치 */
-
-        }
-
-        .order-total-price {
-            display: flex;
-            justify-content: right;
-            flex-direction: row; /* 가로 방향으로 배치 */
-            padding-right: 10%;
         }
 
         .search-form input {
@@ -146,11 +137,17 @@
             border-radius: 5px;
         }
 
-        .search-btn {
+        .btn-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 5%;
+        }
+
+        .order-btn {
             padding: 10px 16px;
             border: none;
             border-radius: 5px;
-            background-color: #333;
+            background-color:  #575dfb;
             color: #fff;
             font-weight: 700;
             cursor: pointer;
@@ -175,19 +172,18 @@
                 <thead>
                 <tr>
                     <th><input type="checkbox" id="checkall" onclick="checkAll()"></th>
-                    <th>상품 번호</th>
                     <th>상품 이미지</th>
                     <th>상품 모델</th>
                     <th>상품 가격</th>
                     <th>수량</th>
                     <th>합계 금액</th>
+                    <th></th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr th:each="item : ${cartItems}">
                     <td><input type="checkbox" name="cartChkBox" class="product-checkbox" th:value="${item.cartItemId}" th:attr="data-product-id=${item.cartItemId}"/>
                     </td>
-                    <td th:text="${item.cartItemId}"></td>
                     <td><img th:src="${item.imgUrl}" alt="Product Image" width="50" height="50"/></td>
                     <td th:text="${item.productName}" th:attr="data-product-id=${item.cartItemId}"
                         onclick="goToProductDetailPage(this)" class="product-model"></td>
@@ -202,13 +198,21 @@
                               name="totalPrice" th:text="${item.price * item.count} + '원'">
                         </span>
                     </td>
+                    <td>
+                        <button type="button" class="close" aria-label="Close">
+                            <span aria-hidden="true" th:data-id="${item.cartItemId}" onclick="deleteCartItem(this)">&times;</span>
+                        </button>
+                    </td>
                 </tr>
                 </tbody>
             </table>
         </div>
         <h3 class="order-total-price">
-            총 주문 금액 : <span id="orderTotalPrice">0원</span>
+            총 주문 금액 :&nbsp; <span id="orderTotalPrice">0원</span>
         </h3>
+        <div class="btn-container">
+            <button type="button" class="order-btn">주문하기</button>
+        </div>
     </div>
 
 </div>
@@ -248,7 +252,7 @@
     function goToProductDetailPage(row) {
         var productId = row.getAttribute("data-product-id");
         console.log(productId);
-        window.location.href = "/Product/update/" + productId;
+        window.location.href = "/Product/" + productId;
     }
 
     // 상품 수량 변경
@@ -305,21 +309,28 @@
         $("#orderTotalPrice").html(orderTotalPrice+'원');
     }
 
-    function successMsg(msg) {
-        Toast.fire({
-            icon: 'success',
-            title: msg
-        }).then(function () {
-            window.location.reload();
-        })
+
+    // 상품 삭제
+    function deleteCartItem(obj) {
+        var cartItemId = obj.dataset.id;
+
+        var url = "/api/cart/" + cartItemId;
+
+        $.ajax({
+            type: "DELETE",
+            url: url,
+            contentType: "application/json",
+            success: function(data) {
+                console.log("삭제 성공")
+                window.location.reload();
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.log("삭제 실패")
+            }
+        });
+
     }
 
-    function errorMsg(msg) {
-        Toast.fire({
-            icon: 'error',
-            title: msg
-        })
-    }
 
 </script>
 </html>

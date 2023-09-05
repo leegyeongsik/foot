@@ -40,7 +40,7 @@ public class CartService {
 
         CartItem savedCartItem = cartItemRepository.findByCartIdAndProductSizeId(cart.getId(), productSize.getId());
 
-        log.info("CartItem already exists with id: {}", savedCartItem.getId());
+
         if (savedCartItem != null) {
             // 장바구니에 이미 존재하는 상품이면 개수만 추가
             savedCartItem.addCount(cartItemDto.getCount());
@@ -80,6 +80,17 @@ public class CartService {
                         () -> new IllegalArgumentException("존재하지 않는 상품입니다.")
                 );
         cartItem.updateCount(count);
+    }
+
+
+    // 장바구니 아이템 삭제
+    @Transactional
+    public void deleteCartItem(Long cartItemId) {
+        CartItem cartItem = cartItemRepository.findById(cartItemId)
+                .orElseThrow(
+                        () -> new IllegalArgumentException("존재하지 않는 상품입니다.")
+                );
+        cartItemRepository.delete(cartItem);
     }
 
 

@@ -6,6 +6,7 @@ import com.foot.security.UserDetailsImpl;
 import com.foot.service.CartService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.method.P;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -37,5 +38,12 @@ public class CartController {
     public ResponseEntity<String> updateCartAmount(@RequestBody CartItemDto cartItemDto) {
         cartService.updateCartItemCount(cartItemDto.getItemId(), cartItemDto.getCount());
         return ResponseEntity.ok("CartItem updated successfully");
+    }
+
+    // 장바구니 아이템 삭제
+    @DeleteMapping("/api/cart/{cartItemId}")
+    public ResponseEntity<String> deleteCartItem(@PathVariable Long cartItemId) {
+        cartService.deleteCartItem(cartItemId);
+        return ResponseEntity.ok("CartItem deleted successfully");
     }
 }
