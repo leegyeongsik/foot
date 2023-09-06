@@ -69,8 +69,8 @@ public class WebSecurityConfig {
                         .requestMatchers("/").permitAll()
                         .requestMatchers("/api/auth/**").permitAll() // 회원가입, 로그인으로 시작하는 요청 모두 접근 허가
                         .requestMatchers("/view/**").permitAll()
-                        //.requestMatchers("/api/users/**").permitAll()
                         .requestMatchers("/api/product/**").permitAll()
+                        .requestMatchers("/api/cart/**").permitAll()
                         .requestMatchers("/Product/**").permitAll()
 
 

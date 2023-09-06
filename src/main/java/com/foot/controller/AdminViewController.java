@@ -31,6 +31,13 @@ public class AdminViewController {
     private final UserRepository userRepository;
     private final AdminService adminService;
 
+    // 관리자 홈
+    @Secured(UserRoleEnum.Authority.ADMIN)
+    @GetMapping("")
+    public String adminHomePage() {
+        return "adminHome";
+    }
+
     // 전체 회원 목록 조회
     @Secured(UserRoleEnum.Authority.ADMIN)
     @GetMapping("/users")

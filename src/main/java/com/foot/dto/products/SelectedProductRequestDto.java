@@ -7,9 +7,6 @@ import java.util.List;
 
 @Getter
 @Setter
-public class SaleProductRequestDto {
-//    String discountRate;
-//    Long discountPrice;
+public class SelectedProductRequestDto {
     private List<Long> productIds;
-    private double discountRate;
 }
