@@ -104,6 +104,7 @@ public class CartService {
 
         return new CartResponseDto(
                 cartItem.getId(),
+                product.getId(),
                 product.getModel(),
                 price,
                 cartItem.getCount(),
