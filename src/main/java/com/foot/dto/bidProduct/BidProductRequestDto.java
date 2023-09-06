@@ -1,4 +1,4 @@
-package com.foot.dto;
+package com.foot.dto.bidProduct;
 
 import lombok.Getter;
 import lombok.Setter;

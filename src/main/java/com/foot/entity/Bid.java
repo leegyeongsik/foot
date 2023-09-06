@@ -1,8 +1,7 @@
 package com.foot.entity;
 
-import com.foot.dto.BidRequestDto;
+import com.foot.dto.bidProduct.BidRequestDto;
 import jakarta.persistence.*;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -40,8 +39,9 @@ public class Bid extends Timestamped{
      * 생성자 - 약속된 형태로만 생성가능하도록 합니다.
      */
 
-    public Bid(BidRequestDto requestDto, BidProduct bidProduct) {
+    public Bid(BidRequestDto requestDto, BidProduct bidProduct, User user) {
         bidPrice = requestDto.getBidPrice();
+        this.user = user;
         this.bidProduct = bidProduct;
     }
 

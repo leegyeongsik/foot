@@ -1,8 +1,11 @@
 package com.foot.controller;
 
-import com.foot.dto.BidProductRequestDto;
-import com.foot.dto.BidProductResponseDto;
+import com.foot.dto.bidProduct.BidProductRequestDto;
+import com.foot.dto.bidProduct.BidProductResponseDto;
+import com.foot.entity.User;
+import com.foot.security.UserDetailsImpl;
 import com.foot.service.BidService;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,8 +22,9 @@ public class BidProductController {
 
     // 경매 상품 생성
     @PostMapping
-    public BidProductResponseDto createBidProduct(@RequestBody BidProductRequestDto requestDto) {
-        return bidService.createBidProduct(requestDto);
+    public BidProductResponseDto createBidProduct(@RequestBody BidProductRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        User user = userDetails.getUser();
+        return bidService.createBidProduct(requestDto, user);
     }
 
     // 경매 상품 전체 조회
@@ -43,14 +47,16 @@ public class BidProductController {
 
     // 경매 상품 수정
     @PutMapping("/{bidProductId}")
-    public BidProductResponseDto updateBidProduct(@PathVariable Long bidProductId, @RequestBody BidProductRequestDto requestDto) {
-        return bidService.updateBidProduct(bidProductId, requestDto);
+    public BidProductResponseDto updateBidProduct(@PathVariable Long bidProductId, @RequestBody BidProductRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        User user = userDetails.getUser();
+        return bidService.updateBidProduct(bidProductId, requestDto, user);
     }
 
     // 경매 상품 삭제
     @DeleteMapping("/{bidProductId}")
-    public String deleteBidProduct(@PathVariable Long bidProductId) {
-        bidService.deleteBidProduct(bidProductId);
+    public String deleteBidProduct(@PathVariable Long bidProductId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        User user = userDetails.getUser();
+        bidService.deleteBidProduct(bidProductId, user);
         return "삭제 완료";
     }
 

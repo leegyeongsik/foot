@@ -1,7 +1,7 @@
 package com.foot.service;
 
-import com.foot.dto.BrandRequestDto;
-import com.foot.dto.BrandResponseDto;
+import com.foot.dto.bidProduct.BrandRequestDto;
+import com.foot.dto.bidProduct.BrandResponseDto;
 import com.foot.entity.Brand;
 import com.foot.repository.BrandRepository;
 import org.springframework.stereotype.Service;

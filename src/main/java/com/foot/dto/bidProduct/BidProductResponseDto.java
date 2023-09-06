@@ -1,4 +1,4 @@
-package com.foot.dto;
+package com.foot.dto.bidProduct;
 
 import com.foot.entity.BidProduct;
 import lombok.Getter;
@@ -31,6 +31,8 @@ public class BidProductResponseDto {
 
     private BrandResponseDto brand;
 
+    private BidResponseDto topBid;
+
     private List<BidResponseDto> bidResponseDtoList = new ArrayList<>();
 
     public BidProductResponseDto(BidProduct bidProduct) {
@@ -43,6 +45,8 @@ public class BidProductResponseDto {
         footSize = bidProduct.getFootsize();
         footPicture = bidProduct.getFootpicture();
         brand = new BrandResponseDto(bidProduct.getBrand());
+
+        topBid = new BidResponseDto(bidProduct.getTopBid());
 
         status = bidProduct.getStatus();
 

@@ -1,6 +1,6 @@
 package com.foot.entity;
 
-import com.foot.dto.BrandRequestDto;
+import com.foot.dto.bidProduct.BrandRequestDto;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;

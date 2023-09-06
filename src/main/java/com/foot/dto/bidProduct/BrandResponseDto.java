@@ -1,4 +1,4 @@
-package com.foot.dto;
+package com.foot.dto.bidProduct;
 
 import com.foot.entity.Brand;
 import lombok.Getter;

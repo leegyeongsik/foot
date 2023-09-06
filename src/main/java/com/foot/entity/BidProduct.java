@@ -1,6 +1,6 @@
 package com.foot.entity;
 
-import com.foot.dto.BidProductRequestDto;
+import com.foot.dto.bidProduct.BidProductRequestDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -53,10 +53,12 @@ public class BidProduct extends Timestamped{
     /**
      * 연관관계 - Foreign Key 값을 따로 컬럼으로 정의하지 않고 연관 관계로 정의합니다.
      */
-
-
     @OneToMany(mappedBy = "bidProduct", cascade = CascadeType.REMOVE)
     private List<Bid> bids = new ArrayList<>();
+
+    @OneToOne
+    @JoinColumn(name = "topBid")
+    private Bid topBid;
 
     @ManyToOne
     @JoinColumn(name = "userId")
@@ -71,7 +73,7 @@ public class BidProduct extends Timestamped{
      * 생성자 - 약속된 형태로만 생성가능하도록 합니다.
      */
 
-    public BidProduct(BidProductRequestDto requestDto, Brand brand) {
+    public BidProduct(BidProductRequestDto requestDto, Brand brand, User user) {
         this.expirationPeriod = requestDto.getExpirationPeriod();
         this.startPrice = requestDto.getStartPrice();
         this.name = requestDto.getName();
@@ -80,6 +82,7 @@ public class BidProduct extends Timestamped{
         this.footsize = requestDto.getFootSize();
         this.feetsize = requestDto.getFeetSize();
         this.brand = brand;
+        this.user = user;
         this.status = 0;
     }
 
@@ -95,6 +98,24 @@ public class BidProduct extends Timestamped{
 
     public void changeToSell() {
         this.status = 1;
+    }
+
+    public void setTopBid(Bid topBid) {
+        this.topBid = topBid;
+    }
+
+    public void updateTopBid(Bid bid) {
+        long max = -1;
+
+        for (int i = 0; i < bids.size() - 1; i++) {
+            if (max < bids.get(i).getBidPrice()) {
+                max = bids.get(i).getBidPrice();
+            }
+        }
+
+        if (max < bid.getBidPrice()) {
+            this.topBid = bid;
+        }
     }
 
 
