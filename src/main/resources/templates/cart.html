@@ -126,7 +126,8 @@
             display: flex;
             justify-content: center;
             /*align-items: center;*/
-            height: 60vh;
+            max-height: 50vh; /* 원하는 세로 높이로 조정 */
+            overflow-y: auto; /* 세로 스크롤을 허용하도록 설정 */
             flex-direction: column;
             padding: 20px;
             border: 1.5px solid transparent;;
@@ -215,11 +216,10 @@
 
 <div class="cart-container">
     <div class="cart-content">
+        <div class="title">
+            장바구니
+        </div>
         <div class="list-container">
-            <div class="title">
-                장바구니
-            </div>
-
             <table>
                 <thead>
                 <tr>
@@ -238,9 +238,10 @@
                     </td>
                     <td th:attr="data-product-id=${item.productId}"
                         onclick="goToProductDetailPage(this)" class="product-info">
-                        <img th:src="${item.imgUrl}" alt="Product Image" width="100" height="100"/>
+                        <img th:src="${item.imgUrl}" alt="Product Image" width="80" height="80"/>
                         <br>
                         <span th:text="${item.productName}" class="product-model"></span>
+                        <span th:text="'size : ' + ${item.productSize}" class="product-size"></span>
                     </td>
                     <td th:id="'price_' + ${item.cartItemId}"
                         th:data-price="${item.price}" th:text="${item.price}"></td>

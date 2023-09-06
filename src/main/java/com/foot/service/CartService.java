@@ -125,6 +125,7 @@ public class CartService {
                 cartItem.getId(),
                 product.getId(),
                 product.getModel(),
+                productSize.getSize(),
                 price,
                 cartItem.getCount(),
                 product.getModelpicture()
