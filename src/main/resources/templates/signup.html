@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <title>signup Page</title>
+    <style>
+
+        /* Reset some default styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Main styles */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #fff;
+            color: #000;
+        }
+
+        .signup-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .signup-form {
+            max-width: 300px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            padding: 20px;
+            border: 1.5px solid transparent;;
+            border-radius: 16px;
+            background-color: #fff;
+        }
+
+        .signup-form h1 {
+            font-size: 32px;
+            font-weight: 700;
+            color: #575dfb;
+            margin-bottom: 50px;
+        }
+
+        .signup-form input[type="email"],
+        .signup-form input[type="password"],
+        .signup-form input[type="text"]
+        {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            border: 1.5px solid #575dfb;
+            border-radius: 16px;
+        }
+
+
+        .signup-button {
+            width: 100%;
+            padding: 16px;
+            margin-top: 20px;
+            border: none;
+            border-radius: 16px;
+            background-color: #575dfb;
+            color: #fff;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .register-link {
+            margin-top: 8px;
+            font-size: 16px;
+        }
+
+        .register-link span {
+            color: #575dfb;
+            cursor: pointer;
+        }
+
+        .forgot-password {
+            margin-top: 20px;
+            font-size: 12px;
+            color: #575dfb;
+            cursor: pointer;
+        }
+
+        .social-signup {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .social-signup img {
+            width: 24px;
+            height: 24px;
+            margin-right: 8px;
+        }
+
+        .social-signup p {
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+    </style>
+</head>
+
+<body>
+<div class="signup-container">
+    <div class="signup-form">
+        <h1>Register</h1>
+        <form action="/api/auth/signup" method="post">
+            <input type="email" name="email" placeholder="Email">
+            <input type="text" name="name" placeholder="Your Name">
+            <input type="password" name="password" placeholder="Password">
+            <input type="text" name="address" placeholder="Your Address">
+            <input type="text" name="cellphone" placeholder="Your Cell Phone Number">
+            <div>
+                <input id="admin-check" type="checkbox" name="admin" onclick="onclickAdmin()" style="margin-top: 40px;"> Admin
+                <input id="admin-token" type="password" name="adminToken" placeholder="관리자 암호" class="login-input-box" style="display:none">
+            </div>
+            <button type="submit" class="signup-button">Register</button>
+        </form>
+        <div class="social-signup">
+            <p>Continue with Google</p>
+        </div>
+        <div class="register-link">
+            <p>Already have an account? <span onclick="location.href='/view/login-page'">Login</span></p>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    function onclickAdmin() {
+        // Get the checkbox
+        var checkBox = document.getElementById("admin-check");
+        // Get the output text
+        var box = document.getElementById("admin-token");
+
+        // If the checkbox is checked, display the output text
+        if (checkBox.checked == true){
+            box.style.display = "block";
+        } else {
+            box.style.display = "none";
+        }
+    }
+</script>
+</html>

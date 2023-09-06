@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>경매 상품 등록 form</title>
+
+    <!--JQuery-->
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"
+            integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
+
+
+    <script>
+        function bpResist() {
+            let name = $('#bpName').val();
+            let description = $('#bpDescription').val();
+            let startPrice = $('#bpStartPrice').val();
+            let expirationPeriod = $('#bpExpirationPeriod').val();
+            let feetSize = $('#bpFeetSize').val();
+            let footSize = $('#bpFootSize').val();
+            let footPicture = $('#bpFootPicture').val();
+            let brand = $('#bpBrand').val();
+
+            let data = {
+                "name" : name,
+                "description" : description,
+                "startPrice" : startPrice,
+                "expirationPeriod" : expirationPeriod,
+                "feetSize" : feetSize,
+                "footSize" : footSize,
+                "footPicture" : footPicture,
+                "brand" : brand
+            }
+
+            $.ajax({
+                type:'POST',
+                url:'/api/bidProduct',
+                contentType: "application/json",
+                data: JSON.stringify(data),
+                success: function() {
+                    alert("성공");
+                    window.location.reload();
+                }, error: function() {
+                    alert("실패")
+                }
+            })
+        }
+    </script>
+</head>
+<body>
+<h1>상품 등록</h1>
+<form>
+    <div>
+        <label>이름</label>
+        <input type="text" id="bpName" name="name"/>
+    </div>
+    <div>
+        <label>설명</label>
+        <input type="text" id="bpDescription" name="description"/>
+    </div>
+    <div>
+        <label>시작 금액</label>
+        <input type="text" id="bpStartPrice" name="startPrice"/>
+    </div>
+    <div>
+        <label>마감 기한</label>
+        <input type="text" id="bpExpirationPeriod" name="expirationPeriod" value="2023-09-18T11:22:33"/>
+    </div>
+    <div>
+        <label>feet 크기</label>
+        <input type="text" id="bpFeetSize" name="feetSize"/>
+    </div>
+    <div>
+        <label>foot 크기</label>
+        <input type="text" id="bpFootSize" name="footSize"/>
+    </div>
+    <div>
+        <label>foot 사진</label>
+        <input type="text" id="bpFootPicture" name="footPicture"/>
+    </div>
+    <div>
+        <label>브랜드</label>
+        <input type="text" id="bpBrand" name="brand"/>
+    </div>
+    <div>
+        <button type="button" onclick="bpResist()">등록</button>
+    </div>
+</form>
+</body>
+</html>

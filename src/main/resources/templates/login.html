@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"
+            integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g="
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <title>Login Page</title>
+    <style>
+
+        /* Reset some default styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Main styles */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #fff;
+            color: #000;
+        }
+
+        .login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .login-form {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            padding: 20px;
+            border: 1.5px solid transparent;;
+            border-radius: 16px;
+            background-color: #fff;
+        }
+
+        .login-form h1 {
+            font-size: 32px;
+            font-weight: 700;
+            color: #575dfb;
+            margin-bottom: 50px;
+        }
+
+        .login-form input[type="text"],
+        .login-form input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            border: 1.5px solid #575dfb;
+            border-radius: 16px;
+        }
+
+
+        .login-button {
+            width: 100%;
+            padding: 16px;
+            margin-top: 20px;
+            border: none;
+            border-radius: 16px;
+            background-color: #575dfb;
+            color: #fff;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .register-link {
+            margin-top: 8px;
+            font-size: 16px;
+        }
+
+        .register-link span {
+            color: #575dfb;
+            cursor: pointer;
+        }
+
+        .forgot-password {
+            margin-top: 20px;
+            font-size: 12px;
+            color: #575dfb;
+            cursor: pointer;
+        }
+
+        .social-login {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .social-login img {
+            width: 24px;
+            height: 24px;
+            margin-right: 8px;
+        }
+
+        .social-login p {
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+    </style>
+</head>
+
+<body>
+<div class="login-container">
+    <div class="login-form">
+        <h1>Login</h1>
+        <input type="text" id="name" placeholder="ID">
+        <input type="password" id="password" placeholder="Password">
+        <button class="login-button" onclick="onLogin()">Login</button>
+        <div class="social-login">
+            <p>Continue with Google</p>
+        </div>
+        <div class="register-link">
+            <p>Don’t have an account? <span onclick="location.href='/view/signup'">Register</span></p>
+        </div>
+        <p class="forgot-password">Forgot Password?</p>
+    </div>
+</div>
+</body>
+<script>
+    $(document).ready(function () {
+        // 토큰 삭제
+       Cookies.remove('Authorization', {path: '/'});
+    });
+
+
+    const href = location.href;
+    const queryString = href.substring(href.indexOf("?") + 1)
+    if (queryString === 'error') {
+        const errorDiv = document.getElementById('login-failed');
+        errorDiv.style.display = 'block';
+    }
+
+    const host = 'http://' + window.location.host;
+    function onLogin() {
+        let name = $('#name').val();
+        let password = $('#password').val();
+
+        $.ajax({
+            type: "POST",
+            url: `/api/auth/login`,
+            contentType: "application/json",
+            data: JSON.stringify({name: name, password: password}),
+        })
+            .done(function (res, status, xhr) {
+                window.location.href = host
+            })
+            .fail(function (jqXHR, textStatus) {
+                Swal.fire({
+                    icon: 'error',                         // Alert 타입
+                    title: '비밀번호를 확인해주세요!'        // Alert 제목
+                })
+            });
+    }
+
+</script>
+</html>
