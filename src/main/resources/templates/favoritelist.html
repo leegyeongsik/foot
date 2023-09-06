@@ -1,19 +1,19 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="UTF-8">
-  <link rel="shortcut icon" href="#">
-  <meta name="viewport"
-        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <script src="https://code.jquery.com/jquery-3.7.0.min.js"
-          integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g="
-          crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <meta charset="UTF-8">
+    <link rel="shortcut icon" href="#">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"
+            integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g="
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 
-<!--  <link rel="stylesheet" href="/css/main-page.css">-->
-  <title>foot</title>
+    <!--  <link rel="stylesheet" href="/css/main-page.css">-->
+    <title>foot</title>
     <style>
         .Header {
             width: 1850px;
@@ -381,37 +381,11 @@
         <div class="NavList">
             <div class="NavItem" id = "shoes_id">shoes</div>
             <div class="NavItem">Auction</div>
-            <div class="NavItem" id="favorite">favourite</div>
+            <div class="NavItem">favourite</div>
             <div class="NavItem" id = "signup">signup</div>
             <div class="NavItem" id = "signin">signin</div>
         </div>
     </div>
-    <div class="Sidebar">
-        <div class="SidebarTitle">
-            brand
-            <!-- <span class="SortText">정렬 기준</span> -->
-        </div>
-        <!-- <div class="SortButtons" id="sortButtons">
-            <div>높은 가격</div>
-            <div>낮은 가격</div>
-        </div>
-        <div class="SortButtons">
-            <label><input type="radio" name="sort" value="high">높은 가격</label>
-            <label><input type="radio" name="sort" value="low">낮은 가격</label>
-        </div> -->
-        <div class="SidebarItem">Category 1</div>
-        <div class="SidebarItem">Category 2</div>
-        <div class="SidebarItem">Category 3</div>
-        <div class="SearchBox">
-            <div class="SearchContainer">
-                <input id="gettext"type="text" placeholder="Search...">
-                <button class="search">
-                    <img src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png" style="height: 25px; width: 25px; left:222px;bottom: 23px; position: absolute" >
-                </button>
-            </div>
-        </div>
-    </div>
-
     <div class="DivOLayout">
 
     </div>
@@ -426,20 +400,19 @@
 </body>
 <script>
     const auth = Cookies.get('Authorization');
-    console.log(auth)
 
     $(document).ready(function () {
-        if (auth != null){ // ture인지 펄스인지
+        if (auth != null) { //
             $('.NavList').empty();
             temp_Navi = `<div class="NavItem" id="shoes_id">shoes</div>
             <div class="NavItem">Auction</div>
-            <div class="NavItem" id="favorite">favourite</div>
+            <div class="NavItem">favourite</div>
             <div class="NavItem" id="signup">signup</div>
             <div class="NavItem" id="signout">signOut</div>`
             $('.NavList').append(temp_Navi)
             $("#footers").load(`/Chats`); //
             $.ajax({
-                url: `/api/product`,
+                url: `/api/product/favorite`,
                 type: 'GET',
                 contentType: 'application/json',
                 headers: {
@@ -450,8 +423,8 @@
                         console.log(response)
                         var list = response
                         for (var i = 0; i < list.length; i++) {
-                            if(list[i].isAppend == true){
-                                var Products= `
+                            if (list[i].isAppend == true) {
+                                var Products = `
                                 <div class="item"  style="border: 1px solid #EE312F; background-color: #ffffff;">
                                     <img class ="click_img" id = ${list[i].productId} src="${list[i].modelPicture}">
                                     <div class="ItemDetails"> <!-- 선을 div로 감싸서 스타일을 제어 -->
@@ -477,7 +450,7 @@
                                 </div>`
                                 $('.DivOLayout').append(Products);
                             } else {
-                                var Products= `
+                                var Products = `
                                 <div class="item"  style="border: 1px solid #EE312F; background-color: #ffffff;">
                                     <img class ="click_img" id = ${list[i].productId} src="${list[i].modelPicture}">
                                     <div class="ItemDetails"> <!-- 선을 div로 감싸서 스타일을 제어 -->
@@ -511,91 +484,10 @@
                     console.log("실패")
                 }
             })
+            } else {
+                window.location.href = `/view/login-page`;
+            }
 
-        } else {
-            $.ajax({
-                url: `/api/product`,
-                type: 'GET',
-                contentType: 'application/json',
-                headers: {
-                    // 'Authorization': Cookies.get('Authorization') // 클라이언트 쿠키의 값을 전달
-                },
-                success: function (response) {
-                    if (response) {
-                        var list = response
-                        for (var i = 0; i < list.length; i++) {
-                            var Products= `
-                            <div class="item"  style="border: 1px solid #EE312F; background-color: #ffffff;">
-                                <img class ="click_img" id = ${list[i].productId} src="${list[i].modelPicture}">
-                                <div class="ItemDetails"> <!-- 선을 div로 감싸서 스타일을 제어 -->
-                                    <hr> <!-- 선 추가 -->
-                                    <div class="DivCThumbnailInfo">
-                                        <div class="Heading3" style="display: flex; justify-content: space-between; align-items: center;">
-                                            <div class="Barand1" style="margin-left: 5px; color: #EE312F;">Brand Name 1</div>
-                                            <div class="PriceAndCheckbox"
-                                                 style="display: flex; align-items: center; display: flex;align-items: center;flex-direction: row-reverse;">
-                                                <div class="PCThumbnailPrice" style="margin-right: 5px; color: #EE312F;">${list[i].price}</div>
-                                            </div>
-                                        </div>
-                                        <div class="Laangels">${list[i].modelName}</div>
-                                    </div>
-                                </div>
-                            </div>`
-                            $('.DivOLayout').append(Products);
-
-                        }
-                    }
-                },
-                error: function () {
-                    console.log("실패")
-                }
-            })
-        }
-
-        $(document).on('click',"button[class='search']" , function (e) { // 유저 검색
-            e.preventDefault();
-            var text =document.getElementById("gettext").value;
-            // console.log(text)
-            $.ajax({
-                url: `/api/product/search?name=${text}`,
-                type: 'GET',
-                contentType: 'application/json',
-                headers: {
-                    // 'Authorization': Cookies.get('Authorization') // 클라이언트 쿠키의 값을 전달
-                },
-                success: function (response) {
-                    if (response) {
-                        // console.log(response)
-                        var list = response
-                        $('.DivOLayout').empty();
-                        for (var i = 0; i < list.length; i++) {
-                            var Products= `
-                            <div class="item" style="border: 1px solid #EE312F; background-color: #ffffff;">
-                                <img class ="click_img" id = ${list[i].productId} src=${list[i].modelPicture}>
-                                <div class="ItemDetails"> <!-- 선을 div로 감싸서 스타일을 제어 -->
-                                    <hr> <!-- 선 추가 -->
-                                    <div class="DivCThumbnailInfo">
-                                        <div class="Heading3" style="display: flex; justify-content: space-between; align-items: center;">
-                                            <div class="Barand1" style="margin-left: 5px; color: #EE312F;">Brand Name 1</div>
-                                            <div class="PriceAndCheckbox"
-                                                 style="display: flex; align-items: center; display: flex;align-items: center;flex-direction: row-reverse;">
-                                                <div class="PCThumbnailPrice" style="margin-right: 5px; color: #EE312F;">${list[i].price}</div>
-                                                <div class="check_wrap" style="left: 5px;">
-                                                    <input type="checkbox" />
-                                                    <label htmlFor="check_btn"></label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="Laangels">${list[i].modelName}</div>
-                                    </div>
-                                </div>
-                            </div>`
-                            $('.DivOLayout').append(Products);
-                        }
-                    }
-                }
-            })
-        })
         $(document).on('click',"img[class='click_img']" , function (e) { // 보드 상세 페이지 이동
             e.preventDefault();
             var tagId = e.target.id
@@ -618,10 +510,11 @@
             Cookies.remove('Authorization', {path: '/'});
             window.location.href = ""
         })
-        $(document).on('click',"div[id='favorite']" , function (e) { // 보드 상세 페이지 이동
-            e.preventDefault();
-            window.location.href = `/Product/favorite`
+        $(document).on('click',"div[id='shoes_id']" , function (e) { // 신발 누르면 해당 사이즈 출력
+            window.location.href=`http://localhost:8080`
+
         })
+
 
         $(document).on('click',"button[class='btnsssssssssssss']" , function (e) { // 보드 상세 페이지 이동
             e.preventDefault();
@@ -645,8 +538,8 @@
                     },
                     success: function (response) {
                         if (response) {
-                            }
                         }
+                    }
                 })
             } else {
                 $(`#${tagId}`).prop('checked',!checked);

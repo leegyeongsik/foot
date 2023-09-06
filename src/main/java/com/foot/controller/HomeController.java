@@ -48,6 +48,10 @@ public class HomeController {
         model.addAttribute("productId" ,productId);
         return "updateProduct";
     }
+    @GetMapping("/Product/favorite")
+    public String FavoriteProductPage(){
+        return "favoritelist";
+    }
 
     @GetMapping("/Chats")
     public String chatList(@AuthenticationPrincipal UserDetailsImpl userDetails , Model model){

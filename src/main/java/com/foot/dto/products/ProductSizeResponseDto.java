@@ -16,7 +16,7 @@ public class ProductSizeResponseDto {
     String footPicture;
     Long ColorAmount;
     List<ProductColorResponseDto> colorResponseDtos;
-
+    Long colorAmount;
 //    Long predictFootPicture;
 
 

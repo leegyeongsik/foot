@@ -2,6 +2,7 @@ package com.foot.service;
 
 import com.foot.dto.products.*;
 import com.foot.entity.*;
+import com.foot.repository.favorite.FavoriteRepository;
 import com.foot.repository.products.ProductColorImgRepository;
 import com.foot.repository.products.ProductColorRepository;
 import com.foot.repository.products.ProductRepository;
@@ -13,10 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -27,6 +25,7 @@ public class ProductService {
     private final ProductColorRepository productColorRepository;
     private final ProductSizeRepository productSizeRepository;
     private final S3UploadService s3UploadService;
+    private final FavoriteRepository favoriteRepository;
 
     @Transactional
     public void createProduct(ProductRequestDto requestDto , User user) throws IOException { // 상품등록
@@ -91,7 +90,7 @@ public class ProductService {
         }
     }
 
-    public List<ProductResponseDto> getProduct() { // 전체 상품 조회
+    public List<ProductResponseDto> getProduct() { // 전체 상품 조회 // true 인지 false인지
         List<ProductResponseDto> productResponseDtos = new ArrayList<>(); // cursor 페이지네이션
         List<Product> products=productRepository.findAll();
         for (Product product : products) {
@@ -99,8 +98,37 @@ public class ProductService {
         }
         return productResponseDtos;
     }
-
+    public List<ProductResponseDto> getUserProduct(User user) {
+        List<ProductResponseDto> productResponseDtos = new ArrayList<>(); // cursor 페이지네이션
+        List<Product> products=productRepository.findAll();
+        for (Product product : products) {
+            Optional<Favorite> favorite = favoriteRepository.getFavoriteIsExist(user.getId(),product.getId());
+            if(!favorite.isEmpty()){
+                productResponseDtos.add(new ProductResponseDto(product , true) );
+            }
+            else {
+                productResponseDtos.add(new ProductResponseDto(product));
+            }
+        }
+        return productResponseDtos;
+    }
     public innerProductResponseDto getTargetProduct(Long productId) { // 특정 상품 조회
+        List<ProductColorResponseDto> productColorResponseDtos = new ArrayList<>();
+        Product product=productRepository.findById(productId).get();
+
+        List<ProductColorImg> productColorImgs=productRepository.getModelColors(productId);
+        for (ProductColorImg colorImg : productColorImgs) {
+            List<ProductSizeResponseDto> productSizeResponseDtos = new ArrayList<>();
+            Map<ProductSize, ProductColor> sizeProductColorMap =
+                    productRepository.getModelSizeOfColor(productId , colorImg.getId());
+            for (ProductSize productSize : sizeProductColorMap.keySet()) {
+                productSizeResponseDtos.add(new ProductSizeResponseDto(productSize ,sizeProductColorMap.get(productSize)));
+            }
+            productColorResponseDtos.add(new ProductColorResponseDto(colorImg,productSizeResponseDtos));
+        }
+        return new innerProductResponseDto(new ProductResponseDto(product),productColorResponseDtos);
+    }
+    public innerProductResponseDto getTargetUserProduct(Long productId, User user) {
         List<ProductColorResponseDto> productColorResponseDtos = new ArrayList<>();
         Product product=productRepository.findById(productId).get();
         List<ProductColorImg> productColorImgs=productRepository.getModelColors(productId);
@@ -113,7 +141,13 @@ public class ProductService {
             }
             productColorResponseDtos.add(new ProductColorResponseDto(colorImg,productSizeResponseDtos));
         }
-        return new innerProductResponseDto(new ProductResponseDto(product),productColorResponseDtos);
+        Optional<Favorite> favorite = favoriteRepository.getFavoriteIsExist(user.getId(),product.getId());
+        if(!favorite.isEmpty()){
+            return new innerProductResponseDto(new ProductResponseDto(product,true),productColorResponseDtos);
+        }
+        else {
+            return new innerProductResponseDto(new ProductResponseDto(product),productColorResponseDtos);
+        }
     }
 
     public innerProductResponseDto getSizeProduct(Long productId) { // 특정 상품 조회
@@ -202,4 +236,7 @@ public class ProductService {
             throw new IllegalArgumentException("어드민유저만 접근할수 있습니다");
         }
     }
+
+
+
 }

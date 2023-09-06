@@ -22,13 +22,21 @@ public class ProductController {
     }
 
     @GetMapping("") // 전체 상품 조회
-    public List<ProductResponseDto> getProduct() {
-        return productService.getProduct();
+    public List<ProductResponseDto> getProduct(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+        if (userDetails == null){
+            return productService.getProduct();
+        } else {
+            return productService.getUserProduct(userDetails.getUser());
+        }
     }
 
     @GetMapping("/{productId}") // 특정 상품 조회
-    public innerProductResponseDto getTargetProduct(@PathVariable Long productId) {
-        return productService.getTargetProduct(productId);
+    public innerProductResponseDto getTargetProduct(@PathVariable Long productId,@AuthenticationPrincipal UserDetailsImpl userDetails) {
+        if (userDetails == null){
+            return productService.getTargetProduct(productId);
+        } else {
+            return productService.getTargetUserProduct(productId,userDetails.getUser());
+        }
     }
 
     @PutMapping("/{productId}") // 특정 상품 수정
