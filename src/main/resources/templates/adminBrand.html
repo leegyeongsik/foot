@@ -87,6 +87,7 @@
         #brandName {
             padding: 5px;
             height: 25px;
+            width: 20%;
             border: 1px solid #ddd;
             border-radius: 3px;
             margin-right: 5px;
@@ -148,6 +149,7 @@
             <div>
                 <h2 id="title">브랜드 전체 목록</h2>
             </div>
+            <div></div>
             <div th:each="brand: ${brandList}" class="brand" th:id="${brand.id}">
                 <div class="brand-info">
                     <h3 th:id="${brand.id}" th:text="${brand.name}"></h3>
