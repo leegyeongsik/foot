@@ -111,6 +111,7 @@ public class AdminViewController {
     }
 
     // 브랜드 페이지
+    @Secured(UserRoleEnum.Authority.ADMIN)
     @GetMapping("/brands")
     public String getBrandList(Model model) {
         List<BrandResponseDto> brandList = brandService.getAllBrand();
