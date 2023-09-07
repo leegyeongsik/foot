@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"
+            integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g="
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <title>브랜드 관리</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+
+        .admin-container {
+            display: flex;
+            height: 100vh;
+        }
+
+        .admin-menu {
+            background-color: #333;
+            color: #fff;
+            width: 200px;
+            padding: 20px;
+        }
+
+        .menu-item {
+            margin-bottom: 10px;
+            cursor: pointer;
+        }
+
+        .admin-content {
+            flex-grow: 1;
+            padding: 40px;
+            display: flex;
+            justify-content: center; /* 수평 가운데 정렬 */
+        }
+
+        .list-container {
+            width: 90%;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .brand {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .brand-info {
+            flex-grow: 1;
+        }
+
+        .brand-buttons {
+            display: flex;
+            gap: 10px; /* 버튼 사이의 간격을 조정할 수 있습니다. */
+        }
+
+        #addBrandForm {
+            display: none;
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+
+        #brandName {
+            padding: 5px;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            margin-right: 5px;
+        }
+
+
+        /* 버튼 스타일 추가 */
+        .edit-btn,
+        .delete-btn {
+            background-color: #fff; /* 배경색을 하얀색으로 설정 */
+            color: #333; /* 글자색을 어두운 회색으로 설정 */
+            border: 1px solid #ccc; /* 회색 테두리 추가 */
+            border-radius: 3px;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+
+        button:hover
+        {
+            background-color: #cccccc;
+        }
+
+        .add-brand-btn {
+            border: 1.5px dashed #ddd; /* 점선 테두리 스타일과 파란색 테두리 색상을 지정합니다. */
+            padding: 10px 10px; /* 위아래 5px, 좌우 10px 여백을 추가합니다. */
+            cursor: pointer;
+            display: inline-block; /* 요소를 인라인 블록으로 표시하여 텍스트와 같은 방식으로 표시됩니다. */
+            border-radius: 3px; /* 테두리의 둥근 모서리를 추가합니다. */
+            margin-top: 10px; /* 위쪽 여백을 추가합니다. */
+        }
+
+        .add-brand-btn:hover {
+            cursor: pointer;
+            border-color: #333333;
+        }
+
+        /* 추가 버튼 스타일 */
+        .confirm-btn,
+        .cancel-btn {
+            background-color: #fff; /* 배경색을 하얀색으로 설정 */
+            color: #333; /* 글자색을 어두운 회색으로 설정 */
+            border: 1px solid #ccc; /* 회색 테두리 추가 */
+            border-radius: 3px;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+<div class="admin-container">
+    <div class="admin-menu">
+        <div class="menu-item" onclick="location.href='/view/admin/products'">상품관리</div>
+        <div class="menu-item">메뉴 항목 2</div>
+        <!-- 원하는 메뉴 항목들을 추가 -->
+    </div>
+
+    <div class="admin-content">
+        <div class="list-container">
+            <div>
+                <h2>브랜드 전체 목록</h2>
+            </div>
+            <div th:each="brand: ${brandList}" class="brand" th:id="${brand.id}">
+                <div class="brand-info">
+                    <h3 th:id="${brand.id}" th:text="${brand.name}"></h3>
+                </div>
+                <div class="brand-buttons">
+                    <button class="edit-btn">수정</button>
+                    <button class="delete-btn">삭제</button>
+                </div>
+            </div>
+            <!-- 브랜드 추가 인풋 폼 -->
+            <div id="addBrandForm" style="display: none;">
+                <input type="text" id="brandName" placeholder="브랜드 이름">
+                <button class="confirm-btn" onclick="addBrand()">생성</button>
+                <button class="cancel-btn" onclick="cancelAddBrand()">취소</button>
+            </div>
+            <div><span class="add-brand-btn" onclick="showAddBrandForm()">+ 브랜드 추가</span></div>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    function showAddBrandForm() {
+        // 브랜드 추가 인풋 폼을 보이도록 설정
+        document.getElementById("addBrandForm").style.display = "block";
+    }
+
+    function cancelAddBrand() {
+        // 브랜드 추가 인풋 폼을 숨기고, 입력 필드 초기화
+        document.getElementById("addBrandForm").style.display = "none";
+        document.getElementById("brandName").value = "";
+    }
+
+    function addBrand() {
+        // 입력한 브랜드 이름 가져오기
+        var brandName = document.getElementById("brandName").value;
+
+        // 브랜드 추가 요청 데이터
+        var requestData = {
+            name: brandName
+        };
+
+        $.ajax({
+            type: "POST",
+            url: "/api/brand", // 해당 URL은 실제로 사용되는 URL로 변경해야 합니다.
+            contentType: "application/json",
+            data: JSON.stringify(requestData),
+            success: function (response) {
+                // 서버로부터 성공적인 응답을 받았을 때 수행할 작업
+                console.log("브랜드 추가 성공:", response);
+
+                // 브랜드 추가 후 폼 숨기기
+                document.getElementById("addBrandForm").style.display = "none";
+                // 입력 필드 초기화
+                document.getElementById("brandName").value = "";
+
+                // 새로운 브랜드를 목록에 추가하는 등의 추가 작업을 수행할 수 있습니다.
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                // 서버로부터 오류 응답을 받았을 때 수행할 작업
+                console.error("브랜드 추가 오류:", errorThrown);
+            }
+        });
+    }
+
+</script>
+</html>

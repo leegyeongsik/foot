@@ -1,11 +1,14 @@
 package com.foot.controller;
 
 import com.foot.dto.ProfileResponseDto;
+import com.foot.dto.bidProduct.BrandResponseDto;
+import com.foot.entity.Brand;
 import com.foot.entity.Product;
 import com.foot.entity.User;
 import com.foot.entity.UserRoleEnum;
 import com.foot.repository.UserRepository;
 import com.foot.service.AdminService;
+import com.foot.service.BrandService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -30,6 +33,7 @@ import java.util.stream.Collectors;
 public class AdminViewController {
     private final UserRepository userRepository;
     private final AdminService adminService;
+    private final BrandService brandService;
 
     // 관리자 홈
     @Secured(UserRoleEnum.Authority.ADMIN)
@@ -104,6 +108,14 @@ public class AdminViewController {
         model.addAttribute("endPage", endPage);
 
         return "adminProductList";
+    }
+
+    // 브랜드 페이지
+    @GetMapping("/brands")
+    public String getBrandList(Model model) {
+        List<BrandResponseDto> brandList = brandService.getAllBrand();
+        model.addAttribute("brandList", brandList);
+        return "adminBrand";
     }
 
 
