@@ -1,8 +1,6 @@
 package com.foot.controller;
 
-import com.foot.dto.ProfileResponseDto;
 import com.foot.dto.bidProduct.BrandResponseDto;
-import com.foot.entity.Brand;
 import com.foot.entity.Product;
 import com.foot.entity.User;
 import com.foot.entity.UserRoleEnum;
@@ -12,7 +10,6 @@ import com.foot.service.BrandService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -24,7 +21,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Controller
 @Slf4j
@@ -68,7 +64,7 @@ public class AdminViewController {
         model.addAttribute("startPage", startPage);
         model.addAttribute("endPage", endPage);
 
-        return "userlist";
+        return "adminUserList";
     }
 
     // 회원 상세 조회
@@ -116,6 +112,7 @@ public class AdminViewController {
     public String getBrandList(Model model) {
         List<BrandResponseDto> brandList = brandService.getAllBrand();
         model.addAttribute("brandList", brandList);
+        model.addAttribute("size", brandList.size());
         return "adminBrand";
     }
 

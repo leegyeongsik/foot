@@ -8,6 +8,7 @@
             crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <script src="https://kit.fontawesome.com/1d07e1c680.js" crossorigin="anonymous"></script>
     <title>장바구니</title>
     <style>
         body {
@@ -82,40 +83,21 @@
             cursor: pointer;
         }
 
-        .product-btn {
-            padding: 10px 16px;
-            border: none;
-            border-radius: 5px;
-            background-color: #333;
-            color: #fff;
-            font-weight: 700;
-            cursor: pointer;
-            display: block; /* 블록 요소로 설정하여 한 줄에 하나의 버튼만 표시 */
-        }
-
-        .discount-btn {
-            padding: 10px 16px;
-            border: none;
-            border-radius: 5px;
-            background-color: #333;
-            color: #fff;
-            font-weight: 700;
-            cursor: pointer;
-            display: block;
-
-        }
-
         .close {
             padding: 10px 16px;
             border: none;
             border-radius: 5px;
             background-color: transparent;
             color: black;
-            font-size: 35px;
+            font-size: 20px;
             cursor: pointer;
             display: block;
         }
 
+        .close:hover {
+            cursor: pointer;
+            color: #EE312F;
+        }
 
         .cart-content {
             width: 100%; /* 내용 영역 너비 조정 */
@@ -256,7 +238,7 @@
                     </td>
                     <td>
                         <button type="button" class="close" aria-label="Close">
-                            <span aria-hidden="true" th:data-id="${item.cartItemId}" onclick="deleteCartItem(this)">&times;</span>
+                            <span aria-hidden="true" th:data-id="${item.cartItemId}" onclick="deleteCartItem(this)"><i class="fa-solid fa-trash-can"></i></span>
                         </button>
                     </td>
                 </tr>

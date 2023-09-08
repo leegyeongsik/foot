@@ -9,6 +9,7 @@
     <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <script src="https://kit.fontawesome.com/1d07e1c680.js" crossorigin="anonymous"></script>
     <title>브랜드 관리</title>
     <style>
         body {
@@ -19,7 +20,7 @@
         }
 
         #title {
-            margin: 20px;
+            margin: 25px;
         }
 
         .admin-container {
@@ -30,34 +31,42 @@
         .admin-menu {
             background-color: #333;
             color: #fff;
-            width: 200px;
+            width: 16%;
             padding: 20px;
+            box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.2); /* 그림자 효과 추가 */
         }
 
         .menu-item {
             font-size: 18px;
-            margin: 20px 10px;
+            margin: 10px 0;
+            padding: 10px 10px;
             cursor: pointer;
+            border-radius: 5px; /* 버튼 모서리를 둥글게 만듭니다. */
+            transition: background-color 0.3s; /* 배경색에 애니메이션 효과 추가 */
+        }
+
+        .menu-item:hover {
+            background-color: #555; /* 마우스 오버시 배경색 변경 */
         }
 
         .admin-content {
             flex-grow: 1;
-            padding: 40px;
+            padding: 10px;
             display: flex;
             justify-content: center; /* 수평 가운데 정렬 */
         }
 
         .list-container {
-            width: 90%;
+            width: 100%;
             background-color: #fff;
-            padding: 20px;
+            padding: 3%;
             border-radius: 5px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
         .brand-container {
             display: flex;
             flex-wrap: wrap; /* 자식 요소들을 여러 줄로 나누도록 설정 */
-            gap: 10px; /* 브랜드 간격 조정 */
+            gap: 5%; /* 브랜드 간격 조정 */
             justify-content: flex-start; /* 왼쪽 정렬 */
         }
 
@@ -66,13 +75,12 @@
             padding: 5px;
             border: 1px solid #ddd;
             border-radius: 5px;
-            margin-bottom: 2px;
+            margin: 10px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap; /* 요소가 너비를 초과하면 아래 줄로 내려가도록 설정 */
             width: 25%; /* 요소의 너비를 조정합니다. */
-            margin-right: 2%; /* 요소 사이의 간격을 설정합니다. */
         }
 
         .brand-info {
@@ -85,9 +93,21 @@
             gap: 10px; /* 버튼 사이의 간격을 조정할 수 있습니다. */
         }
 
+        /* 아이콘에 대한 기본 스타일 */
+        .brand-buttons .edit-btn i,
+        .brand-buttons .delete-btn i {
+            transition: color 0.3s; /* 색상 변경에 애니메이션 효과 추가 */
+        }
+
+        .brand-buttons .edit-btn:hover,
+        .brand-buttons .delete-btn:hover {
+            cursor: pointer;
+            color: #EE312F;
+        }
+
         #addBrandForm {
-            display: none;
-            margin: 10px 0;
+            width: 27%;
+            margin: 10px 1.5%;
             padding: 10px;
             border: 1px solid #ddd;
             border-radius: 5px;
@@ -101,18 +121,6 @@
             margin-right: 5px;
         }
 
-
-        /* 버튼 스타일 추가 */
-        .edit-btn,
-        .delete-btn {
-            background-color: #fff; /* 배경색을 하얀색으로 설정 */
-            color: #333; /* 글자색을 어두운 회색으로 설정 */
-            border: 1px solid #ccc; /* 회색 테두리 추가 */
-            border-radius: 3px;
-            padding: 5px;
-            cursor: pointer;
-        }
-
         button:hover
         {
             background-color: #cccccc;
@@ -120,13 +128,14 @@
 
         .add-brand-btn {
             border: 1.5px dashed #ddd; /* 점선 테두리 스타일과 파란색 테두리 색상을 지정합니다. */
-            padding: 5px; /* 위아래 5px, 좌우 10px 여백을 추가합니다. */
+            padding: 1%; /* 위아래 5px, 좌우 10px 여백을 추가합니다. */
             cursor: pointer;
             display: inline-block; /* 요소를 인라인 블록으로 표시하여 텍스트와 같은 방식으로 표시됩니다. */
             border-radius: 3px; /* 테두리의 둥근 모서리를 추가합니다. */
-            margin-top: 10px; /* 위쪽 여백을 추가합니다. */
+            margin-top: 2%; /* 위쪽 여백을 추가합니다. */
             transition: border-color 0.3s; /* 테두리 색상에 애니메이션 효과 추가 */
             font-size: 13px;
+            margin-left: 1.5%;
         }
 
         .add-brand-btn:hover {
@@ -149,14 +158,14 @@
 <body>
 <div class="admin-container">
     <div class="admin-menu">
-        <div class="menu-item" onclick="location.href='/view/admin'">관리자 홈</div>
-        <div class="menu-item" onclick="location.href='/view/admin/users'">회원관리</div>
-        <div class="menu-item" onclick="location.href='/view/admin/products'">상품관리</div>
+        <div class="menu-item" onclick="location.href='/view/admin'"><i class="fas fa-home" style="margin-right: 10px;"></i>관리자 홈</div>
+        <div class="menu-item" onclick="location.href='/view/admin/users'"><i class="fas fa-users" style="margin-right: 10px;"></i>회원 관리</div>
+        <div class="menu-item" onclick="location.href='/view/admin/products'"><i class="fas fa-box"  style="margin-right: 10px;"></i> 상품 관리</div>
     </div>
     <div class="admin-content">
         <div class="list-container">
             <div>
-                <h2 id="title">브랜드 전체 목록</h2>
+                <h2 id="title" th:text="|전체 브랜드 목록 (총 ${size}개)|"></h2>
             </div>
             <div class="brand-container">
                 <div th:each="brand: ${brandList}" class="brand" th:id="${brand.id}">
@@ -164,8 +173,8 @@
                         <h4 th:id="${brand.id}" th:text="${brand.name}"></h4>
                     </div>
                     <div class="brand-buttons">
-                        <button class="edit-btn" th:attr="data-brand-id=${brand.id}">수정</button>
-                        <button class="delete-btn" th:attr="data-brand-id=${brand.id}">삭제</button>
+                        <div class="edit-btn" th:attr="data-brand-id=${brand.id}"><i class="fa-regular fa-pen-to-square"></i></div>
+                        <div class="delete-btn" th:attr="data-brand-id=${brand.id}"><i class="fa-regular fa-trash-can"></i></div>
                     </div>
                 </div>
             </div>
