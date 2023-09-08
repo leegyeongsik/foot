@@ -72,7 +72,7 @@ public class WebSecurityConfig {
                         .requestMatchers("/api/product/**").permitAll()
                         .requestMatchers("/api/cart/**").permitAll()
                         .requestMatchers("/Product/**").permitAll()
-
+                        .requestMatchers("/api/bidProduct/**").permitAll()
 
                         .anyRequest().authenticated() // 그 외 모든 요청 인증처리
 

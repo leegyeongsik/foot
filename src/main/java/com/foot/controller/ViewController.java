@@ -10,4 +10,11 @@ public class ViewController {
     public String getBpResister() {
         return "bpResist";
     }
+
+    @GetMapping("/view/bpSave")
+    public String bpSavePage() {
+        return "createBidProduct";
+    }
+
+
 }

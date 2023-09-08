@@ -9,39 +9,66 @@ import com.foot.repository.BidHistoryRepository;
 import com.foot.repository.BidProductRepository;
 import com.foot.repository.BidRepository;
 import com.foot.repository.BrandRepository;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class BidService {
 
-    private BidProductRepository bidProductRepository;
-    private BidRepository bidRepository;
-    private BrandRepository brandRepository;
-    private BidHistoryRepository bidHistoryRepository;
+    private final BidProductRepository bidProductRepository;
+    private final BidRepository bidRepository;
+    private final BrandRepository brandRepository;
+    private final BidHistoryRepository bidHistoryRepository;
 
-    public BidService(BidProductRepository bidProductRepository, BidRepository bidRepository, BrandRepository brandRepository, BidHistoryRepository bidHistoryRepository) {
-        this.bidProductRepository = bidProductRepository;
-        this.bidRepository = bidRepository;
-        this.brandRepository = brandRepository;
-        this.bidHistoryRepository = bidHistoryRepository;
-    }
+    private final S3UploadService s3UploadService;
+
 
     //------------------- 경매 상품 관련 -------------------//
 
     // 경매 상품 생성
-    public BidProductResponseDto createBidProduct(BidProductRequestDto requestDto, User user) {
+    public BidProductResponseDto createBidProduct(BidProductRequestDto requestDto, User user) throws IOException {
         Brand brand = brandRepository.findByName(requestDto.getBrand());
-        BidProduct bidProduct = new BidProduct(requestDto, brand, user);
+        BidProduct bidProduct = BidProduct.builder()
+                .expirationPeriod(requestDto.getExpirationPeriod())
+                .startPrice(requestDto.getStartPrice())
+                .name(requestDto.getName())
+                .feetsize(requestDto.getFeetSize())
+                .footsize(requestDto.getFootSize())
+                .footpicture(s3UploadService.uploadImage(requestDto.getBidProductFile()))
+                .brand(brand)
+                .user(user)
+                .build();
         bidProductRepository.save(bidProduct);
         return new BidProductResponseDto(bidProduct);
+    }
+
+    public void save(BidProductRequestDto requestDto, User user) throws IOException {
+        if (requestDto.getBidProductFile().isEmpty()) {
+            // 첨부 파일 없음
+            Brand brand = brandRepository.findByName(requestDto.getBrand());
+            BidProduct bidProduct = new BidProduct(requestDto, brand, user);
+            bidProductRepository.save(bidProduct);
+        } else {
+            // 첨부 파일 있음
+            MultipartFile bidProductFile = requestDto.getBidProductFile();
+            String originalFilename = bidProductFile.getOriginalFilename();
+            String storedFileName = System.currentTimeMillis() + "_" + originalFilename;
+            String savePath = "/Users/me/foot_img/" + storedFileName; // Mac일 경우  : "/Users/사용자이름/저장할폴더명/" 윈도우일 경우 : "C:/저장할폴더명/"
+
+            bidProductFile.transferTo(new File(savePath));
+        }
     }
 
     // 경매 상품 전체 조회
@@ -90,17 +117,17 @@ public class BidService {
         return result;
     }
 
-    // 경매 상품 수정
-    @Transactional
-    public BidProductResponseDto updateBidProduct(Long bidId, BidProductRequestDto requestDto, User user) {
-        BidProduct bidProduct = findBidProductById(bidId);
-        if (bidProduct.getUser().equals(user)) {
-            bidProduct.update(requestDto);
-        } else {
-            throw new IllegalArgumentException("본인의 경매상품만 수정할수 있습니다.");
-        }
-        return new BidProductResponseDto(bidProduct);
-    }
+//    // 경매 상품 수정
+//    @Transactional
+//    public BidProductResponseDto updateBidProduct(Long bidId, BidProductRequestDto requestDto, User user) {
+//        BidProduct bidProduct = findBidProductById(bidId);
+//        if (bidProduct.getUser().equals(user)) {
+//            bidProduct.update(requestDto);
+//        } else {
+//            throw new IllegalArgumentException("본인의 경매상품만 수정할수 있습니다.");
+//        }
+//        return new BidProductResponseDto(bidProduct);
+//    }
 
     // 경매 상품 삭제
     public void deleteBidProduct(Long bidId, User user) {
