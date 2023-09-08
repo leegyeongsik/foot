@@ -18,7 +18,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 @EnableWebSecurity
@@ -72,6 +71,14 @@ public class WebSecurityConfig {
                         .requestMatchers("/api/product/**").permitAll()
                         .requestMatchers("/api/cart/**").permitAll()
                         .requestMatchers("/Product/**").permitAll()
+
+
+                        .requestMatchers("/ws/**").permitAll()
+                        .requestMatchers("/queue/**").permitAll()
+                        .requestMatchers("/chat/**").permitAll()
+                        .requestMatchers("/topic/**").permitAll()
+
+                        .requestMatchers("/Chats/**").permitAll()
 
 
                         .anyRequest().authenticated() // 그 외 모든 요청 인증처리

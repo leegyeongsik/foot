@@ -182,10 +182,10 @@
                 </thead>
                 <tbody>
                 <tr th:each="item : ${cartItems}">
-                    <td><input type="checkbox" name="cartChkBox" class="product-checkbox" th:value="${item.cartItemId}" th:attr="data-product-id=${item.cartItemId}"/>
+                    <td><input type="checkbox" name="cartChkBox" class="product-checkbox"  th:value="${item.cartItemId}" th:attr="data-product-id=${item.cartItemId}"/>
                     </td>
                     <td><img th:src="${item.imgUrl}" alt="Product Image" width="50" height="50"/></td>
-                    <td th:text="${item.productName}" th:attr="data-product-id=${item.cartItemId}"
+                    <td th:text="${item.productName}" th:id="'name_'+${item.cartItemId}" th:attr="data-product-id=${item.cartItemId}"
                         onclick="goToProductDetailPage(this)" class="product-model"></td>
                     <td th:id="'price_' + ${item.cartItemId}"
                         th:data-price="${item.price}" th:text="${item.price}"></td>
@@ -203,6 +203,11 @@
                             <span aria-hidden="true" th:data-id="${item.cartItemId}" onclick="deleteCartItem(this)">&times;</span>
                         </button>
                     </td>
+                    <div hidden>
+                    <td hidden th:id="'colorid_' + ${item.cartItemId}"
+                        th:data-colorid="${item.productColorId}" th:text="${item.price}"></td>
+                    <td hidden>
+                    </div>
                 </tr>
                 </tbody>
             </table>
@@ -211,7 +216,7 @@
             총 주문 금액 :&nbsp; <span id="orderTotalPrice">0원</span>
         </h3>
         <div class="btn-container">
-            <button type="button" class="order-btn">주문하기</button>
+            <button type="button" class="order-btn" onclick="orderCartItem()">주문하기</button>
         </div>
     </div>
 
@@ -302,6 +307,7 @@
             var price = $("#price_" + cartItemId).attr("data-price");
             var count = $("#count_" + cartItemId).val();
             orderTotalPrice += price*count;
+            var colorid = $("#price_" + cartItemId).attr("data-price");
 
             console.log(cartItemId,price, count, orderTotalPrice);
         });
@@ -331,6 +337,27 @@
 
     }
 
+    function orderCartItem(){
+        $("input[name=cartChkBox]:checked").each(function() {
+            let cartItemId = $(this).val();
+            let price = $("#price_" + cartItemId).attr("data-price");
+            let count = $("#count_" + cartItemId).val();
+            let colorid = $("#colorid_" + cartItemId).attr("data-colorid");
+            console.log(cartItemId,price, count,colorid);
+            $.ajax({
+                url: `/api/product/order`,
+                type: "POST",
+                data: JSON.stringify({orderCartItemId:cartItemId,orderPrice:price,orderCount:count,orderProductcolorId:colorid}),
+                contentType: "application/json",
+                success: function(data) {
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    let cartnum =  jqXHR.responseJSON.message
+                    alert("재고가 부족합니다" + " " + " 해당상품: "+$("#name_" + cartnum).text())
+                }
+            });
+        });
+    }
 
 </script>
 </html>

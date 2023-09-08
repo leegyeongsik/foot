@@ -6,21 +6,22 @@ import lombok.Setter;
 @Getter
 @Setter
 public class CartResponseDto {
-    private Long cartItemId; //장바구니 상품 아이디
+    private Long cartItemId; //장바구니 상품 아이디 -> 컬러 아이디
 
-    private String productName; //상품명
+    private String productName; //상품명  조인
 
-    private Long price; //상품 금액
+    private Long price; //상품 금액 조인
 
-    private int count; //수량
+    private int count; //수량 조인
 
     private String imgUrl; //상품 이미지 경로
-
-    public CartResponseDto(Long cartItemId, String productName, Long price, int count, String imgUrl) {
+    private Long productColorId;
+    public CartResponseDto(Long cartItemId, String productName, Long price, int count, String imgUrl, Long productColorId) {
         this.cartItemId = cartItemId;
         this.productName = productName;
         this.price = price;
         this.count = count;
         this.imgUrl = imgUrl;
+        this.productColorId = productColorId;
     }
 }

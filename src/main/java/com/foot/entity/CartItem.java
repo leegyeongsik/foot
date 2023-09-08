@@ -20,15 +20,15 @@ public class CartItem extends Timestamped {
     private Cart cart;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "productSize_id")
-    private ProductSize productSize;
+    @JoinColumn(name = "productSizeColor_id")
+    private ProductColor productColor;
 
     private int count;
 
-    public static CartItem createCartItem(Cart cart, ProductSize productSize, int count) {
+    public static CartItem createCartItem(Cart cart, ProductColor productColor, int count) {
         CartItem cartItem = new CartItem();
         cartItem.setCart(cart);
-        cartItem.setProductSize(productSize);
+        cartItem.setProductColor(productColor);
         cartItem.setCount(count);
         return cartItem;
     }

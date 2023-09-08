@@ -16,7 +16,7 @@ public class ProductSizeResponseDto {
     String footPicture;
     Long ColorAmount;
     List<ProductColorResponseDto> colorResponseDtos;
-
+    Long ColorIds;
 //    Long predictFootPicture;
 
 
@@ -31,6 +31,7 @@ public class ProductSizeResponseDto {
         this.footPicture = productSize.getFootpicture();
 //        this.predictFootPicture = productFoot.getPredictfootpicture();
         this.ColorAmount = productColor.getAmount();
+        this.ColorIds = productColor.getId();
 
     }
 

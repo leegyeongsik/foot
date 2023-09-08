@@ -15,6 +15,7 @@ public class ProductRequestDto {
     Long totalAmount;
     String description;
     Long price;
+    String brand;
     MultipartFile ModelPicture; // product
 
     List<MultipartFile> modelColorImg;

@@ -10,6 +10,7 @@ public class ProfileResponseDto {
     private String address;
     private String cellphone;
     private String userImage;
+    private String role;
 
     public ProfileResponseDto(User currentUser) {
         this.name = currentUser.getName();
@@ -17,5 +18,6 @@ public class ProfileResponseDto {
         this.address = currentUser.getAddress();
         this.cellphone = currentUser.getCellphone();
         this.userImage = currentUser.getUserImage();
+        this.role = String.valueOf(currentUser.getRole());
     }
 }
