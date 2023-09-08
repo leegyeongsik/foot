@@ -204,7 +204,7 @@
 
         $.ajax({
             type: "POST",
-            url: "/api/brand", // 해당 URL은 실제로 사용되는 URL로 변경해야 합니다.
+            url: "/api/brand",
             contentType: "application/json",
             data: JSON.stringify(requestData),
             success: function (response) {
@@ -237,7 +237,7 @@
         deleteBrand(brandId);
     });
 
-    // 회원 탈퇴
+    // 브랜드 삭제
     function deleteBrand(brandId) {
         Swal.fire({
             icon: 'warning',
@@ -265,6 +265,40 @@
             }
         });
     }
+
+    $('.edit-btn').click(function () {
+        var brandId = $(this).data('brand-id'); // 클릭된 버튼의 data-brand-id 얻기
+        // 이후 수정 작업 수행
+        editBrand(brandId);
+    });
+
+    // 브랜드 이름 수정
+    function editBrand(brandId) {
+
+        var newBrandName = prompt("Enter the new brand name:");
+        if (newBrandName === null) {
+            return; // 사용자가 취소를 눌렀을 경우 함수 종료
+        }
+        var requestData = JSON.stringify({
+            name: newBrandName,
+        });
+
+        $.ajax({
+            type: "PUT",
+            url: "/api/brand/" + brandId,
+            contentType: "application/json",
+            data: requestData,
+            success: function (data) {
+                console.log("브랜드 수정 완료");
+                window.location.reload();
+            },
+            error: function () {
+                console.log("브랜드 수정 실패");
+            }
+        });
+    }
+
+
 
 
 
