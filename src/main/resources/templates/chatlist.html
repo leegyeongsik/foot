@@ -473,15 +473,15 @@
   })
   var sockss = new SockJS("/ws/chat"); //new SockJS()를 사용하여 아까 핸들러에서 지정해준 endPoint를 사용하여 연결을 해준다.
   var wsss = Stomp.over(sockss);
-
-  wsss.connect({}, function (frame) {
-    wsss.subscribe("/topic/api/channel/enter", function (message) {
-      let receive = JSON.parse(message.body);
-      console.log(receive)
-    });
-  }, function (error) {
-    alert("error" + error);
-  });
+  //
+  // wsss.connect({}, function (frame) {
+  //   wsss.subscribe("/topic/api/channel/enter", function (message) {
+  //     let receive = JSON.parse(message.body);
+  //     console.log(receive)
+  //   });
+  // }, function (error) {
+  //   alert("error" + error);
+  // });
 
 </script>
 </html>

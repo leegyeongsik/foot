@@ -15,7 +15,7 @@ public class ProductResponseDto {
     Long discountPrice;
     boolean IsAppend = false;
 
-//    String brand;
+    String brand;
 
     public ProductResponseDto(Product product){
         this.productId = product.getId();
@@ -26,7 +26,7 @@ public class ProductResponseDto {
         this.discountRate = product.getDiscountRate();
         this.discountPrice = product.getDiscountPrice();
         this.modelDescription = product.getDescription();
-//        this.brand =
+        this.brand = product.getBrand().getName();
     }
 
     public ProductResponseDto(Product product , boolean IsAppend){
@@ -39,6 +39,6 @@ public class ProductResponseDto {
         this.discountPrice = product.getDiscountPrice();
         this.modelDescription = product.getDescription();
         this.IsAppend = IsAppend;
-//        this.brand =
+        this.brand = product.getBrand().getName();
     }
 }

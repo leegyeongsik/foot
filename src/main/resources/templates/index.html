@@ -389,19 +389,9 @@
     <div class="Sidebar">
         <div class="SidebarTitle">
             brand
-            <!-- <span class="SortText">정렬 기준</span> -->
         </div>
-        <!-- <div class="SortButtons" id="sortButtons">
-            <div>높은 가격</div>
-            <div>낮은 가격</div>
+        <div class="sidebar-container">
         </div>
-        <div class="SortButtons">
-            <label><input type="radio" name="sort" value="high">높은 가격</label>
-            <label><input type="radio" name="sort" value="low">낮은 가격</label>
-        </div> -->
-        <div class="SidebarItem">Category 1</div>
-        <div class="SidebarItem">Category 2</div>
-        <div class="SidebarItem">Category 3</div>
         <div class="SearchBox">
             <div class="SearchContainer">
                 <input id="gettext"type="text" placeholder="Search...">
@@ -434,7 +424,7 @@
             temp_Navi = `<div class="NavItem" id="shoes_id">shoes</div>
             <div class="NavItem">Auction</div>
             <div class="NavItem" id="favorite">favourite</div>
-            <div class="NavItem" id="signup">signup</div>
+            <div class="NavItem" id="my-page">info</div>
             <div class="NavItem" id="signout">signOut</div>`
             $('.NavList').append(temp_Navi)
             $("#footers").load(`/Chats`); //
@@ -448,7 +438,13 @@
                 success: function (response) {
                     if (response) {
                         console.log(response)
-                        var list = response
+                        var list = response.productResponseDtos
+                        var brandList = response.brandResponseDtos
+                        $('.sidebar-container').empty()
+                        for (let i = 0; i < brandList.length; i++) {
+                            brand=`<div class="SidebarItem">${brandList[i].name}</div>`
+                            $(".sidebar-container").append(brand)
+                        }
                         for (var i = 0; i < list.length; i++) {
                             if(list[i].isAppend == true){
                                 var Products= `
@@ -511,8 +507,8 @@
                     console.log("실패")
                 }
             })
-
         } else {
+
             $.ajax({
                 url: `/api/product`,
                 type: 'GET',
@@ -522,7 +518,13 @@
                 },
                 success: function (response) {
                     if (response) {
-                        var list = response
+                        var list = response.productResponseDtos
+                        var brandList = response.brandResponseDtos
+                        $('.sidebar-container').empty()
+                        for (let i = 0; i < brandList.length; i++) {
+                            brand=`<div class="SidebarItem">${brandList[i].name}</div>`
+                            $(".sidebar-container").append(brand)
+                        }
                         for (var i = 0; i < list.length; i++) {
                             var Products= `
                             <div class="item"  style="border: 1px solid #EE312F; background-color: #ffffff;">
@@ -596,6 +598,110 @@
                 }
             })
         })
+        $(document).on('click',"div[class='sidebar-container']" , function (e) { // 보드 상세 페이지 이동
+            e.preventDefault();
+            var brand = e.target.innerText
+            // console.log(tagId);
+
+            $.ajax({
+                url: `/api/product/?brand=${brand}`,
+                type: 'GET',
+                contentType: 'application/json',
+                headers: {
+                    // 'Authorization': Cookies.get('Authorization') // 클라이언트 쿠키의 값을 전달
+                },
+                success: function (response) {
+                    if (response) {
+                        // console.log(response)
+                        if(auth != null){
+                            var list = response
+                            $('.DivOLayout').empty();
+                            for (var i = 0; i < list.length; i++) {
+                                if(list[i].isAppend == true){
+                                    var Products= `
+                                <div class="item"  style="border: 1px solid #EE312F; background-color: #ffffff;">
+                                    <img class ="click_img" id = ${list[i].productId} src="${list[i].modelPicture}">
+                                    <div class="ItemDetails"> <!-- 선을 div로 감싸서 스타일을 제어 -->
+                                        <hr> <!-- 선 추가 -->
+                                        <div class="DivCThumbnailInfo">
+                                            <div class="Heading3" style="display: flex; justify-content: space-between; align-items: center;">
+                                                <div class="Barand1" style="margin-left: 5px; color: #EE312F;">Brand Name 1</div>
+                                                <div class="PriceAndCheckbox"
+                                                     style="display: flex; align-items: center; display: flex;align-items: center;flex-direction: row-reverse;">
+
+                                                    <div class="PCThumbnailPrice" style="margin-right: 5px; color: #EE312F;">${list[i].price}</div>
+                                                    <div class="check_wrap" style="left: 5px;">
+                                                        <input class="checkboxs" id = "productcheckId_${list[i].productId}"type="checkbox" checked/>
+                                                        <label htmlFor="check_btn"></label>
+                                                    <button class="btnsssssssssssss"style="background-color: #ffffff; border: #ffffff; position:relative; bottom: 2px;"  type="button" id = "productcheckId_${list[i].productId}">+</button>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="Laangels">${list[i].modelName}</div>
+                                        </div>
+                                    </div>
+                                </div>`
+                                    $('.DivOLayout').append(Products);
+                                } else {
+                                    var Products= `
+                                <div class="item"  style="border: 1px solid #EE312F; background-color: #ffffff;">
+                                    <img class ="click_img" id = ${list[i].productId} src="${list[i].modelPicture}">
+                                    <div class="ItemDetails"> <!-- 선을 div로 감싸서 스타일을 제어 -->
+                                        <hr> <!-- 선 추가 -->
+                                        <div class="DivCThumbnailInfo">
+                                            <div class="Heading3" style="display: flex; justify-content: space-between; align-items: center;">
+                                                <div class="Barand1" style="margin-left: 5px; color: #EE312F;">Brand Name 1</div>
+                                                <div class="PriceAndCheckbox"
+                                                     style="display: flex; align-items: center; display: flex;align-items: center;flex-direction: row-reverse;">
+
+                                                    <div class="PCThumbnailPrice" style="margin-right: 5px; color: #EE312F;">${list[i].price}</div>
+                                                    <div class="check_wrap" style="left: 5px;">
+                                                        <input class="checkboxs" id = "productcheckId_${list[i].productId}"type="checkbox"/>
+                                                        <label htmlFor="check_btn"></label>
+                                                    <button class="btnsssssssssssss"style="background-color: #ffffff; border: #ffffff; position:relative; bottom: 2px;"  type="button" id = "productcheckId_${list[i].productId}">+</button>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="Laangels">${list[i].modelName}</div>
+                                        </div>
+                                    </div>
+
+                                </div>`
+                                    $('.DivOLayout').append(Products);
+                                }
+                            }
+                        }else {
+                            var list = response
+                            $('.DivOLayout').empty();
+
+                            for (var i = 0; i < list.length; i++) {
+                                var Products= `
+                            <div class="item"  style="border: 1px solid #EE312F; background-color: #ffffff;">
+                                <img class ="click_img" id = ${list[i].productId} src="${list[i].modelPicture}">
+                                <div class="ItemDetails"> <!-- 선을 div로 감싸서 스타일을 제어 -->
+                                    <hr> <!-- 선 추가 -->
+                                    <div class="DivCThumbnailInfo">
+                                        <div class="Heading3" style="display: flex; justify-content: space-between; align-items: center;">
+                                            <div class="Barand1" style="margin-left: 5px; color: #EE312F;">Brand Name 1</div>
+                                            <div class="PriceAndCheckbox"
+                                                 style="display: flex; align-items: center; display: flex;align-items: center;flex-direction: row-reverse;">
+                                                <div class="PCThumbnailPrice" style="margin-right: 5px; color: #EE312F;">${list[i].price}</div>
+                                            </div>
+                                        </div>
+                                        <div class="Laangels">${list[i].modelName}</div>
+                                    </div>
+                                </div>
+                            </div>`
+                                $('.DivOLayout').append(Products);
+                            }
+                        }
+
+                    }
+                }
+            })
+        })
         $(document).on('click',"img[class='click_img']" , function (e) { // 보드 상세 페이지 이동
             e.preventDefault();
             var tagId = e.target.id
@@ -622,7 +728,14 @@
             e.preventDefault();
             window.location.href = `/Product/favorite`
         })
-
+        $(document).on('click',"div[id='my-page']" , function (e) { // 보드 상세 페이지 이동
+            e.preventDefault();
+            window.location.href = `/view/myPage`
+        })
+        $(document).on('click',"div[id='shoes_id']" , function (e) { // 보드 상세 페이지 이동
+            e.preventDefault();
+            location.reload();
+        })
         $(document).on('click',"button[class='btnsssssssssssss']" , function (e) { // 보드 상세 페이지 이동
             e.preventDefault();
             var tagId = e.target.id
@@ -670,6 +783,5 @@
     })
 
 
-    // 해야할거: 브랜드 받아오기 브랜드연결 각종 헤드 연결
 </script>
 </html>

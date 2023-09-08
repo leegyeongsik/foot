@@ -32,7 +32,7 @@ public class MessageController {
     private final SimpMessagingTemplate template;
 
     @MessageMapping("/chat/message")
-    public void message(ChatMessageRequestDto message) throws IOException {
+    public void message(ChatMessageRequestDto message) throws Exception {
         log.info(String.valueOf(message));
         if(message.getMessageImg() !=null){
             ChatMessageRequestDto messageRequestDto = messageService.messageImg(message);

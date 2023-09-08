@@ -407,10 +407,9 @@
             temp_Navi = `<div class="NavItem" id="shoes_id">shoes</div>
             <div class="NavItem">Auction</div>
             <div class="NavItem">favourite</div>
-            <div class="NavItem" id="signup">signup</div>
+            <div class="NavItem" id="my-page">info</div>
             <div class="NavItem" id="signout">signOut</div>`
             $('.NavList').append(temp_Navi)
-            $("#footers").load(`/Chats`); //
             $.ajax({
                 url: `/api/product/favorite`,
                 type: 'GET',
@@ -509,6 +508,10 @@
             e.preventDefault();
             Cookies.remove('Authorization', {path: '/'});
             window.location.href = ""
+        })
+        $(document).on('click',"div[id='my-page']" , function (e) { // 보드 상세 페이지 이동
+            e.preventDefault();
+            window.location.href = `/view/myPage`
         })
         $(document).on('click',"div[id='shoes_id']" , function (e) { // 신발 누르면 해당 사이즈 출력
             window.location.href=`http://localhost:8080`

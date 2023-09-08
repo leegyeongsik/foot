@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 
 import java.util.ArrayList;
@@ -11,6 +12,7 @@ import java.util.List;
 
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor
 @Table(name = "products")
 public class Product extends Timestamped {
@@ -39,7 +41,7 @@ public class Product extends Timestamped {
     private Long discountPrice;
 
     @Builder
-    public Product(Long TotalAmount , String Description , Long price  , String model , String modelpicture , User user , Long discountPrice){
+    public Product(Long TotalAmount , String Description , Long price  , String model , String modelpicture , User user , Long discountPrice ,Brand brand){
         this.TotalAmount = TotalAmount;
         this.Description =Description;
         this.price =price;
@@ -47,6 +49,7 @@ public class Product extends Timestamped {
         this.modelpicture = modelpicture;
         this.user = user;
         this.discountPrice = discountPrice;
+        this.brand = brand;
     }
 
 
@@ -58,7 +61,7 @@ public class Product extends Timestamped {
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "brandId", nullable = true)
+    @JoinColumn(name = "brandId")
     private Brand brand;
 
 
@@ -92,7 +95,6 @@ public class Product extends Timestamped {
         this.price = price;
         this.Description = description;
         this.TotalAmount = totalAmount;
-//        this.brand =
     }
 
     public void setDiscountRate(double discountRate) {

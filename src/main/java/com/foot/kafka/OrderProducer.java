@@ -1,6 +1,6 @@
 package com.foot.kafka;
 
-import com.foot.dto.chats.ChatMessageRequestDto;
+import com.foot.dto.OrderRequestDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -10,11 +10,11 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 @Slf4j
 
-public class MessageProducer {
-    private final KafkaTemplate<String, ChatMessageRequestDto> kafkaTemplate;
-    public void send(String topic, ChatMessageRequestDto data) throws Exception { // 채팅을 topic에 전송
+public class OrderProducer {
+    private final KafkaTemplate<String, OrderRequestDto> kafkaTemplate;
+
+    public void send(String topic, OrderRequestDto data) { // 주문이 들어오면 주문내용을(OrderRequestDto) 토픽에 전달함
 //        log.info("sending data='{}' to topic='{}'", data, topic);
         kafkaTemplate.send(topic, data);
     }
-
 }

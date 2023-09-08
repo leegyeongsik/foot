@@ -6,7 +6,6 @@ import com.foot.security.UserDetailsImpl;
 import com.foot.service.CartService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.method.P;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,7 +24,7 @@ public class CartController {
         cartService.addCart(userDetails.getUser(), cartItemDto);
     }
 
-    // 장바구니 조회
+//     장바구니 조회
     @GetMapping("/view/cart")
     public String getCartList(@AuthenticationPrincipal UserDetailsImpl userDetails, Model model) {
         List<CartResponseDto> cartResponseDtoList = cartService.getCartList(userDetails.getUser());

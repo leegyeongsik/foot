@@ -326,6 +326,24 @@
       height: 130px;
       transform: rotate(-45deg)
     }
+    .button-container {
+      display: flex;
+      align-items: center; /* 세로 중앙 정렬 */
+      gap: 10px; /* 버튼과 결과 사이의 간격 설정 */
+      position: relative;
+      bottom: 35px;
+      left: 150px;
+    }
+
+    /*input[type='button'] {*/
+    /*  width: 30px; !* 버튼 너비 설정 *!*/
+    /*  height: 30px; !* 버튼 높이 설정 *!*/
+    /*  font-size: 24px; !* 버튼 텍스트 크기 설정 *!*/
+    /*}*/
+
+    #result {
+      font-size: 24px; /* 결과 텍스트 크기 설정 */
+    }
   </style>
 
   </style>
@@ -363,6 +381,8 @@
 
       <div class="TextContainers" style="position: relative; top: 70px;">  <!-- 제목 -->
         <h2>사이즈 선택</h2>
+        <div class="button-container">
+        </div>
       </div>
 
       <div class="DivOLayoutss"> <!-- 신발 사이즈 -->
@@ -424,7 +444,7 @@
       temp_Navi = `<div class="NavItem" id="shoes_id">shoes</div>
             <div class="NavItem">Auction</div>
             <div class="NavItem" id="favorite">favourite</div>
-            <div class="NavItem" id="signup">signup</div>
+            <div class="NavItem" id="my-page">info</div>
             <div class="NavItem" id="signout">signOut</div>`
       $('.NavList').append(temp_Navi)
 
@@ -507,10 +527,8 @@
     $(document).on('click',"img[class='click_img_color']" , function (e) { // 신발 누르면 해당 사이즈 출력
       e.preventDefault();
       var tagId = e.target.id
-      colorIdssssssssss = tagId
-      console.log(colorIdssssssssss)
       lists=itemDict[tagId].productSizeResponseDtos;
-      console.log(lists)
+      $('.button-container').empty();
       $('.DivOLayoutss').empty();
 
       for (let i = 0; i < lists.length; i++) {
@@ -526,7 +544,7 @@
         } else if(lists[i].colorAmount > 0){
           var size = `<div class="item" style="border: 1px solid #fff; background-color: #ffffff;">
                         <div class="Label">
-                         <div class="colorchg" id=${lists[i].productSizeId}>${lists[i].size}</div>
+                         <div class="colorchg" id=${lists[i].colorIds}>${lists[i].size}</div>
                          </div>
                         </div>`
           $('.DivOLayoutss').append(size);
@@ -538,30 +556,37 @@
       e.preventDefault();
       var tagId = e.target.id
       sizeId = tagId;
-      console.log(sizeId)
-    })
+      $('.button-container').empty()
+    sizenum=`          <input type='button' onClick='count("plus")' value='+'/>
+          <div id='result'>1</div>
+          <input type='button' onClick='count("minus")' value='-'/>
 
+      `
+      $('.button-container').append(sizenum)
+
+    })
     $(document).on('click',"div[id='basket_add']" , function (e) { // 신발 누르면 해당 사이즈 출력
       e.preventDefault();
-      console.log(colorIdssssssssss)
       console.log(sizeId)
-      // $.ajax({
-      //   url: `/api/product/${productId}/basket`,
-      //   type: 'POST',
-      //   contentType: 'application/json',
-      //   data: JSON.stringify({productSizeId: sizeId, productColorId: colorIdssssssssss}),
-      //
-      //   headers: {
-      //     // 'Authorization': Cookies.get('Authorization') // 클라이언트 쿠키의 값을 전달
-      //   },
-      //   success: function (response) {
-      //     // window.location.href = '/view/main';  수정
-      //
-      //   },
-      //   error: function () {
-      //     console.log("실패")
-      //   }
-      // })
+      var productcnt=document.getElementById('result').innerText
+      console.log(productcnt)
+      $.ajax({
+        url: `/api/cart`,
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify({itemId: sizeId, count: productcnt}),
+
+        headers: {
+          // 'Authorization': Cookies.get('Authorization') // 클라이언트 쿠키의 값을 전달
+        },
+        success: function (response) {
+          // window.location.href = '/view/myPage';
+
+        },
+        error: function () {
+          console.log("실패")
+        }
+      })
     })
 
     $(document).on('click',"div[id='shoes_id']" , function (e) { // 신발 누르면 해당 사이즈 출력
@@ -591,6 +616,11 @@
       e.preventDefault();
       window.location.href = `/Product/favorite`
     })
+    $(document).on('click',"div[id='my-page']" , function (e) { // 보드 상세 페이지 이동
+      e.preventDefault();
+      window.location.href = `/view/myPage`
+    })
+
     // 해야할거 장바구니 , 댓글 , 각종 헤드 연결 , Shoses_size_confirm 데이터 주기 , 장바구니에 담을때 해당 신발 id값 으로 찾아서 담아주기
     // 나중에 jwt 쿠키 있는지 확인하고 로그인 후 구매하기 -> 장바구니 담기
     if(auth!=null){
@@ -642,5 +672,23 @@
 
 
   })
+  function count(type)  {
+    // 결과를 표시할 element
+    const resultElement = document.getElementById('result');
+
+    // 현재 화면에 표시된 값
+    let number = resultElement.innerText;
+
+    // 더하기/빼기
+    if(type === 'plus') {
+      number = parseInt(number) + 1;
+    }else if(type === 'minus')  {
+      number = parseInt(number) - 1;
+    }
+
+    // 결과 출력
+    resultElement.innerText = number;
+  }
+
 </script>
 </html>
