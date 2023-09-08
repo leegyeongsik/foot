@@ -43,6 +43,10 @@
             max-height: 100%;
         }
 
+        #bidProductFile {
+            margin-top: 20px;
+        }
+
         /* 오른쪽 칼럼 스타일링 */
         .right-column {
             flex: 1; /* 오른쪽 칼럼을 작게 조정 */
@@ -93,11 +97,12 @@
 <div class="container">
     <!-- 왼쪽 칼럼: 이미지 미리보기 -->
     <div class="left-column">
-        <label for="bidProductFile">Choose File</label>
-        <input type="file" id="bidProductFile" onchange="previewImage(this)" name="bidProductFile" accept="image/png, image/jpeg, image/gif">
         <div id="imagePreviewContainer">
-            <img id="imagePreview" src="https://via.placeholder.com/300x200" alt="Image Preview">
+            <img id="imagePreview"  alt="Image Preview">
         </div>
+        <label for="bidProductFile">Choose File</label>
+        <input type="file" id="bidProductFile" onchange="previewImage(this)"
+               name="bidProductFile" accept="image/png, image/jpeg, image/gif">
     </div>
     <!-- 오른쪽 칼럼: 입력 필드 -->
     <div class="right-column">
@@ -151,7 +156,7 @@
 
             reader.readAsDataURL(input.files[0]);
         } else {
-            imagePreview.src = 'https://via.placeholder.com/300x200'; // 기본 이미지 URL 설정
+            imagePreview.src = ''; // 기본 이미지 URL 설정
         }
     }
 </script>
