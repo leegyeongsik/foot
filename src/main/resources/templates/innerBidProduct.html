@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
+    <meta charset="UTF-8">
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
@@ -83,35 +84,45 @@
         }
 
         /* .info-header 스타일 */
-        .info-header h3 {
+        .info-header h4 {
             font-size: 20px;
-            margin: 10px;
+            margin: 10px 20px;
             padding-bottom: 10px;
         }
 
         .info-header p {
-            font-size: 12px;
-            margin-right: 15px;
             display: block;
         }
 
-        /* .info-body 스타일 */
-        .info-body {
-            margin-top: 20px;
+        .product-name {
+            font-size: 15px;
+            margin-left: 20px;
+        }
+
+        .product-description {
+            font-size: 13px;
+            margin-left: 20px;
+        }
+
+
+
+        .info-body-title {
+            margin-top: 25px; /* 위쪽 여백을 20px로 설정 */
+            margin-left: 10px;
         }
 
         /* .detail-info 스타일 */
         .detail-info {
             display: flex;
             flex-direction: column; /* 내부 요소를 세로로 배치 */
-            padding: 10px;
+            padding: 5px;
         }
 
 
         .detail-info-label {
             font-size: 15px;
             margin-right: 10px; /* 간격을 오른쪽으로 추가 */
-            padding: 15px;
+            padding: 10px;
         }
 
         .detail-info-value {
@@ -119,6 +130,11 @@
             font-weight: lighter;
             text-align: left;
             margin-left: 20px; /* 간격을 왼쪽으로 추가 */
+        }
+
+        #currentTopBid {
+            color: #EE312F;
+            font-weight: bold;
         }
 
         .bidding-form-container {
@@ -172,12 +188,12 @@
     </div>
     <div class="info-box">
         <div class="info-header">
-            <h3 th:text="${product.brand.name}"></h3>
-            <p th:text="${product.name}"></p>
-            <p th:text="${product.description}"></p>
+            <h4 th:text="${product.brand.name}"></h4>
+            <p class="product-name" th:text="${product.name}"></p>
+            <p class="product-description" th:text="${product.description}"></p>
         </div>
         <div class="info-body">
-            <p>Information Detail</p>
+            <p class="info-body-title">Information Detail</p>
             <div class="detail-info">
                 <table>
                     <tr>
