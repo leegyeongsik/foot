@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:div="http://www.divymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
@@ -129,32 +129,32 @@
     </div>
     <div class="info-box">
         <div class="info-header">
-            <h3 div:text="${product.brand.name}"></h3>
-            <span div:text="${product.name}"></span>
-            <span div:text="${product.description}"></span>
+            <h3 th:text="${product.brand.name}"></h3>
+            <span th:text="${product.name}"></span>
+            <span th:text="${product.description}"></span>
         </div>
         <div class="info-body">
             <p>Information Detail</p>
             <div class="detail-info">
                 <div>
-                    <div>Author</div>
-                    <p div:text="${product.author}"></p>
+                    <p>Author</p>
+                    <p th:text="${product.author}"></p>
                 </div>
                 <div>
-                    <div>Foot Size</div>
-                    <p div:text="${product.footSize}"></p>
+                    <p>Foot Size</p>
+                    <p th:text="${product.footSize}"></p>
                 </div>
                 <div>
-                    <div>Start Price</div>
-                    <p div:text="${product.startPrice}"></p>
+                    <p>Start Price</p>
+                    <p th:text="${product.startPrice}"></p>
                 </div>
                 <div>
-                    <div>Top Bid</div>
+                    <p>Top Bid</p>
                     <p th:text="${product.topBid != null ? product.topBid.getBidPrice() : '0원'}"></p>
                 </div>
                 <div>
-                    <div>Auction End</div>
-                    <p div:text="${product.expirationPeriod}"></p>
+                    <p>Auction End</p>
+                    <p th:text="${product.expirationPeriod}"></p>
                 </div>
             </div>
         </div>
