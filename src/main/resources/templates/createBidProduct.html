@@ -4,27 +4,87 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="https://cdn-icons-png.flaticon.com/128/2675/2675848.png"/>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
     <style>
         /* styles.css */
+        .Header {
+            width: 100%;
+            height: 10%;
+            position: absolute;
+            background-color: #ffffff;
+            display: flex;
+            padding: 0 20px;
+        }
+
+        .NavList {
+            margin-top: 2%;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            width: 95%;
+        }
+
+        .NavItem {
+            flex: 1;
+            text-align: center;
+            color: #EE312F;
+            font-size: 23.71px;
+            font-family: Inter, sans-serif;
+            font-weight: 400;
+            text-transform: uppercase;
+            line-height: 1.1;
+            word-wrap: break-word;
+            cursor: pointer;
+            margin-left: 10%;
+
+        }
+
 
         /* 컨테이너 스타일링 */
         .container {
             display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            max-width: 800px;
             margin: 0 auto;
             padding: 20px;
             background-color: #f5f5f5;
             border-radius: 10px;
             box-shadow: 0 0 1px rgba(0, 0, 0, 0.1);
+            flex-direction: row; /* Ensure horizontal layout */
+            ustify-content: center; /* 수평 중앙 정렬 */
+            align-items: center; /* 수직 중앙 정렬 */
+            height: 100vh; /* 화면 높이의 100% */
+
         }
 
-        /* 왼쪽 칼럼 스타일링 */
-        .left-column {
-            flex: 2; /* 왼쪽 칼럼을 더 크게 조정 */
-            padding-right: 20px;
+        /* 스타일링 */
+        .form-row {
+            display: flex;
+            flex-wrap: wrap;
         }
+
+        .form-column {
+            flex: 1;
+        }
+
+        .form-column-left {
+            flex: 3; /* 오른쪽 칼럼을 작게 만듭니다. */
+            margin-right: 10%; /* 오른쪽 칼럼 사이 여백 제거 */
+
+        }
+
+        .form-column-right {
+            flex: 1;
+            padding-top: 30%;
+        }
+
+
+
+        /* 제출 버튼 스타일링 */
+        button {
+            width: 100%; /* 폼 너비 전체를 사용하도록 설정 */
+        }
+
 
         /* 이미지 미리보기 스타일링 */
         #imagePreviewContainer {
@@ -44,19 +104,7 @@
         }
 
         #bidProductFile {
-            margin-top: 20px;
-        }
-
-        /* 오른쪽 칼럼 스타일링 */
-        .right-column {
-            flex: 1; /* 오른쪽 칼럼을 작게 조정 */
-        }
-
-        /* 제목 스타일링 */
-        .header {
-            font-size: 24px;
-            text-align: center;
-            margin-bottom: 20px;
+            margin-top: 10px;
         }
 
         /* 레이블 스타일링 */
@@ -65,13 +113,14 @@
         }
 
         /* 입력 필드 스타일링 */
-        #bidProductForm input, #bidProductForm textarea {
-            width: 100%;
-            padding: 10px;
+        #bidProductForm input,
+        #bidProductForm textarea {
+            width: 100%; /* 모든 입력 필드의 너비를 일정하게 설정 */
+            padding: 5px;
             margin-bottom: 10px;
             border: 1px solid #ccc;
             border-radius: 5px;
-            font-size: 16px;
+            font-size: 12px;
         }
 
         /* 버튼 스타일링 */
@@ -89,58 +138,71 @@
         .submit-btn:hover {
             background-color: #0056b3;
         }
-
     </style>
+
 </head>
 <body>
-<h1 class="header">경매 상품 등록</h1>
-<div class="container">
-    <!-- 왼쪽 칼럼: 이미지 미리보기 -->
-    <div class="left-column">
-        <div id="imagePreviewContainer">
-            <img id="imagePreview"  alt="Image Preview">
+<div class="Header">
+    <div class="NavList">
+        <div class="Logo" onclick="location.href='/view/home'">
+            <img alt="Owl Image" style="height: 30px; width: auto; margin-right: 10px;">
+            foot
         </div>
-        <label for="bidProductFile">Choose File</label>
-        <input type="file" id="bidProductFile" onchange="previewImage(this)"
-               name="bidProductFile" accept="image/png, image/jpeg, image/gif">
+        <div class="NavItem" id="shoes_id" onclick="location.href='/view/home'">shoes</div>
+        <div class="NavItem">Auction</div>
+        <div class="NavItem">favourite</div>
+        <div class="NavItem" onclick="location.href='/view/myPage'">MyPage</div>
+        <div class="NavItem" onclick="logoutUser()">SIGNOUT</div>
     </div>
-    <!-- 오른쪽 칼럼: 입력 필드 -->
-    <div class="right-column">
-        <form id="bidProductForm" action="/api/bidProduct" method="post" enctype="multipart/form-data">
-            <!-- 나머지 입력 필드들 ... -->
-            <div>
-                <label for="brand">브랜드명 </label>
-                <input type="text" id="brand" name="brand" required>
+</div>
+<div class="container">
+    <form id="bidProductForm" action="/api/bidProduct" method="post" enctype="multipart/form-data">
+        <div class="form-row">
+            <div class="form-column form-column-left">
+                <div id="imagePreviewContainer">
+                    <img id="imagePreview" alt="Image Preview">
+                </div>
+                <label for="bidProductFile">Choose File</label>
+                <input type="file" id="bidProductFile" onchange="previewImage(this)"
+                       name="bidProductFile" accept="image/png, image/jpeg, image/gif">
+                <div>
+                    <label for="brand">브랜드명 </label>
+                    <input type="text" id="brand" name="brand" required>
+                </div>
+                <div>
+                    <label for="name">모델명 </label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+                <div>
+                    <label for="description">모델설명 </label>
+                    <textarea id="description" name="description" rows="2" required></textarea>
+                </div>
             </div>
-            <div>
-                <label for="name">모델명 </label>
-                <input type="text" id="name" name="name" required>
+            <!-- 오른쪽 칼럼: 입력 필드 -->
+            <div class="form-column form-column-right">
+                <div>
+                    <label for="feetSize">발볼사이즈</label>
+                    <input type="number" id="feetSize" name="feetSize" required>
+                </div>
+                <div>
+                    <label for="footSize">사이즈</label>
+                    <input type="number" id="footSize" name="footSize" required>
+                </div>
+                <div>
+                    <label for="startPrice">시작가격 </label>
+                    <input type="number" id="startPrice" name="startPrice" required>
+                </div>
+                <div>
+                    <label for="expirationPeriod">경매마감기한 </label>
+                    <input type="datetime-local" id="expirationPeriod" name="expirationPeriod" required>
+                </div>
+                <div>
+                    <button class="submit-btn" type="submit">상품 등록</button>
+                </div>
             </div>
-            <div>
-                <label for="description">모델설명 </label>
-                <textarea id="description" name="description" rows="4" required></textarea>
-            </div>
-            <div>
-                <label for="feetSize">발볼사이즈</label>
-                <input type="number" id="feetSize" name="feetSize" required>
-            </div>
-            <div>
-                <label for="footSize">사이즈</label>
-                <input type="number" id="footSize" name="footSize" required>
-            </div>
-            <div>
-                <label for="startPrice">시작가격 </label>
-                <input type="number" id="startPrice" name="startPrice" required>
-            </div>
-            <div>
-                <label for="expirationPeriod">경매마감기한 </label>
-                <input type="datetime-local" id="expirationPeriod" name="expirationPeriod" required>
-            </div>
-            <div>
-                <button class="submit-btn" type="submit">상품 등록</button>
-            </div>
-        </form>
-    </div>
+        </div>
+
+    </form>
 </div>
 </body>
 <script>
