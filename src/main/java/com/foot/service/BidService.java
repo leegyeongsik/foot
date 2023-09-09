@@ -44,6 +44,7 @@ public class BidService {
                 .expirationPeriod(requestDto.getExpirationPeriod())
                 .startPrice(requestDto.getStartPrice())
                 .name(requestDto.getName())
+                .description(requestDto.getDescription())
                 .feetsize(requestDto.getFeetSize())
                 .footsize(requestDto.getFootSize())
                 //.footpicture(s3UploadService.uploadImage(requestDto.getBidProductFile()))
