@@ -178,16 +178,36 @@
         </div>
     </div>
 </div>
-<!--<h2>Bids</h2>-->
-<!--<table>-->
-<!--    <div>-->
-<!--        <div>ID</div>-->
-<!--        <div>Amount</div>-->
-<!--    </div>-->
-<!--    <div div:each="bid : ${product.bidResponseDtoList}">-->
-<!--        <p div:text="${bid.getUsername()}"></p>-->
-<!--        <p div:text="${bid.getBidPrice()}"></p>-->
-<!--    </div>-->
-<!--</table>-->
+<div class="bidding-form">
+    <form th:action="@{'/api/bid/' + ${product.id}}" method="post" onsubmit="return validateBid()">
+        <input type="number" name="bidPrice">
+        <button type="submit">Confirmed</button>
+    </form>
+</div>
 </body>
+<script>
+    function validateBid() {
+        var bidPriceInput = document.getElementById("bidPrice");
+        var currentTopBid = parseFloat("your_current_top_bid_value"); // 현재 최고 입찰가를 가져옵니다. 문자열을 숫자로 변환해야 합니다.
+
+        if (isNaN(currentTopBid)) {
+            alert("현재 최고 입찰가가 잘못 설정되었습니다.");
+            return false;
+        }
+
+        var userBid = parseFloat(bidPriceInput.value);
+
+        if (isNaN(userBid)) {
+            alert("올바른 입찰 가격을 입력하세요.");
+            return false;
+        }
+
+        if (userBid <= currentTopBid) {
+            alert("현재 최고 입찰가보다 높은 입찰 가격을 입력하세요.");
+            return false;
+        }
+
+        return true;
+    }
+</script>
 </html>
