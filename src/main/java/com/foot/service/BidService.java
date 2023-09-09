@@ -46,7 +46,8 @@ public class BidService {
                 .name(requestDto.getName())
                 .feetsize(requestDto.getFeetSize())
                 .footsize(requestDto.getFootSize())
-                .footpicture(s3UploadService.uploadImage(requestDto.getBidProductFile()))
+                //.footpicture(s3UploadService.uploadImage(requestDto.getBidProductFile()))
+                .footpicture("")
                 .brand(brand)
                 .user(user)
                 .build();
@@ -54,22 +55,22 @@ public class BidService {
         return new BidProductResponseDto(bidProduct);
     }
 
-    public void save(BidProductRequestDto requestDto, User user) throws IOException {
-        if (requestDto.getBidProductFile().isEmpty()) {
-            // 첨부 파일 없음
-            Brand brand = brandRepository.findByName(requestDto.getBrand());
-            BidProduct bidProduct = new BidProduct(requestDto, brand, user);
-            bidProductRepository.save(bidProduct);
-        } else {
-            // 첨부 파일 있음
-            MultipartFile bidProductFile = requestDto.getBidProductFile();
-            String originalFilename = bidProductFile.getOriginalFilename();
-            String storedFileName = System.currentTimeMillis() + "_" + originalFilename;
-            String savePath = "/Users/me/foot_img/" + storedFileName; // Mac일 경우  : "/Users/사용자이름/저장할폴더명/" 윈도우일 경우 : "C:/저장할폴더명/"
-
-            bidProductFile.transferTo(new File(savePath));
-        }
-    }
+//    public void save(BidProductRequestDto requestDto, User user) throws IOException {
+//        if (requestDto.getBidProductFile().isEmpty()) {
+//            // 첨부 파일 없음
+//            Brand brand = brandRepository.findByName(requestDto.getBrand());
+//            BidProduct bidProduct = new BidProduct(requestDto, brand, user);
+//            bidProductRepository.save(bidProduct);
+//        } else {
+//            // 첨부 파일 있음
+//            MultipartFile bidProductFile = requestDto.getBidProductFile();
+//            String originalFilename = bidProductFile.getOriginalFilename();
+//            String storedFileName = System.currentTimeMillis() + "_" + originalFilename;
+//            String savePath = "/Users/me/foot_img/" + storedFileName; // Mac일 경우  : "/Users/사용자이름/저장할폴더명/" 윈도우일 경우 : "C:/저장할폴더명/"
+//
+//            bidProductFile.transferTo(new File(savePath));
+//        }
+//    }
 
     // 경매 상품 전체 조회
     @Transactional

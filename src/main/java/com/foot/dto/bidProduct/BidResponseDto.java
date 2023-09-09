@@ -2,10 +2,12 @@ package com.foot.dto.bidProduct;
 
 import com.foot.entity.Bid;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
+@NoArgsConstructor
 public class BidResponseDto {
 
     private Long id;

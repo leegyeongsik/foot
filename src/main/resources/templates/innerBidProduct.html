@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html xmlns:div="http://www.divymeleaf.org">
+<head>
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"
+            integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g="
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <title>Bid Product Details</title>
+    <style>
+        /* 전체 페이지 스타일 */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .Header {
+            width: 100%;
+            height: 10%;
+            position: absolute;
+            background-color: #ffffff;
+            display: flex;
+            padding: 0 20px;
+        }
+
+        .NavList {
+            margin-top: 2%;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            width: 95%;
+        }
+
+        .NavItem {
+            flex: 1;
+            text-align: center;
+            color: #EE312F;
+            font-size: 23.71px;
+            font-family: Inter, sans-serif;
+            font-weight: 400;
+            text-transform: uppercase;
+            line-height: 1.1;
+            word-wrap: break-word;
+            cursor: pointer;
+            margin-left: 10%;
+
+        }
+
+        /* .product-info 컨테이너 스타일 */
+        .product-info {
+            display: flex;
+            padding: 20px;
+        }
+
+        /* .product-image 스타일 */
+        .product-image {
+            flex: 1; /* 왼쪽 부분을 확장하여 이미지 크게 표시 */
+            text-align: center; /* 텍스트 가운데 정렬 */
+        }
+
+        .product-image img {
+            max-width: 300px; /* 이미지 크기 조정 */
+            height:auto;
+            display: block; /* 이미지 중앙 정렬 */
+            margin-left: 37%;
+            margin-top: 5%;
+        }
+
+        /* .info-box 스타일 */
+        .info-box {
+            flex: 2; /* 오른쪽 부분을 확장하여 정보 표시 */
+            background-color: #f0f0f0;
+            padding: 10px;
+            border-radius: 5px;
+            max-width: 250px; /* 상자 가로 길이 제한 */
+            margin-top: 8%;
+            margin-right: 15%;
+
+        }
+
+        /* .info-header 스타일 */
+        .info-header h3 {
+            font-size: 20px;
+            margin: 0;
+            padding-bottom: 10px;
+        }
+
+        .info-header span {
+            font-size: 13px;
+            display: block;
+        }
+
+        /* .info-body 스타일 */
+        .info-body {
+            margin-top: 20px;
+        }
+
+        .detail-info div {
+            padding: 10px;
+        }
+
+        .detail-info div {
+            font-weight: bold;
+        }
+
+        /* 예쁘게 스타일링하기 위해 추가적으로 조정 가능합니다. */
+    </style>
+</head>
+<body>
+<div class="Header">
+    <div class="NavList">
+        <div class="Logo" onclick="location.href='/view/home'">
+            <img alt="Owl Image" style="height: 30px; width: auto; margin-right: 10px;">
+            foot
+        </div>
+        <div class="NavItem" id="shoes_id" onclick="location.href='/view/home'">shoes</div>
+        <div class="NavItem">Auction</div>
+        <div class="NavItem">favourite</div>
+        <div class="NavItem" onclick="location.href='/view/myPage'">MyPage</div>
+        <div class="NavItem" onclick="logoutUser()">SIGNOUT</div>
+    </div>
+</div>
+<div class="product-info">
+    <div class="product-image">
+        <p ><img src="https://pbs.twimg.com/media/F4HjRF2bAAAL0ky?format=jpg&name=900x900" alt="Foot Picture" /></p>
+    </div>
+    <div class="info-box">
+        <div class="info-header">
+            <h3 div:text="${product.brand.name}"></h3>
+            <span div:text="${product.name}"></span>
+            <span div:text="${product.description}"></span>
+        </div>
+        <div class="info-body">
+            <p>Information Detail</p>
+            <div class="detail-info">
+                <div>
+                    <div>Author</div>
+                    <p div:text="${product.author}"></p>
+                </div>
+                <div>
+                    <div>Foot Size</div>
+                    <p div:text="${product.footSize}"></p>
+                </div>
+                <div>
+                    <div>Start Price</div>
+                    <p div:text="${product.startPrice}"></p>
+                </div>
+                <div>
+                    <div>Top Bid</div>
+                    <p th:text="${product.topBid != null ? product.topBid.getBidPrice() : '0원'}"></p>
+                </div>
+                <div>
+                    <div>Auction End</div>
+                    <p div:text="${product.expirationPeriod}"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--<h2>Bids</h2>-->
+<!--<table>-->
+<!--    <div>-->
+<!--        <div>ID</div>-->
+<!--        <div>Amount</div>-->
+<!--    </div>-->
+<!--    <div div:each="bid : ${product.bidResponseDtoList}">-->
+<!--        <p div:text="${bid.getUsername()}"></p>-->
+<!--        <p div:text="${bid.getBidPrice()}"></p>-->
+<!--    </div>-->
+<!--</table>-->
+</body>
+</html>

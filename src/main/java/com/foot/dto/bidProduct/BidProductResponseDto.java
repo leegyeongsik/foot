@@ -6,6 +6,7 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 @Getter
@@ -15,6 +16,7 @@ public class BidProductResponseDto {
     //UserResponseDto
 
     private Long id;
+    private String author;
     private String name;
     private String description;
     private Long startPrice;
@@ -36,25 +38,33 @@ public class BidProductResponseDto {
     private List<BidResponseDto> bidResponseDtoList = new ArrayList<>();
 
     public BidProductResponseDto(BidProduct bidProduct) {
-        id = bidProduct.getId();
-        name = bidProduct.getName();
-        description = bidProduct.getDescription();
-        startPrice = bidProduct.getStartPrice();
-        expirationPeriod = bidProduct.getExpirationPeriod();
-        feetSize = bidProduct.getFeetsize();
-        footSize = bidProduct.getFootsize();
-        footPicture = bidProduct.getFootpicture();
-        brand = new BrandResponseDto(bidProduct.getBrand());
+        this.id = bidProduct.getId();
+        this.name = bidProduct.getName();
+        this.author = bidProduct.getUser().getName();
+        this.description = bidProduct.getDescription();
+        this.startPrice = bidProduct.getStartPrice();
+        this.expirationPeriod = bidProduct.getExpirationPeriod();
+        this.feetSize = bidProduct.getFeetsize();
+        this.footSize = bidProduct.getFootsize();
+        this.footPicture = bidProduct.getFootpicture();
+        this.brand = new BrandResponseDto(bidProduct.getBrand());
 
-        topBid = new BidResponseDto(bidProduct.getTopBid());
-
-        status = bidProduct.getStatus();
-
-        createdAt = bidProduct.getCreatedAt();
-        updatedAt = bidProduct.getUpdatedAt();
-
-        for (int i = 0; i < bidProduct.getBids().size(); i++) {
-            bidResponseDtoList.add(new BidResponseDto(bidProduct.getBids().get(i)));
+        // topBid 설정 (null 대신 빈 객체 생성)
+        if (bidProduct.getTopBid() != null) {
+            this.topBid = new BidResponseDto(bidProduct.getTopBid());
+        } else {
+            this.topBid = new BidResponseDto();
         }
+
+        this.status = bidProduct.getStatus();
+
+        this.createdAt = bidProduct.getCreatedAt();
+        this.updatedAt = bidProduct.getUpdatedAt();
+
+        this.bidResponseDtoList = bidProduct.getBids().stream()
+                .map(BidResponseDto::new)
+                .sorted(Comparator.comparing(BidResponseDto::getBidPrice))
+                .toList();
+
     }
 }

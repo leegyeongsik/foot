@@ -19,7 +19,7 @@ public class Bid extends Timestamped{
 
 
     @Column(name = "bidprice" , nullable = false)
-    private Long bidPrice;
+    private Long bidPrice = 0L;
 
 
     /**

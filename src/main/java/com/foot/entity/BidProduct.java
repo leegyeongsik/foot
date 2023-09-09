@@ -84,6 +84,7 @@ public class BidProduct extends Timestamped{
         this.feetsize = requestDto.getFeetSize();
         this.brand = brand;
         this.user = user;
+        this.topBid = new Bid();
         this.status = 0;
     }
 

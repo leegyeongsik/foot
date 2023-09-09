@@ -29,13 +29,13 @@ public class BidProductController {
         return bidService.createBidProduct(requestDto, user);
     }
 
-    // 경매 상품 생성 (이미지 파일 저장)
-    @PostMapping("/save")
-    public String save(@ModelAttribute BidProductRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) throws IOException {
-        System.out.println(requestDto);
-        bidService.save(requestDto, userDetails.getUser());
-        return "index";
-    }
+//    // 경매 상품 생성 (이미지 파일 저장)
+//    @PostMapping("/save")
+//    public String save(@ModelAttribute BidProductRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) throws IOException {
+//        System.out.println(requestDto);
+//        bidService.save(requestDto, userDetails.getUser());
+//        return "index";
+//    }
 
     // 경매 상품 전체 조회
     @GetMapping
