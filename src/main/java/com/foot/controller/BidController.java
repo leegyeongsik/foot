@@ -6,9 +6,10 @@ import com.foot.entity.User;
 import com.foot.security.UserDetailsImpl;
 import com.foot.service.BidService;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-@RestController
+@Controller
 @RequestMapping("/api/bid")
 public class BidController {
 
@@ -20,9 +21,10 @@ public class BidController {
 
     // 경매 생성
     @PostMapping("/{bidProductId}")
-    public BidResponseDto createBid(@PathVariable Long bidProductId, @RequestBody BidRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public String createBid(@PathVariable Long bidProductId, @ModelAttribute BidRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         User user = userDetails.getUser();
-        return bidService.createBid(requestDto, bidProductId, user);
+        bidService.createBid(requestDto, bidProductId, user);
+        return "redirect:/view/bp/" + bidProductId;
     }
 
 }
