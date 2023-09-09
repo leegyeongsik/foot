@@ -57,29 +57,41 @@
             padding: 20px;
         }
 
+        /* 이미지 미리보기 스타일링 */
+        #imagePreviewContainer {
+            width: 400px;
+            height: 300px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #fff;
+            display: block; /* 이미지 중앙 정렬 */
+            margin-left: 20%;
+            margin-top: 5%;
+            margin-bottom: 10px;
+        }
         /* .product-image 스타일 */
         .product-image {
             flex: 1; /* 왼쪽 부분을 확장하여 이미지 크게 표시 */
             text-align: center; /* 텍스트 가운데 정렬 */
+            margin-top: 5%;
         }
 
         .product-image img {
-            max-width: 300px; /* 이미지 크기 조정 */
+            max-width: 400px; /* 이미지 크기 조정 */
             height: auto;
             display: block; /* 이미지 중앙 정렬 */
-            margin-left: 37%;
-            margin-top: 5%;
         }
+
 
         /* .info-box 스타일 */
         .info-box {
             flex: 2; /* 오른쪽 부분을 확장하여 정보 표시 */
             background-color: #f0f0f0;
-            padding: 20px;
+            padding: 10px;
             border-radius: 5px;
             max-width: 25%; /* 상자 가로 길이 제한 */
-            margin-top: 8%;
-            margin-right: 15%;
+            margin-top: 5%;
+            margin-right: 10%;
 
         }
 
@@ -94,22 +106,6 @@
             display: block;
         }
 
-        .product-name {
-            font-size: 15px;
-            margin-left: 20px;
-        }
-
-        .product-description {
-            font-size: 13px;
-            margin-left: 20px;
-        }
-
-
-
-        .info-body-title {
-            margin-top: 25px; /* 위쪽 여백을 20px로 설정 */
-            margin-left: 10px;
-        }
 
         /* .detail-info 스타일 */
         .detail-info {
@@ -120,36 +116,32 @@
 
 
         .detail-info-label {
-            font-size: 15px;
-            margin-right: 10px; /* 간격을 오른쪽으로 추가 */
-            padding: 10px;
+            font-size: 13px;
+            margin-left: 10px; /* 간격을 오른쪽으로 추가 */
+            padding: 5px;
+
         }
 
         .detail-info-value {
             font-size: 13px;
             font-weight: lighter;
             text-align: left;
-            margin-left: 20px; /* 간격을 왼쪽으로 추가 */
+            margin-left: 10px; /* 간격을 왼쪽으로 추가 */
         }
 
-        #currentTopBid {
-            color: #EE312F;
-            font-weight: bold;
+        .detail-info input {
+            padding: 10px 10px;
+            margin: 5px 30px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
         }
 
-        .bidding-form-container {
-            margin-top: 2%;
-            display: flex;
-            justify-content: center; /* 수평 가운데 정렬 */
-        }
-
-
-        /* 입력 필드와 버튼 스타일 */
-        input[type="number"] {
+        .detail-info textarea {
             padding: 12px 20px;
             margin: 5px 30px;
             border: 1px solid #ccc;
             border-radius: 10px;
+
         }
 
         button[type="submit"] {
@@ -159,6 +151,7 @@
             border: none;
             border-radius: 18px;
             cursor: pointer;
+            margin-top: 10%;
         }
 
         button[type="submit"]:hover {
@@ -182,84 +175,79 @@
         <div class="NavItem" onclick="logoutUser()">SIGNOUT</div>
     </div>
 </div>
-<div class="product-info">
-    <div class="product-image">
-        <p><img src="https://pbs.twimg.com/media/F4HjRF2bAAAL0ky?format=jpg&name=900x900" alt="Foot Picture"/></p>
-    </div>
-    <div class="info-box">
-        <div class="info-header">
-            <h4 th:text="${product.brand.name}"></h4>
-            <p class="product-name" th:text="${product.name}"></p>
-            <p class="product-description" th:text="${product.description}"></p>
+<form id="bidProductForm" action="/api/bidProduct" method="post" enctype="multipart/form-data">
+    <div class="product-info">
+        <div class="product-image">
+            <div id="imagePreviewContainer">
+                <img id="imagePreview" alt="Image Preview">
+            </div>
+            <input type="file" id="bidProductFile" onchange="previewImage(this)"
+                   name="bidProductFile" accept="image/png, image/jpeg, image/gif">
+            <div>
+                <button type="submit">상품 등록</button>
+            </div>
+
         </div>
-        <div class="info-body">
-            <p class="info-body-title">Information Detail</p>
+
+        <div class="info-box">
             <div class="detail-info">
                 <table>
                     <tr>
-                        <td class="detail-info-label">Author</td>
-                        <td class="detail-info-value" th:text="${product.author}"></td>
+                        <label class="detail-info-label" for="brand">브랜드명 </label>
+                        <input class="detail-info-value" type="text" id="brand" name="brand" required>
                     </tr>
+
                     <tr>
-                        <td class="detail-info-label">Foot Size</td>
-                        <td class="detail-info-value" th:text="${product.footSize}"></td>
+                        <label class="detail-info-label" for="name">모델명 </label>
+                        <input class="detail-info-value" type="text" id="name" name="name" required>
                     </tr>
+
                     <tr>
-                        <td class="detail-info-label">Start Price</td>
-                        <td class="detail-info-value" th:text="${product.startPrice}"></td>
+                        <label class="detail-info-label" for="description">모델설명 </label>
+                        <textarea class="detail-info-value" id="description" name="description" rows="2"
+                                  required></textarea>
                     </tr>
+
                     <tr>
-                        <td class="detail-info-label">The Highest bid</td>
-                        <td class="detail-info-value"
-                            id="currentTopBid"
-                            th:text="${product.topBid != null ? product.topBid.getBidPrice() : '0원'}"></td>
+                        <label class="detail-info-label" for="feetSize">발볼사이즈</label>
+                        <input class="detail-info-value" type="number" id="feetSize" name="feetSize" required>
                     </tr>
+
                     <tr>
-                        <td class="detail-info-label">Auction End</td>
-                        <td class="detail-info-value"
-                            th:text="${product.expirationPeriod}"></td>
+                        <label class="detail-info-label" for="footSize">사이즈</label>
+                        <input class="detail-info-value" type="number" id="footSize" name="footSize" required>
+                    </tr>
+
+                    <tr>
+                        <label class="detail-info-label" for="startPrice">시작가격 </label>
+                        <input class="detail-info-value" type="number" id="startPrice" name="startPrice" required>
+                    </tr>
+
+                    <tr>
+                        <label class="detail-info-label" for="expirationPeriod">경매마감기한 </label>
+                        <input class="detail-info-value" type="datetime-local" id="expirationPeriod"
+                               name="expirationPeriod" required>
                     </tr>
                 </table>
             </div>
         </div>
     </div>
-</div>
-<div class="bidding-form-container">
-    <div class="bidding-form">
-        <form th:action="@{'/api/bid/' + ${product.id}}" method="post" onsubmit="return validateBid()">
-            <input type="number" name="bidPrice">
-            <button type="submit">CONFIRMED</button>
-        </form>
-    </div>
-</div>
-
+</form>
 </body>
 <script>
-    function validateBid() {
-        var bidPriceInput = document.getElementById("bidPrice");
-        var currentTopBid = parseFloat(document.getElementById("currentTopBid").textContent); // 현재 최고 입찰가를 가져옵니다. 문자열을 숫자로 변환해야 합니다.
+    function previewImage(input) {
+        const imagePreview = document.getElementById('imagePreview');
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
 
-        if (isNaN(currentTopBid)) {
-            alert("현재 최고 입찰가가 잘못 설정되었습니다.");
-            console.log(currentTopBid);
-            return false;
+            reader.onload = function (e) {
+                imagePreview.src = e.target.result;
+            };
+
+            reader.readAsDataURL(input.files[0]);
+        } else {
+            imagePreview.src = ''; // 기본 이미지 URL 설정
         }
-
-        var userBid = parseFloat(bidPriceInput.value);
-
-        if (isNaN(userBid)) {
-            alert("올바른 입찰 가격을 입력하세요.");
-            console.log(userBid);
-            return false;
-        }
-
-        if (userBid <= currentTopBid) {
-            alert("현재 최고 입찰가보다 높은 입찰 가격을 입력하세요.");
-            return false;
-        }
-
-        return true;
     }
-
 </script>
 </html>
