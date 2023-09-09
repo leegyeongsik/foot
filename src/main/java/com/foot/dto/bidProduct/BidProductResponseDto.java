@@ -1,5 +1,6 @@
 package com.foot.dto.bidProduct;
 
+import com.foot.entity.Bid;
 import com.foot.entity.BidProduct;
 import lombok.Getter;
 import lombok.Setter;
@@ -33,7 +34,7 @@ public class BidProductResponseDto {
 
     private BrandResponseDto brand;
 
-    private BidResponseDto topBid;
+    private Bid topBid;
 
     private List<BidResponseDto> bidResponseDtoList = new ArrayList<>();
 
@@ -49,12 +50,22 @@ public class BidProductResponseDto {
         this.footPicture = bidProduct.getFootpicture();
         this.brand = new BrandResponseDto(bidProduct.getBrand());
 
-        // topBid 설정 (null 대신 빈 객체 생성)
+//        // topBid 설정 (null 대신 빈 객체 생성)
+//        if (bidProduct.getTopBid() != null) {
+//            this.topBid = new BidResponseDto(bidProduct.getTopBid());
+//        } else {
+//            this.topBid = new BidResponseDto();
+//        }
+        // topBid 설정 (경매 제시가가 아직 없을 경우 처리)
         if (bidProduct.getTopBid() != null) {
-            this.topBid = new BidResponseDto(bidProduct.getTopBid());
+            this.topBid = bidProduct.getTopBid();
         } else {
-            this.topBid = new BidResponseDto();
+            // topBid가 없을 때 topBid 제시자는 경매상품 등록자로, 가격은 startPrice로 설정
+            this.topBid = new Bid();
+            this.topBid.setUser(bidProduct.getUser());
+            this.topBid.setBidPrice(bidProduct.getStartPrice());
         }
+
 
         this.status = bidProduct.getStatus();
 
