@@ -6,13 +6,14 @@ import com.foot.entity.User;
 import com.foot.security.UserDetailsImpl;
 import com.foot.service.BidService;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.List;
 
-@RestController
+@Controller
 @RequestMapping("/api/bidProduct")
 public class BidProductController {
 
@@ -24,9 +25,10 @@ public class BidProductController {
 
     // 경매 상품 생성
     @PostMapping
-    public BidProductResponseDto createBidProduct(@ModelAttribute BidProductRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) throws IOException {
+    public String createBidProduct(@ModelAttribute BidProductRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) throws IOException {
         User user = userDetails.getUser();
-        return bidService.createBidProduct(requestDto, user);
+        bidService.createBidProduct(requestDto, user);
+        return "redirect:/";
     }
 
 //    // 경매 상품 생성 (이미지 파일 저장)

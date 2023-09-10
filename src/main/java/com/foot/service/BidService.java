@@ -18,9 +18,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 @Service
 @Slf4j
@@ -40,6 +42,23 @@ public class BidService {
     // 경매 상품 생성
     public BidProductResponseDto createBidProduct(BidProductRequestDto requestDto, User user) throws IOException {
         Brand brand = brandRepository.findByName(requestDto.getBrand());
+
+        // 현재 시간
+        LocalDateTime currentTime = LocalDateTime.now();
+        log.info("Current Time: {}", currentTime);
+
+        // 만료 시간
+        LocalDateTime expirationTime = requestDto.getExpirationPeriod();
+        log.info("Expiration Time: {}", expirationTime);
+
+        // 남은 시간 계산
+        Duration duration = Duration.between(currentTime, expirationTime);
+        log.info("Duration : {}", duration);
+
+        // 남은 시간을 "X일 Y시간 Z분" 형식으로 포맷팅
+        String remainingTime = formatRemainingTime(duration);
+        log.info("Remaining Time: {}", remainingTime);
+
         BidProduct bidProduct = BidProduct.builder()
                 .expirationPeriod(requestDto.getExpirationPeriod())
                 .startPrice(requestDto.getStartPrice())
@@ -53,25 +72,9 @@ public class BidService {
                 .user(user)
                 .build();
         bidProductRepository.save(bidProduct);
-        return new BidProductResponseDto(bidProduct);
+        return new BidProductResponseDto(bidProduct, remainingTime);
     }
 
-//    public void save(BidProductRequestDto requestDto, User user) throws IOException {
-//        if (requestDto.getBidProductFile().isEmpty()) {
-//            // 첨부 파일 없음
-//            Brand brand = brandRepository.findByName(requestDto.getBrand());
-//            BidProduct bidProduct = new BidProduct(requestDto, brand, user);
-//            bidProductRepository.save(bidProduct);
-//        } else {
-//            // 첨부 파일 있음
-//            MultipartFile bidProductFile = requestDto.getBidProductFile();
-//            String originalFilename = bidProductFile.getOriginalFilename();
-//            String storedFileName = System.currentTimeMillis() + "_" + originalFilename;
-//            String savePath = "/Users/me/foot_img/" + storedFileName; // Mac일 경우  : "/Users/사용자이름/저장할폴더명/" 윈도우일 경우 : "C:/저장할폴더명/"
-//
-//            bidProductFile.transferTo(new File(savePath));
-//        }
-//    }
 
     // 경매 상품 전체 조회
     @Transactional
@@ -98,7 +101,19 @@ public class BidService {
             changeToSell(bidProduct.getId());
         }
 
-        return new BidProductResponseDto(bidProduct);
+        // 현재 시간
+        LocalDateTime currentTime = LocalDateTime.now();
+
+        // 만료 시간
+        LocalDateTime expirationTime = bidProduct.getExpirationPeriod();
+
+        // 남은 시간 계산
+        Duration duration = Duration.between(currentTime, expirationTime);
+
+        // 남은 시간을 "X일 Y시간 Z분" 형식으로 포맷팅
+        String remainingTime = formatRemainingTime(duration);
+
+        return new BidProductResponseDto(bidProduct, remainingTime);
     }
 
     // 경매 상품 검색
@@ -198,5 +213,16 @@ public class BidService {
         return bidProductRepository.findById(bidId).orElseThrow(
                 () -> new IllegalArgumentException("해당하는 경매 상품을 찾을수 없습니다.")
         );
+    }
+
+    // 경매마감까지 남은 시간을 "X일 Y시간 Z분" 형식으로 포맷팅하는 메서드
+    private String formatRemainingTime(Duration duration) {
+        long days = duration.toDays();
+        duration = duration.minusDays(days);
+        long hours = duration.toHours();
+        duration = duration.minusHours(hours);
+        long minutes = duration.toMinutes();
+
+        return String.format(Locale.US, "%d일 %d시간 %d분", days, hours, minutes);
     }
 }

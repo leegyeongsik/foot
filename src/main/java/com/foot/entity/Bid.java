@@ -45,6 +45,12 @@ public class Bid extends Timestamped{
         this.bidProduct = bidProduct;
     }
 
+    public Bid(Bid topBid) {
+        this.bidPrice = topBid.getBidPrice();
+        this.user = topBid.getUser();
+        this.bidProduct = topBid.getBidProduct();
+    }
+
     /**
      * 연관관계 편의 메소드 - 반대쪽에는 연관관계 편의 메소드가 없도록 주의합니다.
      */
