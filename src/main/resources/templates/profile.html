@@ -250,7 +250,7 @@
                         title: '비밀번호가 일치하지 않습니다'        // Alert 제목
                     }).then((result) => {
                         if (result.isConfirmed) {
-                            window.location.href = "http://localhost:8080/";
+                            window.location.href = "";
                         }
                     });
                 }
@@ -265,7 +265,7 @@
                     title: '비밀번호가 일치하지 않습니다'        // Alert 제목
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        window.location.href = "http://localhost:8080/";
+                        window.location.href = "";
                     }
                 });
             }
@@ -298,7 +298,7 @@
                     title: '변경 완료!'        // Alert 제목
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        window.location.href = "http://localhost:8080/view/profile";
+                        window.location.href = "/view/profile";
                     }
                 });
             },
@@ -308,7 +308,7 @@
                     title: '변경 실패!'        // Alert 제목
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        window.location.href = "http://localhost:8080/view/profile";
+                        window.location.href = "/view/profile";
                     }
                 });
             }

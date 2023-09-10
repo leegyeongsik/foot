@@ -70,7 +70,7 @@ public class WebSecurityConfig {
                         .requestMatchers("/view/**").permitAll()
                         .requestMatchers("/api/product/**").permitAll()
                         .requestMatchers("/api/cart/**").permitAll()
-                        .requestMatchers("/Product/**").permitAll()
+                        .requestMatchers("/product/**").permitAll()
 
 
                         .requestMatchers("/ws/**").permitAll()
@@ -78,7 +78,7 @@ public class WebSecurityConfig {
                         .requestMatchers("/chat/**").permitAll()
                         .requestMatchers("/topic/**").permitAll()
 
-                        .requestMatchers("/Chats/**").permitAll()
+                        .requestMatchers("/chats/**").permitAll()
 
 
                         .anyRequest().authenticated() // 그 외 모든 요청 인증처리

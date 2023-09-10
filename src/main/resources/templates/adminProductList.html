@@ -157,7 +157,7 @@
 
         <div class="list-container">
             <div class="btn-container">
-                <button class="product-btn" onclick="location.href='/Product/create'">상품 추가</button>
+                <button class="product-btn" onclick="location.href='/product/create'">상품 추가</button>
                 <button class="discount-btn" onclick="openDiscountPrompt()">할인율 변경</button>
                 <button class="delete-btn" onclick="deleteProduct()">상품 삭제</button>
             </div>
@@ -243,7 +243,7 @@
     function goToProductDetailPage(row) {
         var productId = row.getAttribute("data-product-id");
         console.log(productId);
-        window.location.href = "/Product/update/" + productId;
+        window.location.href = "/product/update/" + productId;
     }
 
     // 상품 할인율을 입력하는 창

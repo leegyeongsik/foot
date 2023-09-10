@@ -154,7 +154,14 @@ public class ProductService {
             }
             productColorResponseDtos.add(new ProductColorResponseDto(colorImg, productSizeResponseDtos));
         }
-        return new innerProductResponseDto(new ProductResponseDto(product), productColorResponseDtos);
+
+        List<ProductSizesResponseDto> productSizesResponseDtos = new ArrayList<>(); // 상품의 사이즈
+        List<ProductSize>productSizes=productRepository.getSizes(productId);
+        for (ProductSize productSize : productSizes) {
+            productSizesResponseDtos.add(new ProductSizesResponseDto(productSize));
+        }
+
+        return new innerProductResponseDto(new ProductResponseDto(product), productColorResponseDtos , productSizesResponseDtos);
     }
 
     public innerProductResponseDto getTargetUserProduct(Long productId, User user) {
@@ -170,15 +177,21 @@ public class ProductService {
             }
             productColorResponseDtos.add(new ProductColorResponseDto(colorImg, productSizeResponseDtos));
         }
+
+        List<ProductSizesResponseDto> productSizesResponseDtos = new ArrayList<>(); // 상품의 사이즈
+        List<ProductSize>productSizes=productRepository.getSizes(productId);
+        for (ProductSize productSize : productSizes) {
+            productSizesResponseDtos.add(new ProductSizesResponseDto(productSize));
+        }
         Optional<Favorite> favorite = favoriteRepository.getFavoriteIsExist(user.getId(), product.getId());
         if (!favorite.isEmpty()) {
-            return new innerProductResponseDto(new ProductResponseDto(product, true), productColorResponseDtos);
+            return new innerProductResponseDto(new ProductResponseDto(product, true), productColorResponseDtos , productSizesResponseDtos);
         } else {
-            return new innerProductResponseDto(new ProductResponseDto(product), productColorResponseDtos);
+            return new innerProductResponseDto(new ProductResponseDto(product), productColorResponseDtos , productSizesResponseDtos);
         }
     }
 
-    public innerProductResponseDto getSizeProduct(Long productId) { // 특정 상품 조회
+    public innerProductResponseDto getSizeProduct(Long productId) { //수정할때 사이즈 , 사이즈안의 컬러 불러오는 메소드
         Product product = productRepository.findById(productId).get();
         List<ProductSizeResponseDto> productSizeResponseDtos = new ArrayList<>();
 
@@ -194,12 +207,11 @@ public class ProductService {
             productSizeResponseDtos.add(new ProductSizeResponseDto(productSize, productColorResponseDtos));
 
         }
-        return new innerProductResponseDto(new ProductResponseDto(product), productSizeResponseDtos, "null");
+        return new innerProductResponseDto(new ProductResponseDto(product), productSizeResponseDtos);
     }
 
     @Transactional
     public void updateProduct(Long productId, UpdateProductResponseDto updateProductResponseDto) {
-//        confirmAdminToken(user);
 
         Product product = productRepository.findById(productId).get();
         product.updateProduct(updateProductResponseDto.getName(), updateProductResponseDto.getDescription(),
@@ -266,9 +278,9 @@ public class ProductService {
         ProductSize productSize = (ProductSize) sizeProductColor.keySet().toArray()[0];
         ProductColor productColor = sizeProductColor.get(productSize);
 
-        productColor.setAmount(productColor.getAmount() - requestDto.getOrderCount());
-        productSize.setAmount(productSize.getAmount() - requestDto.getOrderCount());
-        productSize.getProduct().setTotalAmount(productSize.getProduct().getTotalAmount() - requestDto.getOrderCount());
+        productColor.decreaseProductAmount(productColor.getAmount() , requestDto.getOrderCount());
+        productSize.decreaseProductAmount(productSize.getAmount() , requestDto.getOrderCount());
+        productSize.getProduct().decreaseProductAmount(productSize.getProduct().getTotalAmount() , requestDto.getOrderCount());
 
 
         productRepository.save(productSize.getProduct());

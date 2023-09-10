@@ -27,7 +27,7 @@ import java.util.List;
 public class ProductController {
     private final OrderProducer orderProducer;
     private final ProductColorRepository repository;
-    private static String BOOT_TOPIC = "kafka-order1";
+    private static String BOOT_TOPIC = "kafka-order";
 
     private final ProductService productService;
 

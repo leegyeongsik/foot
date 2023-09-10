@@ -25,6 +25,7 @@ public interface ProductRepositoryCustom {
 
     Map<ProductSize, ProductColor> getOrderProduct(Long ProductcolorId);
 
-
     List<Product> getBrandProduct(String brand);
+
+    List<ProductSize> getSizes(Long productId);
 }

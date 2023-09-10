@@ -309,7 +309,7 @@
           success: function (response) {
             if (response) {
               wsss.send("/pub/chat/enter", {'Authorization': Cookies.get('Authorization')}, JSON.stringify({channelIDs: `${response.channelNum}` , userRole: role})); //receiver:participant,
-              $("#footersSSS").load(`/Chats/${response.channelNum}`);
+              $("#footersSSS").load(`/chats/${response.channelNum}`);
             }
           },
         });
@@ -460,7 +460,7 @@
       var tagId = e.target.id
       wsss.send("/pub/chat/enter", {'Authorization': Cookies.get('Authorization')}, JSON.stringify({channelIDs: tagId , userRole: role})); //receiver:participant,
       console.log(tagId)
-      $("#footersSSS").load(`/Chats/${tagId}`)
+      $("#footersSSS").load(`/chats/${tagId}`)
     }
   )
 

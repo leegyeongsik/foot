@@ -15,7 +15,6 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @Table(name = "productsizes")
-@Setter
 public class ProductSize extends Timestamped{
     /**
      * 컬럼 - 연관관계 컬럼을 제외한 컬럼을 정의합니다.
@@ -31,8 +30,7 @@ public class ProductSize extends Timestamped{
 
     @Column(name = "footpicture")
     private String footpicture;
-    @Column(name = "predictfootpicture")
-    private String predictfootpicture;
+
     @Column(name = "footsize")
     private Long footsize;
     @Column(name = "feetsize")
@@ -44,14 +42,13 @@ public class ProductSize extends Timestamped{
      * 생성자 - 약속된 형태로만 생성가능하도록 합니다.
      */
     @Builder
-    public ProductSize(Long size , Long amount ,Product product , Long footsize ,Long feetsize , String footpicture ,  String predictfootpicture){
+    public ProductSize(Long size , Long amount ,Product product , Long footsize ,Long feetsize , String footpicture){
         this.size = size;
         this.amount =amount;
         this.product = product;
         this.footsize = footsize;
         this.feetsize = feetsize;
         this.footpicture = footpicture;
-        this.predictfootpicture = predictfootpicture;
     }
 
     /**
@@ -63,12 +60,6 @@ public class ProductSize extends Timestamped{
     @ManyToOne
     @JoinColumn(name = "productId", nullable = false)
     private Product product;
-
-    public void updateFootSize(FootProductRequestDto requestDto) {
-        this.footsize = requestDto.getFootSize();
-        this.feetsize = requestDto.getFeetSize();
-        this.footpicture = requestDto.getFootPicture();
-    }
 
     /**
      * 연관관계 편의 메소드 - 반대쪽에는 연관관계 편의 메소드가 없도록 주의합니다.
@@ -85,5 +76,7 @@ public class ProductSize extends Timestamped{
         this.footsize = footsize;
         this.feetsize = feetsize;
     }
-
+    public void decreaseProductAmount(Long currentAmount , Long orderAmount){
+        this.amount = currentAmount - orderAmount;
+    }
 }

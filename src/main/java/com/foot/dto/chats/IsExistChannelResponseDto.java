@@ -7,27 +7,27 @@ import javax.swing.plaf.TableHeaderUI;
 
 @Getter
 public class IsExistChannelResponseDto {
-    boolean IsExist;
+    boolean isExist;
     ProfileResponseDto responseDto;
-    Long ChannelNum;
-    Long UserLeadCnt;
-    Long AdminLeadTotalCnt;
+    Long channelNum;
+    Long userLeadCnt;
+    Long adminLeadTotalCnt;
     public IsExistChannelResponseDto(boolean IsExist , ProfileResponseDto responseDto, Long channelId , Long UserLeadCnt){
-        this.IsExist = IsExist;
+        this.isExist = IsExist;
         this.responseDto = responseDto;
-        this.ChannelNum = channelId;
-        this.UserLeadCnt = UserLeadCnt;
+        this.channelNum = channelId;
+        this.userLeadCnt = UserLeadCnt;
     }
     public IsExistChannelResponseDto( ProfileResponseDto responseDto , Long AdminLeadTotalCnt){
         this.responseDto = responseDto;
-        this.AdminLeadTotalCnt = AdminLeadTotalCnt;
+        this.adminLeadTotalCnt = AdminLeadTotalCnt;
     }
     public IsExistChannelResponseDto( boolean IsExist , ProfileResponseDto responseDto){
-        this.IsExist = IsExist;
+        this.isExist = IsExist;
         this.responseDto = responseDto;
     }
     public IsExistChannelResponseDto( Long ChannelNum , ProfileResponseDto responseDto){
-        this.ChannelNum = ChannelNum;
+        this.channelNum = ChannelNum;
         this.responseDto = responseDto;
     }
 }

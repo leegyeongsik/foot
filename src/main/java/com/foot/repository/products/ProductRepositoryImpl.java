@@ -131,6 +131,17 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom{
 
     }
 
+    @Override
+    public List<ProductSize> getSizes(Long productId) {
+        return  jpaQueryFactory.select(productSize)
+                .from(productSize)
+                .leftJoin(productSize.product)
+                .where(
+                        productSize.product.id.eq(productId)
+                )
+                .fetch();
+    }
+
 
     private BooleanExpression getColor(String ModelColorName,Long ModelId){
         return Objects.nonNull(ModelId) ? product.id.eq(ModelId)

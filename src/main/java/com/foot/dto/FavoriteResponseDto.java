@@ -12,7 +12,7 @@ public class FavoriteResponseDto {
     String ModelPicture;
     double discountRate;
     Long discountPrice;
-    boolean IsAppend;
+    boolean isAppend;
 
     public FavoriteResponseDto(Product product , boolean IsAppend){
         this.productId = product.getId();
@@ -22,6 +22,6 @@ public class FavoriteResponseDto {
         this.ModelPicture = product.getModelpicture();
         this.discountRate = product.getDiscountRate();
         this.discountPrice = product.getDiscountPrice();
-        this.IsAppend = IsAppend;
+        this.isAppend = IsAppend;
     }
 }

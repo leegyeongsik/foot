@@ -51,8 +51,7 @@ public class KafkaConfig {
                 .put("bootstrap.servers", "localhost:9092")
                 .put("key.serializer", IntegerSerializer.class)
                 .put("value.serializer", JsonSerializer.class)
-                .put("group.id", "spring-boot-test")
-//                .put(JsonSerializer.TYPE_MAPPINGS,"OrderRequestDto:com.foot.dto")
+                .put("group.id", "spring-boot")
                 .build();
     }
 
@@ -95,7 +94,7 @@ public class KafkaConfig {
                 .put("bootstrap.servers", "localhost:9092")
                 .put("key.deserializer", IntegerDeserializer.class)
                 .put("value.deserializer", JsonDeserializer.class)
-                .put("group.id", "spring-boot-test")
+                .put("group.id", "spring-boot")
                 .build();
     }
 

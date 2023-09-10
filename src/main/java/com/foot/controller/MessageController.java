@@ -25,7 +25,7 @@ import java.util.List;
 @Slf4j
 public class MessageController {
     private final MessageProducer messageProducer;
-    private static String BOOT_TOPIC = "kafka-chatting1";
+    private static String BOOT_TOPIC = "kafka-chatting";
     private final MessageService messageService;
     private final ChannelRepository repository;
     private final ChatLogRepository chatLogRepository;
