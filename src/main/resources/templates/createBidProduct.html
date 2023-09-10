@@ -1,14 +1,24 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="https://cdn-icons-png.flaticon.com/128/2675/2675848.png"/>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"
+            integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g="
+            crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <title>Bid Product Details</title>
     <style>
-        /* styles.css */
+        /* 전체 페이지 스타일 */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
         .Header {
             width: 100%;
             height: 10%;
@@ -41,105 +51,118 @@
 
         }
 
-
-        /* 컨테이너 스타일링 */
-        .container {
+        /* .product-info 컨테이너 스타일 */
+        .product-info {
             display: flex;
-            margin: 0 auto;
             padding: 20px;
-            background-color: #f5f5f5;
-            border-radius: 10px;
-            box-shadow: 0 0 1px rgba(0, 0, 0, 0.1);
-            flex-direction: row; /* Ensure horizontal layout */
-            ustify-content: center; /* 수평 중앙 정렬 */
-            align-items: center; /* 수직 중앙 정렬 */
-            height: 100vh; /* 화면 높이의 100% */
-
         }
-
-        /* 스타일링 */
-        .form-row {
-            display: flex;
-            flex-wrap: wrap;
-        }
-
-        .form-column {
-            flex: 1;
-        }
-
-        .form-column-left {
-            flex: 3; /* 오른쪽 칼럼을 작게 만듭니다. */
-            margin-right: 10%; /* 오른쪽 칼럼 사이 여백 제거 */
-
-        }
-
-        .form-column-right {
-            flex: 1;
-            padding-top: 30%;
-        }
-
-
-
-        /* 제출 버튼 스타일링 */
-        button {
-            width: 100%; /* 폼 너비 전체를 사용하도록 설정 */
-        }
-
 
         /* 이미지 미리보기 스타일링 */
         #imagePreviewContainer {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 100%;
+            width: 400px;
             height: 300px;
             border: 1px solid #ccc;
             border-radius: 5px;
             background-color: #fff;
-        }
-
-        #imagePreview {
-            max-width: 100%;
-            max-height: 100%;
-        }
-
-        #bidProductFile {
-            margin-top: 10px;
-        }
-
-        /* 레이블 스타일링 */
-        #bidProductForm label {
-            font-weight: bold;
-        }
-
-        /* 입력 필드 스타일링 */
-        #bidProductForm input,
-        #bidProductForm textarea {
-            width: 100%; /* 모든 입력 필드의 너비를 일정하게 설정 */
-            padding: 5px;
+            display: block; /* 이미지 중앙 정렬 */
+            margin-left: 20%;
+            margin-top: 5%;
             margin-bottom: 10px;
+            text-align: center;
+        }
+        /* .product-image 스타일 */
+        .product-image {
+            flex: 1; /* 왼쪽 부분을 확장하여 이미지 크게 표시 */
+            text-align: center; /* 텍스트 가운데 정렬 */
+            margin-top: 5%;
+        }
+
+        .product-image img {
+            max-width: 400px; /* 이미지 크기 조정 */
+            height: auto;
+            display: block; /* 이미지 중앙 정렬 */
+        }
+
+
+        /* .info-box 스타일 */
+        .info-box {
+            flex: 2; /* 오른쪽 부분을 확장하여 정보 표시 */
+            background-color: #f0f0f0;
+            padding: 10px;
+            border-radius: 5px;
+            max-width: 25%; /* 상자 가로 길이 제한 */
+            margin-top: 5%;
+            margin-right: 10%;
+
+        }
+
+        /* .info-header 스타일 */
+        .info-header h4 {
+            font-size: 20px;
+            margin: 10px 20px;
+            padding-bottom: 10px;
+        }
+
+        .info-header p {
+            display: block;
+        }
+
+
+        /* .detail-info 스타일 */
+        .detail-info {
+            display: flex;
+            flex-direction: column; /* 내부 요소를 세로로 배치 */
+            padding: 5px;
+        }
+
+
+        .detail-info-label {
+            font-size: 13px;
+            margin-left: 10px; /* 간격을 오른쪽으로 추가 */
+            padding: 5px;
+
+        }
+
+        .detail-info-value {
+            font-size: 13px;
+            font-weight: lighter;
+            text-align: left;
+            margin-left: 10px; /* 간격을 왼쪽으로 추가 */
+        }
+
+        .detail-info input {
+            padding: 10px 10px;
+            margin: 5px 30px;
             border: 1px solid #ccc;
-            border-radius: 5px;
-            font-size: 12px;
+            border-radius: 10px;
+        }
+        
+
+        .detail-info textarea {
+            padding: 12px 20px;
+            margin: 5px 30px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+
         }
 
-        /* 버튼 스타일링 */
-        .submit-btn {
-            background-color: #007bff;
-            color: #fff;
-            padding: 10px 20px;
+        button[type="submit"] {
+            background-color: #EE312F;
+            color: white;
+            padding: 12px 70px;
             border: none;
-            border-radius: 5px;
-            font-size: 16px;
+            border-radius: 18px;
             cursor: pointer;
+            margin-top: 10%;
+            font-size: 15px;
         }
 
-        /* 버튼 호버 효과 */
-        .submit-btn:hover {
-            background-color: #0056b3;
+        button[type="submit"]:hover {
+            background-color: #C02832;
         }
+
+        /* 예쁘게 스타일링하기 위해 추가적으로 조정 가능합니다. */
     </style>
-
 </head>
 <body>
 <div class="Header">
@@ -155,58 +178,66 @@
         <div class="NavItem" onclick="logoutUser()">SIGNOUT</div>
     </div>
 </div>
-<div class="container">
-    <form id="bidProductForm" action="/api/bidProduct" method="post" enctype="multipart/form-data">
-        <div class="form-row">
-            <div class="form-column form-column-left">
-                <div id="imagePreviewContainer">
-                    <img id="imagePreview" alt="Image Preview">
-                </div>
-<!--                <label for="bidProductFile">Choose File</label>-->
-<!--                <input type="file" id="bidProductFile" onchange="previewImage(this)"-->
-<!--                       name="bidProductFile" accept="image/png, image/jpeg, image/gif">-->
-                <div>
-                    <label for="brand">브랜드명 </label>
-                    <input type="text" id="brand" name="brand" required>
-                </div>
-                <div>
-                    <label for="name">모델명 </label>
-                    <input type="text" id="name" name="name" required>
-                </div>
-                <div>
-                    <label for="description">모델설명 </label>
-                    <textarea id="description" name="description" rows="2" required></textarea>
-                </div>
+<form id="bidProductForm" action="/api/bidProduct" method="post" enctype="multipart/form-data">
+    <div class="product-info">
+        <div class="product-image">
+            <div id="imagePreviewContainer">
+                <img id="imagePreview" alt="Image Preview">
             </div>
-            <!-- 오른쪽 칼럼: 입력 필드 -->
-            <div class="form-column form-column-right">
-                <div>
-                    <label for="feetSize">발볼사이즈</label>
-                    <input type="number" id="feetSize" name="feetSize" required>
-                </div>
-                <div>
-                    <label for="footSize">사이즈</label>
-                    <input type="number" id="footSize" name="footSize" required>
-                </div>
-                <div>
-                    <label for="startPrice">시작가격 </label>
-                    <input type="number" id="startPrice" name="startPrice" required>
-                </div>
-                <div>
-                    <label for="expirationPeriod">경매마감기한 </label>
-                    <input type="datetime-local" id="expirationPeriod" name="expirationPeriod" required>
-                </div>
-                <div>
-                    <button class="submit-btn" type="submit">상품 등록</button>
-                </div>
+<!--            <input type="file" id="bidProductFile" onchange="previewImage(this)"-->
+<!--                   name="bidProductFile" accept="image/png, image/jpeg, image/gif">-->
+            <div>
+                <button type="submit">상품 등록</button>
             </div>
+
         </div>
 
-    </form>
-</div>
+        <div class="info-box">
+            <div class="detail-info">
+                <table>
+                    <tr>
+                        <label class="detail-info-label" for="brand">브랜드명 </label>
+                        <input class="detail-info-value" type="text" id="brand" name="brand" required>
+                    </tr>
+
+                    <tr>
+                        <label class="detail-info-label" for="name">모델명 </label>
+                        <input class="detail-info-value" type="text" id="name" name="name" required>
+                    </tr>
+
+                    <tr>
+                        <label class="detail-info-label" for="description">모델설명 </label>
+                        <textarea class="detail-info-value" id="description" name="description" rows="2"
+                                  required></textarea>
+                    </tr>
+
+                    <tr>
+                        <label class="detail-info-label" for="feetSize">발볼사이즈</label>
+                        <input class="detail-info-value" type="number" id="feetSize" name="feetSize" required>
+                    </tr>
+
+                    <tr>
+                        <label class="detail-info-label" for="footSize">사이즈</label>
+                        <input class="detail-info-value" type="number" id="footSize" name="footSize" required>
+                    </tr>
+
+                    <tr>
+                        <label class="detail-info-label" for="startPrice">시작가격 </label>
+                        <input class="detail-info-value" type="number" id="startPrice" name="startPrice" required>
+                    </tr>
+
+                    <tr>
+                        <label class="detail-info-label" for="expirationPeriod">경매마감기한 </label>
+                        <input class="detail-info-value" type="datetime-local" id="expirationPeriod"
+                               name="expirationPeriod" required>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</form>
 </body>
 <script>
-    // 이미지 미리보기 함수
     function previewImage(input) {
         const imagePreview = document.getElementById('imagePreview');
         if (input.files && input.files[0]) {
