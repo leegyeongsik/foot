@@ -244,7 +244,11 @@
         var currentTopBid = parseFloat(document.getElementById("currentTopBid").textContent); // 현재 최고 입찰가를 가져옵니다. 문자열을 숫자로 변환해야 합니다.
 
         if (isNaN(currentTopBid)) {
-            alert("현재 최고 입찰가가 잘못 설정되었습니다.");
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: '현재 최고 입찰가가 잘못 설정되었습니다.'
+            });
             console.log(currentTopBid);
             return false;
         }
@@ -252,13 +256,21 @@
         var userBid = parseFloat(bidPriceInput.value);
 
         if (isNaN(userBid)) {
-            alert("올바른 입찰 가격을 입력하세요.");
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: '올바른 입찰 가격을 입력해주세요.'
+            });
             console.log(userBid);
             return false;
         }
 
         if (userBid <= currentTopBid) {
-            alert("현재 최고 입찰가보다 높은 입찰 가격을 입력하세요.");
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: '현재 최고 입찰가보다 높은 가격을 입찰해주세요.'
+            });
             return false;
         }
 
@@ -273,7 +285,7 @@
 
         Swal.fire({
             title: '입찰 확인',
-            text: bidPrice + ' 원을 입찰하시겠습니까?',
+            text: bidPrice + '원을 입찰하시겠습니까?',
             icon: 'info',
             showCancelButton: true,
             confirmButtonText: '입찰',

@@ -20,6 +20,7 @@ import java.io.File;
 import java.io.IOException;
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -71,6 +72,7 @@ public class BidService {
                 .brand(brand)
                 .user(user)
                 .build();
+
         bidProductRepository.save(bidProduct);
         return new BidProductResponseDto(bidProduct, remainingTime);
     }
@@ -224,5 +226,11 @@ public class BidService {
         long minutes = duration.toMinutes();
 
         return String.format(Locale.US, "%d일 %d시간 %d분", days, hours, minutes);
+    }
+
+    // 경매 마감 시간 포맷팅
+    public String formatExpirationTime(LocalDateTime expirationTime) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        return expirationTime.format(formatter);
     }
 }
