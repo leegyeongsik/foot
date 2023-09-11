@@ -1,9 +1,6 @@
 package com.foot.service;
 
-import com.foot.dto.bidProduct.BidProductRequestDto;
-import com.foot.dto.bidProduct.BidProductResponseDto;
-import com.foot.dto.bidProduct.BidRequestDto;
-import com.foot.dto.bidProduct.BidResponseDto;
+import com.foot.dto.bidProduct.*;
 import com.foot.entity.*;
 import com.foot.repository.BidHistoryRepository;
 import com.foot.repository.BidProductRepository;
@@ -19,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -189,6 +187,7 @@ public class BidService {
             throw new IllegalArgumentException("본인의 경매상품만 삭제할수 있습니다.");
         }
     }
+
 
     // 경매 상품 마감
     @Transactional
