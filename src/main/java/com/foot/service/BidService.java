@@ -197,6 +197,14 @@ public class BidService {
 
         if (bidProduct.getStatus() == 0) {
             bidProduct.changeToSell();
+            if (bidProduct.getTopBid() == null) {
+                Bid bid = new Bid();
+                bid.setBidProduct(bidProduct);
+                bid.setUser(bidProduct.getUser());
+                bid.setBidPrice(0L);
+                bidRepository.save(bid);
+                bidProduct.setTopBid(bid);
+            }
 
             //경매 히스토리 테이블 생성
             BidHistory bidHistory = new BidHistory(bidProduct ,bidProduct.getTopBid(), bidProduct.getUser(), bidProduct.getTopBid().getUser());

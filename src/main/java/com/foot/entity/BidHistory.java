@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @Table(name = "bidHistories")
-public class BidHistory {
+public class BidHistory extends Timestamped {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,5 +35,9 @@ public class BidHistory {
         this.bid = bid;
         this.sellUser = sellUser;
         this.buyUser = buyUser;
+    }
+
+    public BidHistory(BidProduct bidProduct) {
+        this.bidProduct= bidProduct;
     }
 }
