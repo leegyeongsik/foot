@@ -37,7 +37,4 @@ public class BidHistory extends Timestamped {
         this.buyUser = buyUser;
     }
 
-    public BidHistory(BidProduct bidProduct) {
-        this.bidProduct= bidProduct;
-    }
 }

@@ -122,18 +122,16 @@
         .bid-product-card {
             border: 1px solid #EE312F;
             border-radius: 3%;
-            padding-bottom: 10px;
             text-align: start;
             margin: 1.8%;
             width: 300px; /* 카드의 너비 조정 */
-            height: 300px; /* 카드의 높이 조정 (원하는 높이로 설정) */
             display: flex;
             flex-direction: column; /* 내부 컨텐츠를 세로로 배치 */
         }
 
         /* 이미지 스타일 */
         .product-image {
-            border-radius: 3%;
+            border-radius: 3% 3% 0 0;
             flex-grow: 1; /* 이미지가 남은 공간을 모두 차지하도록 설정 */
             width: 100%; /* 이미지의 너비를 100%로 설정하여 가로 너비에 꽉 차게 합니다. */
             height: auto; /* 높이를 자동으로 조정하여 비율 유지 */
@@ -144,19 +142,26 @@
             width: 100%; /* 테이블을 부모 엘리먼트에 맞추기 위해 100%로 설정 */
         }
 
+
+
         /* 각 열의 텍스트 정렬 스타일 */
         tr {
             display: flex;
             justify-content: space-between;
+            margin: 8px;
         }
 
-
+        .info {
+            font-size: 15px;
+        }
 
         /* 남은 시간 스타일 (강조) */
         .remaining-time {
             color: #EE312F; /* 원하는 색상으로 설정 */
             font-weight: bold;
         }
+
+
         a {
             text-decoration: none;
         }
@@ -206,13 +211,12 @@
             <img th:src="${product.footPicture}" alt="Foot Picture" class="product-image">
             <table>
                 <tr>
-                    <td><p class="brand-name" th:text="${product.brand.name}"></p></td>
-                    <td><p class="product-price" th:text="${product.topBid.bidPrice} +'원'"></p></td>
-
+                    <td><span class="info brand-name" th:text="${product.brand.name}"></span></td>
+                    <td><span class="info product-price" th:text="${product.topBid.bidPrice} +'원'"></span></td>
                 </tr>
                 <tr>
-                    <td><p class="product-name" th:text="${product.name}"></p></td>
-                    <td><p class="remaining-time" th:text="${product.remainingTime}"></p></td>
+                    <td><span class="info product-name" th:text="${product.name}"></span></td>
+                    <td><span class="info remaining-time" th:text="${product.remainingTime}"></span></td>
                 </tr>
             </table>
         </a>
