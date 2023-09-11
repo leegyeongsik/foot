@@ -427,7 +427,7 @@
             <div class="NavItem" id="my-page">info</div>
             <div class="NavItem" id="signout">signOut</div>`
             $('.NavList').append(temp_Navi)
-            $("#footers").load(`/chats`); //
+            $("#footers").load("/chats");
             $.ajax({
                 url: `/api/product`,
                 type: 'GET',
@@ -446,7 +446,7 @@
                             $(".sidebar-container").append(brand)
                         }
                         for (var i = 0; i < list.length; i++) {
-                            if(list[i].isAppend == true){
+                            if(list[i].append == true){
                                 var Products= `
                                 <div class="item"  style="border: 1px solid #EE312F; background-color: #ffffff;">
                                     <img class ="click_img" id = ${list[i].productId} src="${list[i].modelPicture}">
@@ -617,7 +617,7 @@
                             var list = response
                             $('.DivOLayout').empty();
                             for (var i = 0; i < list.length; i++) {
-                                if(list[i].isAppend == true){
+                                if(list[i].append == true){
                                     var Products= `
                                 <div class="item"  style="border: 1px solid #EE312F; background-color: #ffffff;">
                                     <img class ="click_img" id = ${list[i].productId} src="${list[i].modelPicture}">
@@ -722,7 +722,7 @@
         $(document).on('click',"div[id='signout']" , function (e) { // 보드 상세 페이지 이동
             e.preventDefault();
             Cookies.remove('Authorization', {path: '/'});
-            window.location.href = ""
+            window.location.href = `/view/home`
         })
         $(document).on('click',"div[id='favorite']" , function (e) { // 보드 상세 페이지 이동
             e.preventDefault();

@@ -373,14 +373,14 @@
       success: function (response) {
         if (response) {
           console.log(response)
-          if(response.isExist != true && response.responseDto.role != "ADMIN"){
+          if(response.exist != true && response.responseDto.role != "ADMIN"){
             $('#openChatButtonContainer').empty();
             $('#chatlistContainer').empty();
             createButton=`<button id="openChatButton" class="createChatButton">+</button>`
             $('#openChatButtonContainer').append(createButton);
 
           }
-          else if(response.isExist == true && response.responseDto.role != "ADMIN"){
+          else if(response.exist == true && response.responseDto.role != "ADMIN"){
 
             $('#openChatButtonContainer').empty();
             $('#chatlistContainer').empty();

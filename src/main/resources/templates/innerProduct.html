@@ -522,7 +522,7 @@
             $('.DivOLayout').append(Products);
           }
           $('.check_wrap').empty()
-          if(response.productResponseDto.isAppend == true){
+          if(response.productResponseDto.append == true){
             isappend=`<input class="checkboxs" id="productcheckId_${response.productResponseDto.productId}" type="checkbox" checked/>
             <label htmlFor="check_btn"></label>
             <button class="btnsssssssssssss"
@@ -623,7 +623,7 @@
     })
 
     $(document).on('click',"div[id='shoes_id']" , function (e) { // 신발 누르면 해당 사이즈 출력
-      window.location.href=``
+      window.location.href=`/view/home`
 
     })
     $(document).on('click',"div[id='signup']" , function (e) { // 보드 상세 페이지 이동
@@ -643,7 +643,7 @@
     $(document).on('click',"div[id='signout']" , function (e) { // 보드 상세 페이지 이동
       e.preventDefault();
       Cookies.remove('Authorization', {path: '/'});
-      window.location.href = ""
+      window.location.href = `/view/home`
     })
     $(document).on('click',"div[id='favorite']" , function (e) { // 보드 상세 페이지 이동
       e.preventDefault();

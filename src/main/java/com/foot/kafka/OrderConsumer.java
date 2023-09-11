@@ -1,6 +1,5 @@
 package com.foot.kafka;
 
-import com.foot.controller.ProductController;
 import com.foot.dto.OrderRequestDto;
 import com.foot.service.ProductService;
 import lombok.RequiredArgsConstructor;
