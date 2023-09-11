@@ -24,6 +24,7 @@ public class BidHistoryService {
     private final BidHistoryRepository bidHistoryRepository;
     private final BidProductRepository bidProductRepository;
 
+    // 경매 히스토리 그래프
     public List<BidHistoryChartData> getChartDataForLastWeek() {
         LocalDateTime endDate = LocalDateTime.now();  // 현재 날짜
         LocalDateTime startDate = endDate.minusWeeks(1);  // 오늘로부터 일주일 전의 날짜 계산
@@ -38,6 +39,7 @@ public class BidHistoryService {
     }
 
 
+    // 경매 상품 등록 그래프
     public List<BidProductChartData> getChartData() {
         LocalDateTime endDate = LocalDateTime.now();  // 현재 날짜
         LocalDateTime startDate = endDate.minusWeeks(1);  // 오늘로부터 일주일 전의 날짜 계산
@@ -85,11 +87,6 @@ public class BidHistoryService {
                 .map(entry -> new BidHistoryChartData(entry.getKey().atStartOfDay(), entry.getValue()))
                 .collect(Collectors.toList());
     }
-
-
-
-    // bidProduct chart
-
 
 
 

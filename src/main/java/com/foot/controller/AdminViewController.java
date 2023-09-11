@@ -1,6 +1,7 @@
 package com.foot.controller;
 
 import com.foot.dto.bidProduct.BrandResponseDto;
+import com.foot.entity.BidProduct;
 import com.foot.entity.Product;
 import com.foot.entity.User;
 import com.foot.entity.UserRoleEnum;
@@ -104,6 +105,35 @@ public class AdminViewController {
         model.addAttribute("endPage", endPage);
 
         return "adminProductList";
+    }
+
+    // 전체 경매 상품 조회
+    @Secured(UserRoleEnum.Authority.ADMIN)
+    @GetMapping("/bidProducts")
+    public String getBidProductList(Model model,
+                                 @PageableDefault(page = 0, size = 5, sort = "id", direction = Sort.Direction.ASC)
+                                 Pageable pageable,
+                                 String searchKeyword) {
+
+        Page<BidProduct> productList = null;
+
+        if(searchKeyword == null) {
+            productList = adminService.getBidProductList(pageable);
+
+        } else {
+            productList = adminService.bidProductSearchList(searchKeyword, pageable);
+        }
+
+        int nowPage = pageable.getPageNumber() + 1;
+        int startPage = Math.max(nowPage - 4, 1);
+        int endPage = Math.min(nowPage + 5, productList.getTotalPages());
+
+        model.addAttribute("list", productList);
+        model.addAttribute("nowPage", nowPage);
+        model.addAttribute("startPage", startPage);
+        model.addAttribute("endPage", endPage);
+
+        return "adminBidProduct";
     }
 
     // 브랜드 페이지

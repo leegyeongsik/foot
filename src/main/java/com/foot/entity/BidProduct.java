@@ -37,9 +37,6 @@ public class BidProduct extends Timestamped{
     @Column(name = "footpicture")
     private String footpicture;
 
-    @Column(name = "predictfootpicture")
-    private String predictfootpicture;
-
     @Column(name = "footsize")
     private Long footsize;
 
