@@ -1,6 +1,7 @@
 package com.foot.repository;
 
 import com.foot.dto.bidProduct.BidProductChartData;
+import com.foot.dto.bidProduct.BrandBidProductCount;
 import com.foot.entity.BidProduct;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -25,6 +26,13 @@ public interface BidProductRepository extends JpaRepository<BidProduct, Long> {
             "GROUP BY bp.createdAt " +
             "ORDER BY bp.createdAt ASC")
     List<BidProductChartData> getChartDataByDateRange(@Param("startDate") LocalDateTime startDate, @Param("endDate") LocalDateTime endDate);
+
+    // 브랜드 이름 별 경매 상품 조회
+    @Query("SELECT new com.foot.dto.bidProduct.BrandBidProductCount(bp.brand.name, COUNT(bp)) " +
+            "FROM BidProduct bp " +
+            "GROUP BY bp.brand.name")
+    List<BrandBidProductCount> getBrandBidProductCounts();
+
 
     // 경매 상품 이름으로 조회
     Page<BidProduct> findByNameContaining(String searchKeyword, Pageable pageable);

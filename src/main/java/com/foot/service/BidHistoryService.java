@@ -3,6 +3,7 @@ package com.foot.service;
 
 import com.foot.dto.bidProduct.BidHistoryChartData;
 import com.foot.dto.bidProduct.BidProductChartData;
+import com.foot.dto.bidProduct.BrandBidProductCount;
 import com.foot.repository.BidHistoryRepository;
 import com.foot.repository.BidProductRepository;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +25,7 @@ public class BidHistoryService {
     private final BidHistoryRepository bidHistoryRepository;
     private final BidProductRepository bidProductRepository;
 
-    // 경매 히스토리 그래프
+    // 일별 경매 히스토리 그래프
     public List<BidHistoryChartData> getChartDataForLastWeek() {
         LocalDateTime endDate = LocalDateTime.now();  // 현재 날짜
         LocalDateTime startDate = endDate.minusWeeks(1);  // 오늘로부터 일주일 전의 날짜 계산
@@ -39,7 +40,7 @@ public class BidHistoryService {
     }
 
 
-    // 경매 상품 등록 그래프
+    // 일별 경매 상품 등록 그래프
     public List<BidProductChartData> getChartData() {
         LocalDateTime endDate = LocalDateTime.now();  // 현재 날짜
         LocalDateTime startDate = endDate.minusWeeks(1);  // 오늘로부터 일주일 전의 날짜 계산
@@ -49,6 +50,11 @@ public class BidHistoryService {
 
         List<BidProductChartData> dailyChartDataList = groupChartData(chartDataList);
         return dailyChartDataList;
+    }
+
+    // 브랜드별 경매 상품 그래프
+    public List<BrandBidProductCount> getBrandBidProductCounts() {
+        return bidProductRepository.getBrandBidProductCounts();
     }
 
 

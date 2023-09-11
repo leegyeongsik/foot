@@ -9,11 +9,18 @@
     <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     <script src="https://kit.fontawesome.com/1d07e1c680.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <title>경매상품 관리 페이지</title>
     <style>
         body {
             margin: 0;
         }
+
+        #bidProductChart {
+            width: 400px; /* 가로 크기 지정 */
+            height: 300px; /* 세로 크기 지정 */
+        }
+
 
         .admin-container {
             display: flex;
@@ -170,9 +177,7 @@
             <i class="fas fa-tag" style="margin-right: 10px;"></i>브랜드 관리
         </div>
     </div>
-
     <div class="admin-content">
-
         <div class="list-container">
             <div class="btn-container">
                 <button class="product-btn" onclick="location.href='/Product/create'">상품 추가</button>
@@ -224,13 +229,12 @@
                 <button class="search-btn" type="submit">Search</button>
             </form>
         </div>
-
     </div>
 
 </div>
 
 </body>
-<script>
+<script th:inline="javascript">
 
     // 상품 상세 페이지로 이동
     function goToProductDetailPage(row) {
@@ -238,5 +242,6 @@
         console.log(productId);
         window.location.href = "/view/bp/" + productId;
     }
+
 </script>
 </html>

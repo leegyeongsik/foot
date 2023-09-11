@@ -1,5 +1,7 @@
 package com.foot.controller;
 
+import com.foot.dto.bidProduct.BidHistoryChartData;
+import com.foot.dto.bidProduct.BidProductChartData;
 import com.foot.dto.bidProduct.BrandResponseDto;
 import com.foot.entity.BidProduct;
 import com.foot.entity.Product;
@@ -7,6 +9,7 @@ import com.foot.entity.User;
 import com.foot.entity.UserRoleEnum;
 import com.foot.repository.UserRepository;
 import com.foot.service.AdminService;
+import com.foot.service.BidHistoryService;
 import com.foot.service.BrandService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,6 +34,7 @@ public class AdminViewController {
     private final UserRepository userRepository;
     private final AdminService adminService;
     private final BrandService brandService;
+    private final BidHistoryService bidHistoryService;
 
     // 관리자 홈
     @Secured(UserRoleEnum.Authority.ADMIN)
@@ -127,6 +131,11 @@ public class AdminViewController {
         int nowPage = pageable.getPageNumber() + 1;
         int startPage = Math.max(nowPage - 4, 1);
         int endPage = Math.min(nowPage + 5, productList.getTotalPages());
+
+
+        // 일별 판매량 그래프
+        List<BidProductChartData> chartData = bidHistoryService.getChartData();
+        model.addAttribute("chartData", chartData);
 
         model.addAttribute("list", productList);
         model.addAttribute("nowPage", nowPage);

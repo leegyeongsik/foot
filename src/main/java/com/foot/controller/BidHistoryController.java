@@ -2,6 +2,7 @@ package com.foot.controller;
 
 import com.foot.dto.bidProduct.BidHistoryChartData;
 import com.foot.dto.bidProduct.BidProductChartData;
+import com.foot.dto.bidProduct.BrandBidProductCount;
 import com.foot.repository.BidHistoryRepository;
 import com.foot.repository.BidProductRepository;
 import com.foot.service.BidHistoryService;
@@ -37,8 +38,13 @@ public class BidHistoryController {
     @GetMapping("/view/bpChart")
     public String bidProductChart(Model model) {
         List<BidProductChartData> chartData = bidHistoryService.getChartData();
+        List<BrandBidProductCount> brandBidProductCounts = bidHistoryService.getBrandBidProductCounts();
+
+
         // 그래프 데이터를 모델에 추가
         model.addAttribute("chartData", chartData);
+        model.addAttribute("brandCounts", brandBidProductCounts);
+
 
         return "bidProductChart";  // 그래프를 표시할 HTML 템플릿
     }
