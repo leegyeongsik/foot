@@ -102,16 +102,6 @@ public class BidProduct extends Timestamped{
         this.status = 0;
     }
 
-    //    public void update(BidProductRequestDto requestDto) {
-//        this.expirationPeriod = requestDto.getExpirationPeriod();
-//        this.startPrice = requestDto.getStartPrice();
-//        this.name = requestDto.getName();
-//        this.description = requestDto.getDescription();
-//        this.footpicture = requestDto.getFootPicture();
-//        this.footsize = requestDto.getFootSize();
-//        this.feetsize = requestDto.getFeetSize();
-//    }
-
     public void changeToSell() {
         this.status = 1;
     }

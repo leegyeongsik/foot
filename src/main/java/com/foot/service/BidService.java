@@ -22,8 +22,10 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -68,7 +70,6 @@ public class BidService {
                 .feetsize(requestDto.getFeetSize())
                 .footsize(requestDto.getFootSize())
                 .footpicture(s3UploadService.uploadImage(requestDto.getBidProductFile()))
-                //.footpicture("https://pbs.twimg.com/media/F4NpL4-aQAE3wci?format=jpg&name=mediumhttps://pbs.twimg.com/media/F4NpL4-aQAE3wci?format=jpg&name=medium")
                 .brand(brand)
                 .user(user)
                 .build();
@@ -76,6 +77,7 @@ public class BidService {
         bidProductRepository.save(bidProduct);
         return new BidProductResponseDto(bidProduct, remainingTime);
     }
+
 
 
     // 경매 상품 전체 조회
@@ -92,6 +94,36 @@ public class BidService {
 
         return bidProductResponseDtoList;
     }
+
+    // status가 0인(경매진행중인) 경매상품만 조회
+    @Transactional
+    public List<BidProductResponseDto> getActiveBidProducts() {
+        List<BidProduct> activeBidProducts = bidProductRepository.findByStatus(0); // 상태가 0인 활성 경매 상품 조회
+        checkExpirationPeriod(activeBidProducts);
+
+        // 현재 시간
+        LocalDateTime currentTime = LocalDateTime.now();
+
+        List<BidProductResponseDto> bidProductResponses = activeBidProducts.stream()
+                .map(bidProduct -> {
+                    // 만료 시간
+                    LocalDateTime expirationTime = bidProduct.getExpirationPeriod();
+
+                    // 남은 시간 계산
+                    Duration duration = Duration.between(currentTime, expirationTime);
+
+                    // 남은 시간을 "X일 Y시간 Z분" 형식으로 포맷팅
+                    String remainingTime = formatRemainingTime(duration);
+
+                    // BidProductResponseDto 생성
+                    return new BidProductResponseDto(bidProduct, remainingTime);
+                })
+                .sorted(Comparator.comparing(BidProductResponseDto::getExpirationPeriod)) // 마감시간 기준으로 정렬
+                .collect(Collectors.toList());
+
+        return bidProductResponses;
+    }
+
 
     // 특정 경매 상품 조회
     @Transactional
