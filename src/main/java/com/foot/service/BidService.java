@@ -67,8 +67,8 @@ public class BidService {
                 .description(requestDto.getDescription())
                 .feetsize(requestDto.getFeetSize())
                 .footsize(requestDto.getFootSize())
-                //.footpicture(s3UploadService.uploadImage(requestDto.getBidProductFile()))
-                .footpicture("https://pbs.twimg.com/media/F4NpL4-aQAE3wci?format=jpg&name=mediumhttps://pbs.twimg.com/media/F4NpL4-aQAE3wci?format=jpg&name=medium")
+                .footpicture(s3UploadService.uploadImage(requestDto.getBidProductFile()))
+                //.footpicture("https://pbs.twimg.com/media/F4NpL4-aQAE3wci?format=jpg&name=mediumhttps://pbs.twimg.com/media/F4NpL4-aQAE3wci?format=jpg&name=medium")
                 .brand(brand)
                 .user(user)
                 .build();

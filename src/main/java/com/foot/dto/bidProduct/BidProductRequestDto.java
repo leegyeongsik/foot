@@ -18,10 +18,7 @@ public class BidProductRequestDto {
     private Long feetSize;
     private Long footSize;
 
- //   private MultipartFile bidProductFile;
-//    private String originalFileName; // 원본 파일 이름
-//    private String storedFileName; // 서버 저장용 파일 이름
-//    private int fileAttached; // 파일 첨부 여부 (첨부 1,  미첨부 0)
+    private MultipartFile bidProductFile;
 
     private String brand;
 }

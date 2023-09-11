@@ -64,11 +64,12 @@
         }
 
         .product-image img {
-            max-width: 300px; /* 이미지 크기 조정 */
+            max-width: 50%; /* 이미지 크기 조정 */
             height: auto;
+
             display: block; /* 이미지 중앙 정렬 */
-            margin-left: 37%;
-            margin-top: 5%;
+            margin-left: 30%;
+            margin-top: 30%;
         }
 
         /* .info-box 스타일 */
@@ -77,9 +78,9 @@
             background-color: #f0f0f0;
             padding: 20px;
             border-radius: 5px;
-            max-width: 25%; /* 상자 가로 길이 제한 */
-            margin-top: 8%;
-            margin-right: 15%;
+            max-width: 27%; /* 상자 가로 길이 제한 */
+            margin-top: 10%;
+            margin-right: 13%;
         }
 
         /* .info-header 스타일 */
@@ -95,7 +96,7 @@
 
         .product-name {
             font-size: 15px;
-            margin-left: 20px;
+            margin-left: 15px;
         }
 
         .product-description {
@@ -128,7 +129,7 @@
             font-size: 13px;
             font-weight: normal;
             text-align: left;
-            margin-left: 20px; /* 간격을 왼쪽으로 추가 */
+            margin-left: 15px; /* 간격을 왼쪽으로 추가 */
         }
 
         #currentTopBid {
@@ -137,7 +138,7 @@
         }
 
         .bidding-form-container {
-            margin-top: 2%;
+            margin-top: 3%;
             display: flex;
             justify-content: center; /* 수평 가운데 정렬 */
         }
@@ -145,6 +146,7 @@
 
         /* 입력 필드와 버튼 스타일 */
         input[type="number"] {
+            width: 200px;
             padding: 12px 20px;
             margin: 5px 30px;
             border: 1px solid #ccc;
@@ -158,6 +160,8 @@
             border: none;
             border-radius: 18px;
             cursor: pointer;
+            font-weight: bold;
+            font-size: 15px;
         }
 
         button[type="submit"]:hover {
@@ -183,43 +187,42 @@
 </div>
 <div class="product-info">
     <div class="product-image">
-        <p><img src="https://pbs.twimg.com/media/F4HjRF2bAAAL0ky?format=jpg&name=900x900" alt="Foot Picture"/></p>
+        <p><img th:src="${product.getFootPicture()}" alt="Foot Picture"/></p>
     </div>
     <div class="info-box">
         <div class="info-header">
-            <h4 th:text="${product.brand.name}"></h4>
-            <p class="product-name" th:text="${product.name}"></p>
+<!--            <h4 th:text="${product.brand.name}"></h4>-->
+            <h4 class="product-name" th:text="${product.name}"></h4>
             <p class="product-description" th:text="${product.description}"></p>
         </div>
         <div class="info-body">
-            <p class="info-body-title">Information Detail</p>
             <div class="detail-info">
                 <table>
                     <tr>
-                        <td class="detail-info-label">Author</td>
+                        <td class="detail-info-label">판매자</td>
                         <td class="detail-info-value" th:text="${product.author}"></td>
                     </tr>
                     <tr>
-                        <td class="detail-info-label">Foot Size</td>
+                        <td class="detail-info-label">사이즈</td>
                         <td class="detail-info-value" th:text="${product.footSize}"></td>
                     </tr>
                     <tr>
-                        <td class="detail-info-label">Start Price</td>
-                        <td class="detail-info-value" th:text="${product.startPrice}"></td>
+                        <td class="detail-info-label">시작가격</td>
+                        <td class="detail-info-value" id="startPrice" th:text="${product.startPrice}"></td>
                     </tr>
                     <tr>
-                        <td class="detail-info-label">The Highest bid</td>
+                        <td class="detail-info-label">현재가격</td>
                         <td class="detail-info-value"
                             id="currentTopBid"
                             th:text="${product.topBid != null ? product.topBid.getBidPrice() : '0원'}"></td>
                     </tr>
                     <tr>
-                        <td class="detail-info-label">Auction End</td>
+                        <td class="detail-info-label">마감시간</td>
                         <td class="detail-info-value"
                             th:text="${product.expirationPeriod}"></td>
                     </tr>
                     <tr>
-                        <td class="detail-info-label">Time Remaining</td>
+                        <td class="detail-info-label">남은시간</td>
                         <td class="detail-info-value"
                             th:text="${product.remainingTime}"></td>
                     </tr>
@@ -231,8 +234,8 @@
 <div class="bidding-form-container">
     <div class="bidding-form">
         <form th:action="@{'/api/bid/' + ${product.id}}" method="post" onsubmit="return confirmBid()" id="bidForm">
-            <input type="number" name="bidPrice" id="bidPrice">
-            <button type="submit">CONFIRMED</button>
+            <input type="number" name="bidPrice" id="bidPrice" placeholder="입찰할 가격을 입력해주세요.">
+            <button type="submit">입찰하기</button>
         </form>
     </div>
 </div>
@@ -242,6 +245,7 @@
     function validateBid() {
         var bidPriceInput = document.getElementById("bidPrice");
         var currentTopBid = parseFloat(document.getElementById("currentTopBid").textContent); // 현재 최고 입찰가를 가져옵니다. 문자열을 숫자로 변환해야 합니다.
+        var startPrice = parseFloat(document.getElementById("startPrice").textContent); // 시작 가격을 가져옵니다.
 
         if (isNaN(currentTopBid)) {
             Swal.fire({
@@ -264,6 +268,16 @@
             console.log(userBid);
             return false;
         }
+
+        if (userBid < startPrice) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: '시작 가격보다 낮은 가격을 입찰할 수 없습니다.'
+            });
+            return false;
+        }
+
 
         if (userBid <= currentTopBid) {
             Swal.fire({
@@ -300,6 +314,7 @@
 
         return false; // 폼 제출 방지
     }
+
 
 </script>
 </html>
