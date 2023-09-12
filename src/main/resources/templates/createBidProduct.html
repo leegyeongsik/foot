@@ -171,8 +171,8 @@
             foot
         </div>
         <div class="NavItem" id="shoes_id" onclick="location.href='/view/home'">shoes</div>
-        <div class="NavItem">Auction</div>
-        <div class="NavItem">favourite</div>
+        <div class="NavItem" onclick="location.href='/view/bp'" >Auction</div>
+        <div class="NavItem" onclick="location.href ='/product/favorite'">favourite</div>
         <div class="NavItem" onclick="location.href='/view/myPage'">MyPage</div>
         <div class="NavItem" onclick="logoutUser()">SIGNOUT</div>
     </div>
@@ -237,6 +237,29 @@
 </form>
 </body>
 <script>
+
+    const Toast = Swal.mixin({
+        toast: true,
+        position: 'center-center',
+        showConfirmButton: false,
+        timer: 600,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+            toast.addEventListener('mouseenter', Swal.stopTimer)
+            toast.addEventListener('mouseleave', Swal.resumeTimer)
+        }
+    })
+
+    // 로그아웃
+    function logoutUser() {
+        Cookies.remove('Authorization', {path: '/'});
+        Toast.fire({
+            icon: 'success',
+            title: '로그아웃을 성공하였습니다! \n 사이트 이용을 원하시면 로그인 부탁드립니다.'
+        }).then(function () {
+            window.location.href = "/";
+        })
+    }
     function previewImage(input) {
         const imagePreview = document.getElementById('imagePreview');
         if (input.files && input.files[0]) {

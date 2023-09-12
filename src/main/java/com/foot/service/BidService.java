@@ -19,10 +19,7 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -121,6 +118,47 @@ public class BidService {
 
         return bidProductResponses;
     }
+
+    // 브랜드 별 경매 상품 조회
+    @Transactional
+    public List<BidProductResponseDto> getBidProductsByBrand(Long brandId) {
+        Optional<Brand> brand = brandRepository.findById(brandId);
+
+        if (brand.isPresent()) {
+            // Brand가 존재하는 경우
+            Brand targetBrand = brand.get();
+
+            List<BidProduct> activeBidProducts = bidProductRepository.findByStatusAndBrand(0, targetBrand); // 상태가 0이고 특정 Brand에 속한 활성 경매 상품 조회
+            checkExpirationPeriod(activeBidProducts);
+
+            // 현재 시간
+            LocalDateTime currentTime = LocalDateTime.now();
+
+            List<BidProductResponseDto> bidProductResponses = activeBidProducts.stream()
+                    .map(bidProduct -> {
+                        // 만료 시간
+                        LocalDateTime expirationTime = bidProduct.getExpirationPeriod();
+
+                        // 남은 시간 계산
+                        Duration duration = Duration.between(currentTime, expirationTime);
+
+                        // 남은 시간을 "X일 Y시간 Z분" 형식으로 포맷팅
+                        String remainingTime = formatRemainingTime(duration);
+
+                        // BidProductResponseDto 생성
+                        return new BidProductResponseDto(bidProduct, remainingTime);
+                    })
+                    .sorted(Comparator.comparing(BidProductResponseDto::getExpirationPeriod)) // 마감시간 기준으로 정렬
+                    .collect(Collectors.toList());
+
+            return bidProductResponses;
+        } else {
+            // Brand가 존재하지 않는 경우에 대한 처리를 여기에 추가할 수 있습니다.
+            // 예를 들어 예외를 던지거나 빈 리스트를 반환하거나 다른 작업을 수행할 수 있습니다.
+            return Collections.emptyList(); // Brand가 없는 경우 빈 리스트 반환
+        }
+    }
+
 
 
     // 특정 경매 상품 조회

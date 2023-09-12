@@ -3,6 +3,7 @@ package com.foot.repository;
 import com.foot.dto.bidProduct.BidProductChartData;
 import com.foot.dto.bidProduct.BrandBidProductCount;
 import com.foot.entity.BidProduct;
+import com.foot.entity.Brand;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -37,4 +38,5 @@ public interface BidProductRepository extends JpaRepository<BidProduct, Long> {
     Page<BidProduct> findByNameContaining(String searchKeyword, Pageable pageable);
 
 
+    List<BidProduct> findByStatusAndBrand(int status, Brand brand);
 }
