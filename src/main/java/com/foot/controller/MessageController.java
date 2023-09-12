@@ -56,7 +56,7 @@ public class MessageController {
             }
             HashMap<String, String> adminMsg = new HashMap<>();
             adminMsg.put("channelId" , String.valueOf(enterExitMessageRequestDto.getChannelIDs()));
-            adminMsg.put("adminChannelCnt" , String.valueOf(chatLogRepository.getMessageLeadCount(channel.getId())));
+            adminMsg.put("adminChannelCnt" , "0");
             ObjectMapper mapper = new ObjectMapper();
             String messageJsons = mapper.writeValueAsString(adminMsg);
             template.convertAndSend("/topic/api/channel", messageJsons);
