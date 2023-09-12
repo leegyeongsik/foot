@@ -373,7 +373,7 @@
     </div>
     <div class="NavList">
       <div class="NavItem" id = "shoes_id">shoes</div>
-      <div class="NavItem">Auction</div>
+      <div class="NavItem" id ="auction_id">Auction</div>
       <div class="NavItem" id="favorite">favourite</div>
       <div class="NavItem" id = "signup">signup</div>
       <div class="NavItem" id = "signin">signin</div>
@@ -455,7 +455,7 @@
     if (auth != null) {
       $('.NavList').empty();
       temp_Navi = `<div class="NavItem" id="shoes_id">shoes</div>
-            <div class="NavItem">Auction</div>
+            <div class="NavItem" id ="auction_id">Auction</div>
             <div class="NavItem" id="favorite">favourite</div>
             <div class="NavItem" id="my-page">info</div>
             <div class="NavItem" id="signout">signOut</div>`
@@ -612,7 +612,6 @@
 
     $(document).on('click',"div[id='shoes_id']" , function (e) { // 신발 누르면 해당 사이즈 출력
       window.location.href=`/view/home`
-
     })
     $(document).on('click',"div[id='signup']" , function (e) { // 보드 상세 페이지 이동
       e.preventDefault();
@@ -641,6 +640,11 @@
       e.preventDefault();
       window.location.href = `/view/myPage`
     })
+    $(document).on('click',"div[id='auction_id']" , function (e) { // 보드 상세 페이지 이동
+      e.preventDefault();
+      window.location.href = `/view/bp`;
+    })
+
 
     // 해야할거 장바구니 , 댓글 , 각종 헤드 연결 , Shoses_size_confirm 데이터 주기 , 장바구니에 담을때 해당 신발 id값 으로 찾아서 담아주기
     // 나중에 jwt 쿠키 있는지 확인하고 로그인 후 구매하기 -> 장바구니 담기
