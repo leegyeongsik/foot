@@ -224,4 +224,16 @@
     </div>
 </div>
 </body>
+<script>
+    // 로그아웃
+    function logoutUser() {
+        Cookies.remove('Authorization', {path: '/'});
+        Toast.fire({
+            icon: 'success',
+            title: '로그아웃을 성공하였습니다! \n 사이트 이용을 원하시면 로그인 부탁드립니다.'
+        }).then(function () {
+            window.location.href = "/view/login-page"
+        })
+    }
+</script>
 </html>
