@@ -13,6 +13,7 @@ import java.util.List;
 public class BrandController {
 
     private BrandService brandService;
+
     public BrandController(BrandService brandService) {
         this.brandService = brandService;
     }

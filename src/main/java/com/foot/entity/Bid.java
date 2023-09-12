@@ -40,7 +40,7 @@ public class Bid extends Timestamped{
      */
 
     public Bid(BidRequestDto requestDto, BidProduct bidProduct, User user) {
-        bidPrice = requestDto.getBidPrice();
+        this.bidPrice = requestDto.getBidPrice();
         this.user = user;
         this.bidProduct = bidProduct;
     }
@@ -60,6 +60,10 @@ public class Bid extends Timestamped{
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public void setBidProduct(BidProduct bidProduct) {
+        this.bidProduct = bidProduct;
     }
 
     /**
