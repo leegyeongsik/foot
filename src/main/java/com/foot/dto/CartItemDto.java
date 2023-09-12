@@ -7,7 +7,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class CartItemDto {
+public class CartItemDto { // 해당 컬러의 아이디값
     @NotNull(message = "상품 아이디는 필수 입력 값 입니다.")
     private Long itemId;
 

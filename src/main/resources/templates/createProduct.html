@@ -684,7 +684,7 @@
         const productName = document.getElementById("mark25").value; // 파일 input 요소
         const producttotalAmount = document.getElementById("mark26").value; // 파일 input 요소
         const productPrice = document.getElementById("mark29").value; // 파일 input 요소
-
+        const produchBrand = document.getElementById("mark27").value;
         const productdescription = document.getElementById("mark28").value; // 파일 input 요소
 
 
@@ -692,7 +692,7 @@
         formData.append('ModelPicture', productImg.files[0]);
         formData.append('name', productName);
         formData.append('price', productPrice);
-        // formData.append('price', productPrice); 브랜드
+        formData.append('brand', produchBrand);
         formData.append('description', productdescription);
         formData.append('totalAmount', producttotalAmount);
         formData.append('modelSize', ProductSize);

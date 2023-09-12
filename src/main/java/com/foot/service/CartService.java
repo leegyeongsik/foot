@@ -3,9 +3,9 @@ package com.foot.service;
 import com.foot.dto.CartItemDto;
 import com.foot.dto.CartResponseDto;
 import com.foot.entity.*;
-import com.foot.repository.CartItemRepository;
-import com.foot.repository.CartRepository;
-import com.foot.repository.products.ProductSizeRepository;
+import com.foot.repository.cart.CartItemRepository;
+import com.foot.repository.cart.CartRepository;
+import com.foot.repository.products.ProductColorRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -22,12 +23,12 @@ public class CartService {
 
     private final CartRepository cartRepository;
     private final CartItemRepository cartItemRepository;
-    private final ProductSizeRepository productSizeRepository;
+    private final ProductColorRepository productColorRepository;
 
     // 장바구니 상품 추가
     @Transactional
     public Long addCart(User user, CartItemDto cartItemDto) {
-        ProductSize productSize = productSizeRepository.findById(cartItemDto.getItemId()).orElseThrow(
+        ProductColor productColor = productColorRepository.findById(cartItemDto.getItemId()).orElseThrow(
                 () -> new IllegalArgumentException("존재하지 않는 상품입니다.")
         );
 
@@ -40,7 +41,7 @@ public class CartService {
             cartRepository.save(cart);
         }
 
-        CartItem savedCartItem = cartItemRepository.findByCartIdAndProductSizeId(cart.getId(), productSize.getId());
+        CartItem savedCartItem = cartItemRepository.findByCartIdAndProductColorId(cart.getId(), productColor.getId());
 
 
         if (savedCartItem != null) {
@@ -115,9 +116,11 @@ public class CartService {
 
     // CartItem 엔티티를 CartResponseDto로 매핑하는 메서드
     private CartResponseDto mapToCartResponseDto(CartItem cartItem) {
-        ProductSize productSize = cartItem.getProductSize();
-        Product product = productSize.getProduct();
 
+        Map<ProductSize, ProductColor> sizeProductColorMap =cartItemRepository.getModelSizeOfColor(cartItem.getProductColor().getId(),cartItem.getId());
+        ProductSize productSize = (ProductSize) sizeProductColorMap.keySet().toArray()[0];
+        ProductColor productColor=sizeProductColorMap.get(productSize);
+        Product product= productSize.getProduct();
         // 할인중일 경우 할인된 가격을 매핑하고 할인중이 아니면 그냥 price를 매핑한다.
         Long price = product.getDiscountPrice() != null ? product.getDiscountPrice() : product.getPrice();
 
@@ -128,9 +131,8 @@ public class CartService {
                 productSize.getSize(),
                 price,
                 cartItem.getCount(),
-                product.getModelpicture()
-        );
+                product.getModelpicture(),
+                productColor.getId()
+                );
     }
-
-
 }

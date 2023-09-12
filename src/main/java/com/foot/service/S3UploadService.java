@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.awt.*;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
@@ -30,6 +31,7 @@ import java.util.UUID;
 public class S3UploadService {
 
     private static final String S3_BUCKET_DIRECTORY_NAME = "shoes";
+    private static final String S3_BUCKET_DIRECTORY_MESSAGE_NAME = "messageimg";
 
     private final AmazonS3Client amazonS3Client;
 
@@ -63,4 +65,14 @@ public class S3UploadService {
         System.out.println(filename);
         amazonS3Client.deleteObject(new DeleteObjectRequest(bucket, filename));
     }
+
+
+    public String uploadMsgImage(File file , String username) throws IOException  {
+
+        String fileName = S3_BUCKET_DIRECTORY_MESSAGE_NAME + "/" + UUID.randomUUID() + "." + username;
+        amazonS3Client.putObject(new PutObjectRequest(bucket, fileName, file)
+                    .withCannedAcl(CannedAccessControlList.PublicRead));
+        return URLDecoder.decode(amazonS3Client.getUrl(bucket, fileName).toString(), "utf-8");
+    }
+
 }

@@ -215,6 +215,159 @@
             cursor: pointer;
 
         }
+
+
+        #openChatButton {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 10px 20px;
+            background-color: #0084FF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #chatWrap {
+            position: fixed;
+            bottom: 80px; /* 조정된 값 */
+            right: 20px;
+            width: 400px;
+            background-color: #f0f0f0;
+            border-radius: 5px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+            display: none;
+            /* Additional styling as needed */
+        }
+        #openChatButtonContainer {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            display: flex;
+            align-items: center;
+        }
+
+
+
+        #notificationBubble {
+            position: fixed;
+            bottom: 43px; /* Adjust the top position */
+            right: 10px;
+            background-color: red;
+            color: white;
+            padding: 2px 7px;
+            border-radius: 50%;
+        }
+
+
+        /* Chat header styles */
+        #chatHeader {
+            background-color: #0084FF;
+            color: white;
+            text-align: center;
+            padding: 10px;
+            border-radius: 5px 5px 0 0;
+        }
+
+        /* Chat log styles */
+        #chatLog {
+            height: 300px;
+            overflow-y: auto;
+            padding: 10px;
+        }
+
+        /* Chat message styles */
+        .msg {
+            display: inline-block;
+            border-radius: 15px;
+            padding: 7px 15px;
+            margin-bottom: 10px;
+            margin-top: 5px;
+            background-color: white;
+        }
+
+        .anotherMsg > .msg {
+            background-color: #f1f0f0;
+        }
+
+        .myMsg > .msg {
+            background-color: #0084FF;
+            color: white;
+        }
+
+        /* Chat form styles */
+        #chatForm {
+            padding: 10px;
+            display: flex;
+            border-top: 1px solid #ddd;
+            border-radius: 0 0 5px 5px;
+        }
+
+        #message {
+            flex: 1;
+            height: 30px;
+            border: none;
+            padding: 5px;
+            border-radius: 5px;
+        }
+
+        #message:focus {
+            outline: none;
+        }
+        .file-input-label {
+            display: inline-block;
+            background-color: #23a3a7;
+            color: #fff;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            overflow: hidden;
+        }
+
+        .file-input {
+            position: absolute;
+            width: 30%;
+            height: 30%;
+            top: 0;
+            left: 0;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+
+        .filename {
+            display: inline-block;
+            padding-left: 10px;
+            font-size: 12px;
+        }
+
+        #chatForm > input[type=submit] {
+            outline: none;
+            border: none;
+            background: none;
+            color: #0084FF;
+            font-size: 14px; /* Adjust font size */
+            padding: 5px 10px; /* Adjust padding to change button size */
+        }
+        .box-file-input {
+            display: inline-block;
+            background-color: #23a3a7;
+            color: #fff;
+            padding: 5px 10px; /* Adjust padding to change button size */
+            line-height: 30px; /* Adjust line-height to vertically center text */
+            cursor: pointer;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+
+        .label-text {
+            display: inline-block;
+            vertical-align: middle;
+            font-size: 14px;
+        }
+
     </style>
 </head>
 <body>
@@ -228,7 +381,7 @@
         <div class="NavList">
             <div class="NavItem" id = "shoes_id">shoes</div>
             <div class="NavItem">Auction</div>
-            <div class="NavItem">favourite</div>
+            <div class="NavItem" id="favorite">favourite</div>
             <div class="NavItem" id = "signup">signup</div>
             <div class="NavItem" id = "signin">signin</div>
         </div>
@@ -236,19 +389,9 @@
     <div class="Sidebar">
         <div class="SidebarTitle">
             brand
-            <!-- <span class="SortText">정렬 기준</span> -->
         </div>
-        <!-- <div class="SortButtons" id="sortButtons">
-            <div>높은 가격</div>
-            <div>낮은 가격</div>
+        <div class="sidebar-container">
         </div>
-        <div class="SortButtons">
-            <label><input type="radio" name="sort" value="high">높은 가격</label>
-            <label><input type="radio" name="sort" value="low">낮은 가격</label>
-        </div> -->
-        <div class="SidebarItem">Category 1</div>
-        <div class="SidebarItem">Category 2</div>
-        <div class="SidebarItem">Category 3</div>
         <div class="SearchBox">
             <div class="SearchContainer">
                 <input id="gettext"type="text" placeholder="Search...">
@@ -265,6 +408,7 @@
 
 
 </div>
+<div id="footers"></div>
 
 </div>
 
@@ -275,29 +419,116 @@
     console.log(auth)
 
     $(document).ready(function () {
-        if (auth != null){
+        if (auth != null){ // ture인지 펄스인지
             $('.NavList').empty();
             temp_Navi = `<div class="NavItem" id="shoes_id">shoes</div>
-            <div class="NavItem" onclick="location.href='/view/bp'">Auction</div>
-            <div class="NavItem">favourite</div>
-            <div class="NavItem" id="signup">signup</div>
+            <div class="NavItem">Auction</div>
+            <div class="NavItem" id="favorite">favourite</div>
+            <div class="NavItem" id="my-page">info</div>
             <div class="NavItem" id="signout">signOut</div>`
             $('.NavList').append(temp_Navi)
-        }
-        $.ajax({
-            url: `/api/product`,
-            type: 'GET',
-            contentType: 'application/json',
-            headers: {
-                // 'Authorization': Cookies.get('Authorization') // 클라이언트 쿠키의 값을 전달
-            },
-            success: function (response) {
-                if (response) {
-                    var list = response
-                    for (var i = 0; i < list.length; i++) {
-                        var Products= `
+            $("#footers").load(`/Chats`); //
+            $.ajax({
+                url: `/api/product`,
+                type: 'GET',
+                contentType: 'application/json',
+                headers: {
+                    // 'Authorization': Cookies.get('Authorization') // 클라이언트 쿠키의 값을 전달
+                },
+                success: function (response) {
+                    if (response) {
+                        console.log(response)
+                        var list = response.productResponseDtos
+                        var brandList = response.brandResponseDtos
+                        $('.sidebar-container').empty()
+                        for (let i = 0; i < brandList.length; i++) {
+                            brand=`<div class="SidebarItem">${brandList[i].name}</div>`
+                            $(".sidebar-container").append(brand)
+                        }
+                        for (var i = 0; i < list.length; i++) {
+                            if(list[i].isAppend == true){
+                                var Products= `
+                                <div class="item"  style="border: 1px solid #EE312F; background-color: #ffffff;">
+                                    <img class ="click_img" id = ${list[i].productId} src="${list[i].modelPicture}">
+                                    <div class="ItemDetails"> <!-- 선을 div로 감싸서 스타일을 제어 -->
+                                        <hr> <!-- 선 추가 -->
+                                        <div class="DivCThumbnailInfo">
+                                            <div class="Heading3" style="display: flex; justify-content: space-between; align-items: center;">
+                                                <div class="Barand1" style="margin-left: 5px; color: #EE312F;">Brand Name 1</div>
+                                                <div class="PriceAndCheckbox"
+                                                     style="display: flex; align-items: center; display: flex;align-items: center;flex-direction: row-reverse;">
+
+                                                    <div class="PCThumbnailPrice" style="margin-right: 5px; color: #EE312F;">${list[i].price}</div>
+                                                    <div class="check_wrap" style="left: 5px;">
+                                                        <input class="checkboxs" id = "productcheckId_${list[i].productId}"type="checkbox" checked/>
+                                                        <label htmlFor="check_btn"></label>
+                                                    <button class="btnsssssssssssss"style="background-color: #ffffff; border: #ffffff; position:relative; bottom: 2px;"  type="button" id = "productcheckId_${list[i].productId}">+</button>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="Laangels">${list[i].modelName}</div>
+                                        </div>
+                                    </div>
+                                </div>`
+                                $('.DivOLayout').append(Products);
+                            } else {
+                                var Products= `
+                                <div class="item"  style="border: 1px solid #EE312F; background-color: #ffffff;">
+                                    <img class ="click_img" id = ${list[i].productId} src="${list[i].modelPicture}">
+                                    <div class="ItemDetails"> <!-- 선을 div로 감싸서 스타일을 제어 -->
+                                        <hr> <!-- 선 추가 -->
+                                        <div class="DivCThumbnailInfo">
+                                            <div class="Heading3" style="display: flex; justify-content: space-between; align-items: center;">
+                                                <div class="Barand1" style="margin-left: 5px; color: #EE312F;">Brand Name 1</div>
+                                                <div class="PriceAndCheckbox"
+                                                     style="display: flex; align-items: center; display: flex;align-items: center;flex-direction: row-reverse;">
+
+                                                    <div class="PCThumbnailPrice" style="margin-right: 5px; color: #EE312F;">${list[i].price}</div>
+                                                    <div class="check_wrap" style="left: 5px;">
+                                                        <input class="checkboxs" id = "productcheckId_${list[i].productId}"type="checkbox"/>
+                                                        <label htmlFor="check_btn"></label>
+                                                    <button class="btnsssssssssssss"style="background-color: #ffffff; border: #ffffff; position:relative; bottom: 2px;"  type="button" id = "productcheckId_${list[i].productId}">+</button>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="Laangels">${list[i].modelName}</div>
+                                        </div>
+                                    </div>
+
+                                </div>`
+                                $('.DivOLayout').append(Products);
+                            }
+                        }
+                    }
+                },
+                error: function () {
+                    console.log("실패")
+                }
+            })
+        } else {
+
+            $.ajax({
+                url: `/api/product`,
+                type: 'GET',
+                contentType: 'application/json',
+                headers: {
+                    // 'Authorization': Cookies.get('Authorization') // 클라이언트 쿠키의 값을 전달
+                },
+                success: function (response) {
+                    if (response) {
+                        var list = response.productResponseDtos
+                        var brandList = response.brandResponseDtos
+                        $('.sidebar-container').empty()
+                        for (let i = 0; i < brandList.length; i++) {
+                            brand=`<div class="SidebarItem">${brandList[i].name}</div>`
+                            $(".sidebar-container").append(brand)
+                        }
+                        for (var i = 0; i < list.length; i++) {
+                            var Products= `
                             <div class="item"  style="border: 1px solid #EE312F; background-color: #ffffff;">
-                                <img class ="click_img" id = ${list[i].productId} src=${list[i].modelPicture}>
+                                <img class ="click_img" id = ${list[i].productId} src="${list[i].modelPicture}">
                                 <div class="ItemDetails"> <!-- 선을 div로 감싸서 스타일을 제어 -->
                                     <hr> <!-- 선 추가 -->
                                     <div class="DivCThumbnailInfo">
@@ -306,24 +537,23 @@
                                             <div class="PriceAndCheckbox"
                                                  style="display: flex; align-items: center; display: flex;align-items: center;flex-direction: row-reverse;">
                                                 <div class="PCThumbnailPrice" style="margin-right: 5px; color: #EE312F;">${list[i].price}</div>
-                                                <div class="check_wrap" style="left: 5px;">
-                                                    <input type="checkbox" />
-                                                    <label htmlFor="check_btn"></label>
-                                                </div>
                                             </div>
                                         </div>
                                         <div class="Laangels">${list[i].modelName}</div>
                                     </div>
                                 </div>
                             </div>`
-                        $('.DivOLayout').append(Products);
+                            $('.DivOLayout').append(Products);
+
+                        }
                     }
+                },
+                error: function () {
+                    console.log("실패")
                 }
-            },
-            error: function () {
-                console.log("실패")
-            }
-        })
+            })
+        }
+
         $(document).on('click',"button[class='search']" , function (e) { // 유저 검색
             e.preventDefault();
             var text =document.getElementById("gettext").value;
@@ -368,6 +598,110 @@
                 }
             })
         })
+        $(document).on('click',"div[class='sidebar-container']" , function (e) { // 보드 상세 페이지 이동
+            e.preventDefault();
+            var brand = e.target.innerText
+            // console.log(tagId);
+
+            $.ajax({
+                url: `/api/product/?brand=${brand}`,
+                type: 'GET',
+                contentType: 'application/json',
+                headers: {
+                    // 'Authorization': Cookies.get('Authorization') // 클라이언트 쿠키의 값을 전달
+                },
+                success: function (response) {
+                    if (response) {
+                        // console.log(response)
+                        if(auth != null){
+                            var list = response
+                            $('.DivOLayout').empty();
+                            for (var i = 0; i < list.length; i++) {
+                                if(list[i].isAppend == true){
+                                    var Products= `
+                                <div class="item"  style="border: 1px solid #EE312F; background-color: #ffffff;">
+                                    <img class ="click_img" id = ${list[i].productId} src="${list[i].modelPicture}">
+                                    <div class="ItemDetails"> <!-- 선을 div로 감싸서 스타일을 제어 -->
+                                        <hr> <!-- 선 추가 -->
+                                        <div class="DivCThumbnailInfo">
+                                            <div class="Heading3" style="display: flex; justify-content: space-between; align-items: center;">
+                                                <div class="Barand1" style="margin-left: 5px; color: #EE312F;">Brand Name 1</div>
+                                                <div class="PriceAndCheckbox"
+                                                     style="display: flex; align-items: center; display: flex;align-items: center;flex-direction: row-reverse;">
+
+                                                    <div class="PCThumbnailPrice" style="margin-right: 5px; color: #EE312F;">${list[i].price}</div>
+                                                    <div class="check_wrap" style="left: 5px;">
+                                                        <input class="checkboxs" id = "productcheckId_${list[i].productId}"type="checkbox" checked/>
+                                                        <label htmlFor="check_btn"></label>
+                                                    <button class="btnsssssssssssss"style="background-color: #ffffff; border: #ffffff; position:relative; bottom: 2px;"  type="button" id = "productcheckId_${list[i].productId}">+</button>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="Laangels">${list[i].modelName}</div>
+                                        </div>
+                                    </div>
+                                </div>`
+                                    $('.DivOLayout').append(Products);
+                                } else {
+                                    var Products= `
+                                <div class="item"  style="border: 1px solid #EE312F; background-color: #ffffff;">
+                                    <img class ="click_img" id = ${list[i].productId} src="${list[i].modelPicture}">
+                                    <div class="ItemDetails"> <!-- 선을 div로 감싸서 스타일을 제어 -->
+                                        <hr> <!-- 선 추가 -->
+                                        <div class="DivCThumbnailInfo">
+                                            <div class="Heading3" style="display: flex; justify-content: space-between; align-items: center;">
+                                                <div class="Barand1" style="margin-left: 5px; color: #EE312F;">Brand Name 1</div>
+                                                <div class="PriceAndCheckbox"
+                                                     style="display: flex; align-items: center; display: flex;align-items: center;flex-direction: row-reverse;">
+
+                                                    <div class="PCThumbnailPrice" style="margin-right: 5px; color: #EE312F;">${list[i].price}</div>
+                                                    <div class="check_wrap" style="left: 5px;">
+                                                        <input class="checkboxs" id = "productcheckId_${list[i].productId}"type="checkbox"/>
+                                                        <label htmlFor="check_btn"></label>
+                                                    <button class="btnsssssssssssss"style="background-color: #ffffff; border: #ffffff; position:relative; bottom: 2px;"  type="button" id = "productcheckId_${list[i].productId}">+</button>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="Laangels">${list[i].modelName}</div>
+                                        </div>
+                                    </div>
+
+                                </div>`
+                                    $('.DivOLayout').append(Products);
+                                }
+                            }
+                        }else {
+                            var list = response
+                            $('.DivOLayout').empty();
+
+                            for (var i = 0; i < list.length; i++) {
+                                var Products= `
+                            <div class="item"  style="border: 1px solid #EE312F; background-color: #ffffff;">
+                                <img class ="click_img" id = ${list[i].productId} src="${list[i].modelPicture}">
+                                <div class="ItemDetails"> <!-- 선을 div로 감싸서 스타일을 제어 -->
+                                    <hr> <!-- 선 추가 -->
+                                    <div class="DivCThumbnailInfo">
+                                        <div class="Heading3" style="display: flex; justify-content: space-between; align-items: center;">
+                                            <div class="Barand1" style="margin-left: 5px; color: #EE312F;">Brand Name 1</div>
+                                            <div class="PriceAndCheckbox"
+                                                 style="display: flex; align-items: center; display: flex;align-items: center;flex-direction: row-reverse;">
+                                                <div class="PCThumbnailPrice" style="margin-right: 5px; color: #EE312F;">${list[i].price}</div>
+                                            </div>
+                                        </div>
+                                        <div class="Laangels">${list[i].modelName}</div>
+                                    </div>
+                                </div>
+                            </div>`
+                                $('.DivOLayout').append(Products);
+                            }
+                        }
+
+                    }
+                }
+            })
+        })
         $(document).on('click',"img[class='click_img']" , function (e) { // 보드 상세 페이지 이동
             e.preventDefault();
             var tagId = e.target.id
@@ -390,11 +724,64 @@
             Cookies.remove('Authorization', {path: '/'});
             window.location.href = ""
         })
+        $(document).on('click',"div[id='favorite']" , function (e) { // 보드 상세 페이지 이동
+            e.preventDefault();
+            window.location.href = `/Product/favorite`
+        })
+        $(document).on('click',"div[id='my-page']" , function (e) { // 보드 상세 페이지 이동
+            e.preventDefault();
+            window.location.href = `/view/myPage`
+        })
+        $(document).on('click',"div[id='shoes_id']" , function (e) { // 보드 상세 페이지 이동
+            e.preventDefault();
+            location.reload();
+        })
+        $(document).on('click',"button[class='btnsssssssssssss']" , function (e) { // 보드 상세 페이지 이동
+            e.preventDefault();
+            var tagId = e.target.id
+            // console.log(tagId)
+            var regex = /[^0-9]/g;
+            var ProductId = tagId.replace(regex, "");
+
+            var checked =  $(`#${tagId}`).is(':checked');
+
+            console.log(checked)
+            if(checked == true){
+                $(`#${tagId}`).prop('checked',!checked);
+
+                $.ajax({
+                    url: `/api/product/${ProductId}/favorite`,
+                    type: 'DELETE',
+                    contentType: 'application/json',
+                    headers: {
+                        // 'Authorization': Cookies.get('Authorization') // 클라이언트 쿠키의 값을 전달
+                    },
+                    success: function (response) {
+                        if (response) {
+                            }
+                        }
+                })
+            } else {
+                $(`#${tagId}`).prop('checked',!checked);
+                $.ajax({
+                    url: `/api/product/${ProductId}/favorite`,
+                    type: 'POST',
+                    contentType: 'application/json',
+                    headers: {
+                        // 'Authorization': Cookies.get('Authorization') // 클라이언트 쿠키의 값을 전달
+                    },
+                    success: function (response) {
+                        if (response) {
+                            // console.log(response)
+                        }
+                    }
+                })
+            }
+        })
 
 
     })
 
 
-    // 해야할거: 브랜드 받아오기 브랜드연결 각종 헤드 연결
 </script>
 </html>

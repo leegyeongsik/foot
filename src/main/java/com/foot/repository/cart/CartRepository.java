@@ -1,4 +1,4 @@
-package com.foot.repository;
+package com.foot.repository.cart;
 
 import com.foot.entity.Cart;
 import org.springframework.data.jpa.repository.JpaRepository;
