@@ -420,7 +420,13 @@
                   tempssss.innerText ="이미지"
                 }
                 let tempssssssss=document.getElementById(`chatcnt_${receive.channelId}`)
-                tempssssssss.innerText = `${receive.adminChannelCnt}`
+                console.log(receive)
+                console.log(`${receive.adminChannelCnt}`)
+                if(`${receive.adminChannelCnt}` == "undefined"){
+                  tempssssssss.innerText="0"
+                } else {
+                  tempssssssss.innerText = `${receive.adminChannelCnt}`
+                }
               });
             }, function(error) {
               alert("error"+error);

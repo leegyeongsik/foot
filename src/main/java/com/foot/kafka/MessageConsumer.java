@@ -28,7 +28,6 @@ public class MessageConsumer {
         msg.put("img", message.getMessageImg());
         msg.put("channelId", Long.toString(message.getChannelId()));
 
-        msg.put("adminChannelCnt" , "0"); // 두명이 같이있다는거니까 둘다 읽은 상태이므로 cnt는 0
         ObjectMapper mapper = new ObjectMapper();
         String messageJson = mapper.writeValueAsString(msg);
 //        log.info("messageJson='{}'", messageJson);
