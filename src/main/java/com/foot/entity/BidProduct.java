@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -12,6 +13,7 @@ import java.util.List;
 
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor
 @Table(name = "bidproduct")
 public class BidProduct extends Timestamped{
@@ -36,9 +38,6 @@ public class BidProduct extends Timestamped{
 
     @Column(name = "footpicture")
     private String footpicture;
-
-    @Column(name = "predictfootpicture")
-    private String predictfootpicture;
 
     @Column(name = "footsize")
     private Long footsize;
@@ -101,16 +100,6 @@ public class BidProduct extends Timestamped{
         this.user = user;
         this.status = 0;
     }
-
-    //    public void update(BidProductRequestDto requestDto) {
-//        this.expirationPeriod = requestDto.getExpirationPeriod();
-//        this.startPrice = requestDto.getStartPrice();
-//        this.name = requestDto.getName();
-//        this.description = requestDto.getDescription();
-//        this.footpicture = requestDto.getFootPicture();
-//        this.footsize = requestDto.getFootSize();
-//        this.feetsize = requestDto.getFeetSize();
-//    }
 
     public void changeToSell() {
         this.status = 1;

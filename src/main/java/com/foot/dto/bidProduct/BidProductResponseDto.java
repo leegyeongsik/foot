@@ -56,15 +56,6 @@ public class BidProductResponseDto {
             this.topBid = new Bid();
             this.topBid.setBidPrice(0L); // 현재 최고 제시가 0원으로 설정
         }
-        // topBid 설정 (경매 제시가가 아직 없을 경우 처리)
-//        if (bidProduct.getTopBid() != null) {
-//            this.topBid = bidProduct.getTopBid();
-//        } else {
-//            // topBid가 없을 때 topBid 제시자는 경매상품 등록자로, 가격은 startPrice로 설정
-//            this.topBid = new Bid();
-//            this.topBid.setUser(bidProduct.getUser());
-//            this.topBid.setBidPrice(bidProduct.getStartPrice());
-//        }
 
         this.status = bidProduct.getStatus();
 
@@ -97,15 +88,6 @@ public class BidProductResponseDto {
             this.topBid = new Bid();
             this.topBid.setBidPrice(0L); // 현재 최고 제시가 0원으로 설정
         }
-        // topBid 설정 (경매 제시가가 아직 없을 경우 처리)
-//        if (bidProduct.getTopBid() != null) {
-//            this.topBid = bidProduct.getTopBid();
-//        } else {
-//            // topBid가 없을 때 topBid 제시자는 경매상품 등록자로, 가격은 startPrice로 설정
-//            this.topBid = new Bid();
-//            this.topBid.setUser(bidProduct.getUser());
-//            this.topBid.setBidPrice(bidProduct.getStartPrice());
-//        }
 
         this.status = bidProduct.getStatus();
 

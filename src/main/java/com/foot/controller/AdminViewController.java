@@ -1,11 +1,15 @@
 package com.foot.controller;
 
+import com.foot.dto.bidProduct.BidProductChartData;
+import com.foot.dto.bidProduct.BrandBidProductCount;
 import com.foot.dto.bidProduct.BrandResponseDto;
+import com.foot.entity.BidProduct;
 import com.foot.entity.Product;
 import com.foot.entity.User;
 import com.foot.entity.UserRoleEnum;
 import com.foot.repository.UserRepository;
 import com.foot.service.AdminService;
+import com.foot.service.BidHistoryService;
 import com.foot.service.BrandService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,25 +34,34 @@ public class AdminViewController {
     private final UserRepository userRepository;
     private final AdminService adminService;
     private final BrandService brandService;
+    private final BidHistoryService bidHistoryService;
 
     // 관리자 홈
     @Secured(UserRoleEnum.Authority.ADMIN)
     @GetMapping("")
-    public String adminHomePage() {
-        return "adminHome";
+    public String adminHomePage(Model model) {
+        List<BidProductChartData> chartData = bidHistoryService.getChartData();
+        List<BrandBidProductCount> brandBidProductCounts = bidHistoryService.getBrandBidProductCounts();
+
+
+        // 그래프 데이터를 모델에 추가
+        model.addAttribute("chartData", chartData);
+        model.addAttribute("brandCounts", brandBidProductCounts);
+
+        return "adminDashboard";
     }
 
     // 전체 회원 목록 조회
     @Secured(UserRoleEnum.Authority.ADMIN)
     @GetMapping("/users")
     public String getUserList(Model model,
-                              @PageableDefault(page = 0, size = 10, sort = "id", direction = Sort.Direction.ASC)
+                              @PageableDefault(page = 0, size = 5, sort = "id", direction = Sort.Direction.ASC)
                               Pageable pageable,
                               String searchKeyword) {
 
         Page<User> userList = null;
 
-        if(searchKeyword == null) {
+        if (searchKeyword == null) {
             userList = adminService.getUserList(pageable);
 
         } else {
@@ -81,13 +94,13 @@ public class AdminViewController {
     @Secured(UserRoleEnum.Authority.ADMIN)
     @GetMapping("/products")
     public String getProductList(Model model,
-                              @PageableDefault(page = 0, size = 10, sort = "id", direction = Sort.Direction.ASC)
-                              Pageable pageable,
-                              String searchKeyword) {
+                                 @PageableDefault(page = 0, size = 5, sort = "id", direction = Sort.Direction.ASC)
+                                 Pageable pageable,
+                                 String searchKeyword) {
 
         Page<Product> productList = null;
 
-        if(searchKeyword == null) {
+        if (searchKeyword == null) {
             productList = adminService.getProductList(pageable);
 
         } else {
@@ -106,6 +119,35 @@ public class AdminViewController {
         return "adminProductList";
     }
 
+    // 전체 경매 상품 조회
+    @Secured(UserRoleEnum.Authority.ADMIN)
+    @GetMapping("/bidProducts")
+    public String getBidProductList(Model model,
+                                    @PageableDefault(page = 0, size = 5, sort = "id", direction = Sort.Direction.ASC)
+                                    Pageable pageable,
+                                    String searchKeyword) {
+
+        Page<BidProduct> productList = null;
+
+        if (searchKeyword == null) {
+            productList = adminService.getBidProductList(pageable);
+
+        } else {
+            productList = adminService.bidProductSearchList(searchKeyword, pageable);
+        }
+
+        int nowPage = productList.getPageable().getPageNumber() + 1;
+        int startPage = Math.max(nowPage - 4, 1);
+        int endPage = Math.min(nowPage + 4, productList.getTotalPages());
+
+        model.addAttribute("list", productList);
+        model.addAttribute("nowPage", nowPage);
+        model.addAttribute("startPage", startPage);
+        model.addAttribute("endPage", endPage);
+
+        return "adminBidProductList";
+    }
+
     // 브랜드 페이지
     @Secured(UserRoleEnum.Authority.ADMIN)
     @GetMapping("/brands")
@@ -117,6 +159,14 @@ public class AdminViewController {
     }
 
 
+    // 경매 상품 수정 페이지
+    @Secured(UserRoleEnum.Authority.ADMIN)
+    @GetMapping("/bp/{id}")
+    public String getBidProduct(@PathVariable Long id, Model model) {
+        BidProduct bidProduct = adminService.getBidProductById(id);
+        model.addAttribute("product", bidProduct);
+        return "updateBidProduct";
+    }
 
 
 }
