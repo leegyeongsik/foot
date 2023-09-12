@@ -379,11 +379,11 @@
             foot
         </div>
         <div class="NavList">
-            <div class="NavItem" id = "shoes_id">shoes</div>
-            <div class="NavItem">Auction</div>
-            <div class="NavItem">favourite</div>
-            <div class="NavItem" id = "signup">signup</div>
-            <div class="NavItem" id = "signin">signin</div>
+<!--            <div class="NavItem" id = "shoes_id">shoes</div>-->
+<!--            <div class="NavItem" id ="auction_id">Auction</div>-->
+<!--            <div class="NavItem" id="favorite">favourite</div>-->
+<!--            <div class="NavItem" id = "signup">signup</div>-->
+<!--            <div class="NavItem" id = "signin">signin</div>-->
         </div>
     </div>
     <div class="DivOLayout">
@@ -405,8 +405,8 @@
         if (auth != null) { //
             $('.NavList').empty();
             temp_Navi = `<div class="NavItem" id="shoes_id">shoes</div>
-            <div class="NavItem">Auction</div>
-            <div class="NavItem">favourite</div>
+            <div class="NavItem" id ="auction_id">Auction</div>
+            <div class="NavItem" id="favorite">favourite</div>
             <div class="NavItem" id="my-page">info</div>
             <div class="NavItem" id="signout">signOut</div>`
             $('.NavList').append(temp_Navi)
@@ -517,7 +517,14 @@
             window.location.href=`/view/home`
 
         })
-
+        $(document).on('click',"div[id='auction_id']" , function (e) { // 보드 상세 페이지 이동
+            e.preventDefault();
+            window.location.href = `/view/bp`;
+        })
+        $(document).on('click',"div[id='favorite']" , function (e) { // 보드 상세 페이지 이동
+            e.preventDefault();
+            location.reload();
+        })
 
         $(document).on('click',"button[class='btnsssssssssssss']" , function (e) { // 보드 상세 페이지 이동
             e.preventDefault();

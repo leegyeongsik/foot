@@ -28,18 +28,19 @@ public class MessageConsumer {
         msg.put("img", message.getMessageImg());
         msg.put("channelId", Long.toString(message.getChannelId()));
 
-
+        msg.put("adminChannelCnt" , "0"); // 두명이 같이있다는거니까 둘다 읽은 상태이므로 cnt는 0
         ObjectMapper mapper = new ObjectMapper();
         String messageJson = mapper.writeValueAsString(msg);
 //        log.info("messageJson='{}'", messageJson);
         template.convertAndSend("/topic/api/channel/" + message.getChannelId(), messageJson); // 가져온 데이터를 해당 채널에 전송
+        template.convertAndSend("/topic/api/channel", messageJson); // 어드민 채널 목록에도 전송
+
         if(message.getIsUserRead() == 1){ // 해당 유저의 채널에 해당 유저가 들어가있지 않다면 해당 유저에게 몇개를 안읽었는지 데이터를 전송함
             HashMap<String, String> UserMsgCnt = new HashMap<>();
             UserMsgCnt.put("userCnt" , String.valueOf(message.getTotalRead()));
             ObjectMapper mapper1 = new ObjectMapper();
             String UserMsgCntJson = mapper1.writeValueAsString(UserMsgCnt);
             template.convertAndSend("/topic/api/user/channel/" + message.getChannelId(), UserMsgCntJson);
-
         } else if (message.getIsAdminRead() ==1 ) { // 만약 어드민이 해당 채널에 들어가있지 않다면 어드민의 채널목록에 해당 유저채널에 데이터를 몇개 안읽었는지 전송함
             msg.put("adminChannelCnt" , String.valueOf(message.getTotalRead()));
             String messageJsons = mapper.writeValueAsString(msg);
