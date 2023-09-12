@@ -22,11 +22,15 @@ public class HomeController {
     // 로그인 시 일반유저는 홈으로, 관리자는 관리자 페이지로 리다이렉트
     @GetMapping("/view/home")
     public String LoginHome(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-        User user = userDetails.getUser();
-        if(user.getRole() == UserRoleEnum.ADMIN) {
-            return "redirect:/view/admin";
-        } else {
+        if(userDetails == null){
             return "index";
+        } else {
+            User user = userDetails.getUser();
+            if(user.getRole() == UserRoleEnum.ADMIN) {
+                return "redirect:/view/admin";
+            } else {
+                return "index";
+            }
         }
     }
 

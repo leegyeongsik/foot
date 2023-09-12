@@ -380,7 +380,7 @@
         </div>
         <div class="NavList">
             <div class="NavItem" id = "shoes_id">shoes</div>
-            <div class="NavItem">Auction</div>
+            <div class="NavItem" id = "auction_id">Auction</div>
             <div class="NavItem" id="favorite">favourite</div>
             <div class="NavItem" id = "signup">signup</div>
             <div class="NavItem" id = "signin">signin</div>
@@ -421,7 +421,7 @@
         if (auth != null){ // ture인지 펄스인지
             $('.NavList').empty();
             temp_Navi = `<div class="NavItem" id="shoes_id">shoes</div>
-            <div class="NavItem">Auction</div>
+            <div class="NavItem" id ="auction_id">Auction</div>
             <div class="NavItem" id="favorite">favourite</div>
             <div class="NavItem" id="my-page">info</div>
             <div class="NavItem" id="signout">signOut</div>`
@@ -453,7 +453,7 @@
                                         <hr> <!-- 선 추가 -->
                                         <div class="DivCThumbnailInfo">
                                             <div class="Heading3" style="display: flex; justify-content: space-between; align-items: center;">
-                                                <div class="Barand1" style="margin-left: 5px; color: #EE312F;">Brand Name 1</div>
+                                                <div class="Barand1" style="margin-left: 5px; color: #EE312F;">${list[i].brand}</div>
                                                 <div class="PriceAndCheckbox"
                                                      style="display: flex; align-items: center; display: flex;align-items: center;flex-direction: row-reverse;">
 
@@ -479,7 +479,7 @@
                                         <hr> <!-- 선 추가 -->
                                         <div class="DivCThumbnailInfo">
                                             <div class="Heading3" style="display: flex; justify-content: space-between; align-items: center;">
-                                                <div class="Barand1" style="margin-left: 5px; color: #EE312F;">Brand Name 1</div>
+                                                <div class="Barand1" style="margin-left: 5px; color: #EE312F;">${list[i].brand}</div>
                                                 <div class="PriceAndCheckbox"
                                                      style="display: flex; align-items: center; display: flex;align-items: center;flex-direction: row-reverse;">
 
@@ -532,7 +532,7 @@
                                     <hr> <!-- 선 추가 -->
                                     <div class="DivCThumbnailInfo">
                                         <div class="Heading3" style="display: flex; justify-content: space-between; align-items: center;">
-                                            <div class="Barand1" style="margin-left: 5px; color: #EE312F;">Brand Name 1</div>
+                                            <div class="Barand1" style="margin-left: 5px; color: #EE312F;">${list[i].brand}</div>
                                             <div class="PriceAndCheckbox"
                                                  style="display: flex; align-items: center; display: flex;align-items: center;flex-direction: row-reverse;">
                                                 <div class="PCThumbnailPrice" style="margin-right: 5px; color: #EE312F;">${list[i].price}</div>
@@ -577,7 +577,7 @@
                                     <hr> <!-- 선 추가 -->
                                     <div class="DivCThumbnailInfo">
                                         <div class="Heading3" style="display: flex; justify-content: space-between; align-items: center;">
-                                            <div class="Barand1" style="margin-left: 5px; color: #EE312F;">Brand Name 1</div>
+                                            <div class="Barand1" style="margin-left: 5px; color: #EE312F;">${list[i].brand}</div>
                                             <div class="PriceAndCheckbox"
                                                  style="display: flex; align-items: center; display: flex;align-items: center;flex-direction: row-reverse;">
                                                 <div class="PCThumbnailPrice" style="margin-right: 5px; color: #EE312F;">${list[i].price}</div>
@@ -624,7 +624,7 @@
                                         <hr> <!-- 선 추가 -->
                                         <div class="DivCThumbnailInfo">
                                             <div class="Heading3" style="display: flex; justify-content: space-between; align-items: center;">
-                                                <div class="Barand1" style="margin-left: 5px; color: #EE312F;">Brand Name 1</div>
+                                                <div class="Barand1" style="margin-left: 5px; color: #EE312F;">${list[i].brand}</div>
                                                 <div class="PriceAndCheckbox"
                                                      style="display: flex; align-items: center; display: flex;align-items: center;flex-direction: row-reverse;">
 
@@ -650,7 +650,7 @@
                                         <hr> <!-- 선 추가 -->
                                         <div class="DivCThumbnailInfo">
                                             <div class="Heading3" style="display: flex; justify-content: space-between; align-items: center;">
-                                                <div class="Barand1" style="margin-left: 5px; color: #EE312F;">Brand Name 1</div>
+                                                <div class="Barand1" style="margin-left: 5px; color: #EE312F;">${list[i].brand}</div>
                                                 <div class="PriceAndCheckbox"
                                                      style="display: flex; align-items: center; display: flex;align-items: center;flex-direction: row-reverse;">
 
@@ -683,7 +683,7 @@
                                     <hr> <!-- 선 추가 -->
                                     <div class="DivCThumbnailInfo">
                                         <div class="Heading3" style="display: flex; justify-content: space-between; align-items: center;">
-                                            <div class="Barand1" style="margin-left: 5px; color: #EE312F;">Brand Name 1</div>
+                                            <div class="Barand1" style="margin-left: 5px; color: #EE312F;">${list[i].brand}</div>
                                             <div class="PriceAndCheckbox"
                                                  style="display: flex; align-items: center; display: flex;align-items: center;flex-direction: row-reverse;">
                                                 <div class="PCThumbnailPrice" style="margin-right: 5px; color: #EE312F;">${list[i].price}</div>
@@ -775,11 +775,18 @@
         e.preventDefault();
         window.location.href = `/view/myPage`
     })
+    $(document).on('click',"div[id='my-page']" , function (e) { // 보드 상세 페이지 이동
+        e.preventDefault();
+        window.location.href = `/view/myPage`
+    })
     $(document).on('click',"div[id='shoes_id']" , function (e) { // 보드 상세 페이지 이동
         e.preventDefault();
         location.reload();
     })
-
+    $(document).on('click',"div[id='auction_id']" , function (e) { // 보드 상세 페이지 이동
+        e.preventDefault();
+        window.location.href = `/view/bp`;
+    })
 
 </script>
 </html>
