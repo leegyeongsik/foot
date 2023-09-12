@@ -2,6 +2,7 @@ package com.foot.entity;
 
 import com.foot.dto.bidProduct.BidProductRequestDto;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -78,23 +79,38 @@ public class BidProduct extends Timestamped{
         this.startPrice = requestDto.getStartPrice();
         this.name = requestDto.getName();
         this.description = requestDto.getDescription();
-        this.footpicture = requestDto.getFootPicture();
+       // this.footpicture = requestDto.getFootPicture();
         this.footsize = requestDto.getFootSize();
         this.feetsize = requestDto.getFeetSize();
+        this.brand = brand;
+        this.user = user;
+        this.topBid = new Bid();
+        this.status = 0;
+    }
+
+    @Builder
+    public BidProduct(LocalDateTime expirationPeriod, Long startPrice, String name, String description, String footpicture, Long footsize, Long feetsize, Brand brand, User user) {
+        this.expirationPeriod = expirationPeriod;
+        this.startPrice = startPrice;
+        this.name = name;
+        this.description = description;
+        this.footpicture = footpicture;
+        this.footsize = footsize;
+        this.feetsize = feetsize;
         this.brand = brand;
         this.user = user;
         this.status = 0;
     }
 
-    public void update(BidProductRequestDto requestDto) {
-        this.expirationPeriod = requestDto.getExpirationPeriod();
-        this.startPrice = requestDto.getStartPrice();
-        this.name = requestDto.getName();
-        this.description = requestDto.getDescription();
-        this.footpicture = requestDto.getFootPicture();
-        this.footsize = requestDto.getFootSize();
-        this.feetsize = requestDto.getFeetSize();
-    }
+    //    public void update(BidProductRequestDto requestDto) {
+//        this.expirationPeriod = requestDto.getExpirationPeriod();
+//        this.startPrice = requestDto.getStartPrice();
+//        this.name = requestDto.getName();
+//        this.description = requestDto.getDescription();
+//        this.footpicture = requestDto.getFootPicture();
+//        this.footsize = requestDto.getFootSize();
+//        this.feetsize = requestDto.getFeetSize();
+//    }
 
     public void changeToSell() {
         this.status = 1;

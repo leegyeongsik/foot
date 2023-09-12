@@ -19,7 +19,7 @@ public class Bid extends Timestamped{
 
 
     @Column(name = "bidprice" , nullable = false)
-    private Long bidPrice;
+    private Long bidPrice = 0L;
 
 
     /**
@@ -45,10 +45,22 @@ public class Bid extends Timestamped{
         this.bidProduct = bidProduct;
     }
 
+    public Bid(Bid topBid) {
+        this.bidPrice = topBid.getBidPrice();
+        this.user = topBid.getUser();
+        this.bidProduct = topBid.getBidProduct();
+    }
+
     /**
      * 연관관계 편의 메소드 - 반대쪽에는 연관관계 편의 메소드가 없도록 주의합니다.
      */
+    public void setBidPrice(Long bidPrice) {
+        this.bidPrice = bidPrice;
+    }
 
+    public void setUser(User user) {
+        this.user = user;
+    }
 
     /**
      * 서비스 메소드 - 외부에서 엔티티를 수정할 메소드를 정의합니다. (단일 책임을 가지도록 주의합니다.)

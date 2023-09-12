@@ -1,15 +1,15 @@
 package com.foot.controller;
 
-import com.foot.dto.ProfileResponseDto;
+import com.foot.dto.bidProduct.BrandResponseDto;
 import com.foot.entity.Product;
 import com.foot.entity.User;
 import com.foot.entity.UserRoleEnum;
 import com.foot.repository.UserRepository;
 import com.foot.service.AdminService;
+import com.foot.service.BrandService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Controller
 @Slf4j
@@ -30,6 +29,7 @@ import java.util.stream.Collectors;
 public class AdminViewController {
     private final UserRepository userRepository;
     private final AdminService adminService;
+    private final BrandService brandService;
 
     // 관리자 홈
     @Secured(UserRoleEnum.Authority.ADMIN)
@@ -64,7 +64,7 @@ public class AdminViewController {
         model.addAttribute("startPage", startPage);
         model.addAttribute("endPage", endPage);
 
-        return "userlist";
+        return "adminUserList";
     }
 
     // 회원 상세 조회
@@ -104,6 +104,16 @@ public class AdminViewController {
         model.addAttribute("endPage", endPage);
 
         return "adminProductList";
+    }
+
+    // 브랜드 페이지
+    @Secured(UserRoleEnum.Authority.ADMIN)
+    @GetMapping("/brands")
+    public String getBrandList(Model model) {
+        List<BrandResponseDto> brandList = brandService.getAllBrand();
+        model.addAttribute("brandList", brandList);
+        model.addAttribute("size", brandList.size());
+        return "adminBrand";
     }
 
 

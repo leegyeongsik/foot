@@ -3,6 +3,7 @@ package com.foot.controller;
 import com.foot.dto.bidProduct.BrandRequestDto;
 import com.foot.dto.bidProduct.BrandResponseDto;
 import com.foot.service.BrandService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -30,8 +31,9 @@ public class BrandController {
 
     // 브랜드 수정
     @PutMapping("/{brandId}")
-    public BrandResponseDto updateBrand(@PathVariable Long brandId, @RequestBody BrandRequestDto requestDto) {
-        return brandService.updateBrand(brandId, requestDto);
+    public ResponseEntity<String> updateBrand(@PathVariable Long brandId, @RequestBody BrandRequestDto requestDto) {
+        brandService.updateBrand(brandId, requestDto);
+        return ResponseEntity.ok("브랜드 수정 완료");
     }
 
     // 브랜드 삭제

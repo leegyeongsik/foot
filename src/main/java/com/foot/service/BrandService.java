@@ -26,6 +26,7 @@ public class BrandService {
     }
 
     public List<BrandResponseDto> getAllBrand() {
+
         List<Brand> brandList = brandRepository.findAll();
         List<BrandResponseDto> brandResponseDtoList = new ArrayList<>();
         for (int i = 0; i < brandList.size(); i++) {

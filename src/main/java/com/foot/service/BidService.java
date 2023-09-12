@@ -9,40 +9,74 @@ import com.foot.repository.BidHistoryRepository;
 import com.foot.repository.BidProductRepository;
 import com.foot.repository.BidRepository;
 import com.foot.repository.BrandRepository;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
+import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class BidService {
 
-    private BidProductRepository bidProductRepository;
-    private BidRepository bidRepository;
-    private BrandRepository brandRepository;
-    private BidHistoryRepository bidHistoryRepository;
+    private final BidProductRepository bidProductRepository;
+    private final BidRepository bidRepository;
+    private final BrandRepository brandRepository;
+    private final BidHistoryRepository bidHistoryRepository;
 
-    public BidService(BidProductRepository bidProductRepository, BidRepository bidRepository, BrandRepository brandRepository, BidHistoryRepository bidHistoryRepository) {
-        this.bidProductRepository = bidProductRepository;
-        this.bidRepository = bidRepository;
-        this.brandRepository = brandRepository;
-        this.bidHistoryRepository = bidHistoryRepository;
-    }
+    private final S3UploadService s3UploadService;
+
 
     //------------------- 경매 상품 관련 -------------------//
 
     // 경매 상품 생성
-    public BidProductResponseDto createBidProduct(BidProductRequestDto requestDto, User user) {
+    public BidProductResponseDto createBidProduct(BidProductRequestDto requestDto, User user) throws IOException {
         Brand brand = brandRepository.findByName(requestDto.getBrand());
-        BidProduct bidProduct = new BidProduct(requestDto, brand, user);
+
+        // 현재 시간
+        LocalDateTime currentTime = LocalDateTime.now();
+        log.info("Current Time: {}", currentTime);
+
+        // 만료 시간
+        LocalDateTime expirationTime = requestDto.getExpirationPeriod();
+        log.info("Expiration Time: {}", expirationTime);
+
+        // 남은 시간 계산
+        Duration duration = Duration.between(currentTime, expirationTime);
+        log.info("Duration : {}", duration);
+
+        // 남은 시간을 "X일 Y시간 Z분" 형식으로 포맷팅
+        String remainingTime = formatRemainingTime(duration);
+        log.info("Remaining Time: {}", remainingTime);
+
+        BidProduct bidProduct = BidProduct.builder()
+                .expirationPeriod(requestDto.getExpirationPeriod())
+                .startPrice(requestDto.getStartPrice())
+                .name(requestDto.getName())
+                .description(requestDto.getDescription())
+                .feetsize(requestDto.getFeetSize())
+                .footsize(requestDto.getFootSize())
+                .footpicture(s3UploadService.uploadImage(requestDto.getBidProductFile()))
+                //.footpicture("https://pbs.twimg.com/media/F4NpL4-aQAE3wci?format=jpg&name=mediumhttps://pbs.twimg.com/media/F4NpL4-aQAE3wci?format=jpg&name=medium")
+                .brand(brand)
+                .user(user)
+                .build();
+
         bidProductRepository.save(bidProduct);
-        return new BidProductResponseDto(bidProduct);
+        return new BidProductResponseDto(bidProduct, remainingTime);
     }
+
 
     // 경매 상품 전체 조회
     @Transactional
@@ -69,7 +103,19 @@ public class BidService {
             changeToSell(bidProduct.getId());
         }
 
-        return new BidProductResponseDto(bidProduct);
+        // 현재 시간
+        LocalDateTime currentTime = LocalDateTime.now();
+
+        // 만료 시간
+        LocalDateTime expirationTime = bidProduct.getExpirationPeriod();
+
+        // 남은 시간 계산
+        Duration duration = Duration.between(currentTime, expirationTime);
+
+        // 남은 시간을 "X일 Y시간 Z분" 형식으로 포맷팅
+        String remainingTime = formatRemainingTime(duration);
+
+        return new BidProductResponseDto(bidProduct, remainingTime);
     }
 
     // 경매 상품 검색
@@ -90,17 +136,17 @@ public class BidService {
         return result;
     }
 
-    // 경매 상품 수정
-    @Transactional
-    public BidProductResponseDto updateBidProduct(Long bidId, BidProductRequestDto requestDto, User user) {
-        BidProduct bidProduct = findBidProductById(bidId);
-        if (bidProduct.getUser().equals(user)) {
-            bidProduct.update(requestDto);
-        } else {
-            throw new IllegalArgumentException("본인의 경매상품만 수정할수 있습니다.");
-        }
-        return new BidProductResponseDto(bidProduct);
-    }
+//    // 경매 상품 수정
+//    @Transactional
+//    public BidProductResponseDto updateBidProduct(Long bidId, BidProductRequestDto requestDto, User user) {
+//        BidProduct bidProduct = findBidProductById(bidId);
+//        if (bidProduct.getUser().equals(user)) {
+//            bidProduct.update(requestDto);
+//        } else {
+//            throw new IllegalArgumentException("본인의 경매상품만 수정할수 있습니다.");
+//        }
+//        return new BidProductResponseDto(bidProduct);
+//    }
 
     // 경매 상품 삭제
     public void deleteBidProduct(Long bidId, User user) {
@@ -169,5 +215,22 @@ public class BidService {
         return bidProductRepository.findById(bidId).orElseThrow(
                 () -> new IllegalArgumentException("해당하는 경매 상품을 찾을수 없습니다.")
         );
+    }
+
+    // 경매마감까지 남은 시간을 "X일 Y시간 Z분" 형식으로 포맷팅하는 메서드
+    private String formatRemainingTime(Duration duration) {
+        long days = duration.toDays();
+        duration = duration.minusDays(days);
+        long hours = duration.toHours();
+        duration = duration.minusHours(hours);
+        long minutes = duration.toMinutes();
+
+        return String.format(Locale.US, "%d일 %d시간 %d분", days, hours, minutes);
+    }
+
+    // 경매 마감 시간 포맷팅
+    public String formatExpirationTime(LocalDateTime expirationTime) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        return expirationTime.format(formatter);
     }
 }
