@@ -5,4 +5,5 @@ import lombok.Getter;
 @Getter
 public class BasketRequestDto {
     private Long productSizeId;
+    private Long productColorId;
 }

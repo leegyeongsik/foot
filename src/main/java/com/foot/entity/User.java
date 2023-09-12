@@ -2,7 +2,6 @@ package com.foot.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.Columns;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -82,6 +81,12 @@ public class User {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     private List<Bid> bids = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+    private List<Channel> channels = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+    private List<ChatLog> ChatLogs = new ArrayList<>();
 
     /**
      * 연관관계 편의 메소드 - 반대쪽에는 연관관계 편의 메소드가 없도록 주의합니다.

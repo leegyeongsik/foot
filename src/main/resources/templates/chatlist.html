@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+  <script src="/webjars/sockjs-client/1.1.2/sockjs.min.js"></script>
+  <script src="/webjars/stomp-websocket/2.3.3-1/stomp.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.7.0.min.js"
+          integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g="
+          crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+  <style>
+    /* Your existing styles here */
+
+    /* Additional styles for positioning */
+    #openChatButton {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      padding: 10px 20px;
+      background-color: #0084FF;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    #chatWrap {
+      position: fixed;
+      bottom: 80px; /* 조정된 값 */
+      right: 20px;
+      width: 400px;
+      background-color: #f0f0f0;
+      border-radius: 5px;
+      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+      display: none;
+      /* Additional styling as needed */
+    }
+    #openChatButtonContainer {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      display: flex;
+      align-items: center;
+    }
+
+
+
+    #notificationBubble {
+      position: fixed;
+      bottom: 43px; /* Adjust the top position */
+      right: 10px;
+      background-color: red;
+      color: white;
+      padding: 2px 7px;
+      border-radius: 50%;
+    }
+
+    #notificationBubbles {
+      position: fixed;
+      bottom: 43px; /* Adjust the top position */
+      right: 10px;
+      background-color: red;
+      color: white;
+      padding: 2px 7px;
+      border-radius: 50%;
+    }
+
+
+    /* Chat header styles */
+    #chatHeader {
+      background-color: #0084FF;
+      color: white;
+      text-align: center;
+      padding: 10px;
+      border-radius: 5px 5px 0 0;
+    }
+
+    /* Chat log styles */
+    #chatLog {
+      height: 300px;
+      overflow-y: auto;
+      padding: 10px;
+    }
+
+    /* Chat message styles */
+    .msg {
+      display: inline-block;
+      border-radius: 15px;
+      padding: 7px 15px;
+      margin-bottom: 10px;
+      margin-top: 5px;
+      background-color: white;
+    }
+
+    .anotherMsg > .msg {
+      background-color: #f1f0f0;
+    }
+
+    .myMsg > .msg {
+      background-color: #0084FF;
+      color: white;
+    }
+
+    /* Chat form styles */
+    #chatForm {
+      padding: 10px;
+      display: flex;
+      border-top: 1px solid #ddd;
+      border-radius: 0 0 5px 5px;
+    }
+
+    #message {
+      flex: 1;
+      height: 30px;
+      border: none;
+      padding: 5px;
+      border-radius: 5px;
+    }
+
+    #message:focus {
+      outline: none;
+    }
+    .file-input-label {
+      display: inline-block;
+      background-color: #23a3a7;
+      color: #fff;
+      padding: 5px 10px;
+      border-radius: 5px;
+      cursor: pointer;
+      overflow: hidden;
+    }
+
+    .file-input {
+      position: absolute;
+      width: 30%;
+      height: 30%;
+      top: 0;
+      left: 0;
+      opacity: 0;
+      cursor: pointer;
+    }
+
+
+    .filename {
+      display: inline-block;
+      padding-left: 10px;
+      font-size: 12px;
+    }
+
+    #chatForm > input[type=submit] {
+      outline: none;
+      border: none;
+      background: none;
+      color: #0084FF;
+      font-size: 14px; /* Adjust font size */
+      padding: 5px 10px; /* Adjust padding to change button size */
+    }
+    .box-file-input {
+      display: inline-block;
+      background-color: #23a3a7;
+      color: #fff;
+      padding: 5px 10px; /* Adjust padding to change button size */
+      line-height: 30px; /* Adjust line-height to vertically center text */
+      cursor: pointer;
+      border-radius: 5px;
+      overflow: hidden;
+    }
+
+
+    .label-text {
+      display: inline-block;
+      vertical-align: middle;
+      font-size: 14px;
+    }
+    #chatButton {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 20px;
+      cursor: pointer;
+      outline: none;
+    }
+
+    #chatButtonssss {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 20px;
+      cursor: pointer;
+      outline: none;
+    }
+
+    #chatList {
+      position: fixed;
+      bottom: 70px;
+      right: 20px;
+      display: none;
+      width: 300px;
+      max-height: 400px; /* Added max-height for scroll */
+      overflow-y: auto; /* Added scroll for overflow */
+      background-color: white;
+      border-radius: 15px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      padding: 10px;
+    }
+
+    #chatList h2 {
+      font-size: 18px;
+      margin: 10px 0;
+    }
+
+    #chatList ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    #chatList li {
+      display: flex;
+      align-items: center;
+      padding: 10px 0;
+      border-bottom: 1px solid #ccc;
+    }
+
+    #chatList img {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      margin-right: 10px;
+    }
+
+    #chatList .chat-info {
+      flex: 1;
+    }
+
+    #chatList .chat-info h3 {
+      font-size: 16px;
+      margin: 0;
+    }
+
+    #chatList .chat-info p {
+      font-size: 14px;
+      color: #888;
+      margin: 0;
+    }
+
+    .unread-count {
+      background-color: #007bff;
+      color: white;
+      font-size: 12px;
+      padding: 3px 8px;
+      border-radius: 10px;
+      margin-left: 5px;
+    }
+</style>
+</head>
+<body>
+<!-- Your existing content here -->
+<div id="contentWrap">
+  <nav>
+  </nav>
+  <div id="contentCover">
+    <div id="openChatButtonContainer">
+<!--      <button id="openChatButton" onclick="toggleChatWrap()">Open Chat</button>-->
+<!--      <div id="notificationBubble">3</div>-->
+    </div>
+  </div>
+
+  <div id ="chatlistContainer">
+    <div id ="openChatButtonlistContainer">
+    </div>
+    <div id="chatList">
+      <h2>채팅방 목록</h2>
+      <ul class="chatlistsssss">
+        <!-- 여러 채팅방 정보를 추가할 수 있습니다. -->
+      </ul>
+    </div>
+  </div>
+
+</div>
+<div id = "xxxxxxxxx">
+  <div id="footersSSS"></div>
+</div>
+<p id="targetIdParagraphss" style="display: none;">targetId: <span th:text="${role}"></span></p>
+
+</body>
+<script>
+  var role = document.getElementById('targetIdParagraphss').querySelector('span').innerText;
+
+  function toggleChatWrap() {
+        $.ajax({
+          url: `/api/channel/infos`,
+          type: 'GET',
+          contentType: 'application/json',
+          headers: {
+            // 'Authorization': Cookies.get('Authorization')
+          },
+          success: function (response) {
+            if (response) {
+              wsss.send("/pub/chat/enter", {'Authorization': Cookies.get('Authorization')}, JSON.stringify({channelIDs: `${response.channelNum}` , userRole: role})); //receiver:participant,
+              $("#footersSSS").load(`/Chats/${response.channelNum}`);
+            }
+          },
+        });
+  }
+
+
+  var chatListVisible = false; // Initialize chat list state
+
+  function toggleChatList() {
+    var chatList = document.getElementById("chatList");
+    var chatButton = document.getElementById("chatButton");
+
+    // Toggle chat list visibility
+    chatListVisible = !chatListVisible;
+    if (chatListVisible) {
+      chatList.style.display = "block";
+      chatButton.textContent = "채팅방 목록 닫기"; // Change button text
+      $.ajax({
+        url: `/api/channel`,
+        type: 'GET',
+        contentType: 'application/json',
+        headers: {
+          // 'Authorization': Cookies.get('Authorization') // 클라이언트 쿠키의 값을 전달
+        },
+        success: function (response) {
+          if (response) {
+            $('.chatlistsssss').empty()
+            // console.log(response)
+            for (let i = 0; i < response.length; i++) {
+              chatlist=`<li id = ${response[i].channelId} class="chat_infos">
+                  <img src="https://placekitten.com/50/50" class = "chat_infoss" id=${response[i].channelId} alt="Chat User">
+                  <div class="chat-info">
+                    <h3>${response[i].channelOwner}</h3>
+                   <p id = channel_${response[i].channelId}>${response[i].latestMsg}</p> <!-- 마지막 채팅기록-->
+                      </div>
+                      <span class="unread-count" id = chatcnt_${response[i].channelId}>${response[i].yetMessageCnt}</span> <!-- 안읽은 채팅수 -->
+                </li>`
+              $('.chatlistsssss').append(chatlist);
+            }
+          }
+
+        },
+
+      })
+    } else {
+      chatList.style.display = "none";
+      chatButton.textContent = "채팅방 목록 보기"; // Change button text
+      ws.disconnect();
+    }
+  }
+
+  $(document).ready(function () {
+
+    $.ajax({
+      url: `/api/channel/info`,
+      type: 'GET',
+      contentType: 'application/json',
+      headers: {
+        // 'Authorization': Cookies.get('Authorization') // 클라이언트 쿠키의 값을 전달
+      },
+      success: function (response) {
+        if (response) {
+          console.log(response)
+          if(response.isExist != true && response.responseDto.role != "ADMIN"){
+            $('#openChatButtonContainer').empty();
+            $('#chatlistContainer').empty();
+            createButton=`<button id="openChatButton" class="createChatButton">+</button>`
+            $('#openChatButtonContainer').append(createButton);
+
+          }
+          else if(response.isExist == true && response.responseDto.role != "ADMIN"){
+
+            $('#openChatButtonContainer').empty();
+            $('#chatlistContainer').empty();
+            openchatButton=`<button id="openChatButton" onclick="toggleChatWrap()">Open Chat</button>
+             <div id="notificationBubble">${response.userLeadCnt}</div>`
+            $('#openChatButtonContainer').append(openchatButton);
+            var sockss = new SockJS("/ws/chat"); //new SockJS()를 사용하여 아까 핸들러에서 지정해준 endPoint를 사용하여 연결을 해준다.
+            var userSock = Stomp.over(sockss);
+
+            userSock.connect({}, function(frame) {
+              userSock.subscribe(`/topic/api/user/channel/${response.channelNum}`, function(message) {
+                let receive = JSON.parse(message.body);
+                let tempssss=document.getElementById(`notificationBubble`)
+                tempssss.innerText=receive.userCnt;
+              });
+            }, function(error) {
+              alert("error"+error);
+            });
+          }
+          else if(response.responseDto.role == "ADMIN"){
+            $('#contentCover').empty();
+            $('#openChatButtonlistContainer').empty();
+            adminbutton =`<button id="chatButton" onclick="toggleChatList()">채팅방 목록 보기</button>
+             <div id="notificationBubbles">${response.adminLeadTotalCnt}</div>`
+            $('#openChatButtonlistContainer').append(adminbutton);
+            var sock = new SockJS("/ws/chat"); //new SockJS()를 사용하여 아까 핸들러에서 지정해준 endPoint를 사용하여 연결을 해준다.
+            var ws = Stomp.over(sock);
+
+            ws.connect({}, function(frame) {
+              ws.subscribe("/topic/api/channel", function(message) {
+                let receive = JSON.parse(message.body);
+                let tempssss=document.getElementById(`channel_${receive.channelId}`)
+                let tempssssssss=document.getElementById(`chatcnt_${receive.channelId}`)
+
+                tempssss.innerText =`${receive.message}`
+                tempssssssss.innerText = `${receive.adminChannelCnt}`
+              });
+            }, function(error) {
+              alert("error"+error);
+            });
+
+            var socksssss = new SockJS("/ws/chat"); //new SockJS()를 사용하여 아까 핸들러에서 지정해준 endPoint를 사용하여 연결을 해준다.
+            var sssssssssss = Stomp.over(socksssss);
+
+            sssssssssss.connect({}, function(frame) {
+              sssssssssss.subscribe("/topic/api/Admin", function(message) {
+                let receive = JSON.parse(message.body);
+                let tempssss=document.getElementById(`notificationBubbles`)
+                tempssss.innerText=receive.AdminTotalCnt;
+              });
+            }, function(error) {
+              alert("error"+error);
+            });
+          }
+        }
+      },
+    })
+  })
+
+    $(document).on('click',"button[class='createChatButton']" , function (e) { // 보드 상세 페이지 이동
+      e.preventDefault();
+      $.ajax({
+        url: `/api/channel`,
+        type: 'POST',
+        contentType: 'application/json',
+        headers: {
+          // 'Authorization': Cookies.get('Authorization') // 클라이언트 쿠키의 값을 전달
+        },
+        success: function (response) {
+            location.assign(location.href);
+        },
+      })
+    })
+
+    $(document).on('click',"img[class='chat_infoss']" , function (e) { // 보드 상세 페이지 이동
+      e.preventDefault();
+      var tagId = e.target.id
+      wsss.send("/pub/chat/enter", {'Authorization': Cookies.get('Authorization')}, JSON.stringify({channelIDs: tagId , userRole: role})); //receiver:participant,
+      console.log(tagId)
+      $("#footersSSS").load(`/Chats/${tagId}`)
+    }
+  )
+
+
+
+    $(document).on('click',"button[id='chatButtonssss']" , function (e) { // 보드 상세 페이지 이동
+      e.preventDefault();
+      $('#footersSSS').empty();
+      $('#chatButtonssss').remove();
+  })
+  var sockss = new SockJS("/ws/chat"); //new SockJS()를 사용하여 아까 핸들러에서 지정해준 endPoint를 사용하여 연결을 해준다.
+  var wsss = Stomp.over(sockss);
+  //
+  // wsss.connect({}, function (frame) {
+  //   wsss.subscribe("/topic/api/channel/enter", function (message) {
+  //     let receive = JSON.parse(message.body);
+  //     console.log(receive)
+  //   });
+  // }, function (error) {
+  //   alert("error" + error);
+  // });
+
+</script>
+</html>

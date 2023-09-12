@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +15,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @Table(name = "productsizes")
+@Setter
 public class ProductSize extends Timestamped{
     /**
      * 컬럼 - 연관관계 컬럼을 제외한 컬럼을 정의합니다.

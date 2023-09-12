@@ -17,14 +17,28 @@ public class OrderHistory extends Timestamped{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "color")
+    private String color;
+    @Column(name = "size")
+    private Long size;
+    @Column(name = "amount")
+    private Long amount;
+    @Column(name = "totalcnt")
+    private Long totalCnt;
+
+
     /**
      * 생성자 - 약속된 형태로만 생성가능하도록 합니다.
      */
 
     @Builder
-    public OrderHistory(User user , Product product){
+    public OrderHistory(User user , Product product , String color , Long size , Long amount , Long totalCnt){
         this.user = user;
         this.product = product;
+        this.color = color;
+        this.size = size;
+        this.amount = amount;
+        this.totalCnt = totalCnt;
     }
 
     /**

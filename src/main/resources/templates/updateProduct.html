@@ -596,7 +596,7 @@
             success: function (response) {
                 if (response) {
                     var Products = `
-                            <img src=${response.productResponseDto.modelPicture} alt="미리보기 이미지" class="preview">
+                            <img src="${response.productResponseDto.modelPicture}" alt="미리보기 이미지" class="preview">
                        `
 
                     $('.drag-file').append(Products);
@@ -734,7 +734,7 @@
                 enctype : 'multipart/form-data',  // * 중요 *
 
                 success: function (response) {
-                    // window.location.href = `http://localhost:8080`
+                    window.location.href = `/view/admin/products`
                 },
                 error: function () {
                     console.log("실패")

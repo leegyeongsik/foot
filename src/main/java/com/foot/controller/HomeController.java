@@ -48,4 +48,23 @@ public class HomeController {
         model.addAttribute("productId" ,productId);
         return "updateProduct";
     }
+    @GetMapping("/Product/favorite")
+    public String FavoriteProductPage(){
+        return "favoritelist";
+    }
+
+    @GetMapping("/Chats")
+    public String chatList(@AuthenticationPrincipal UserDetailsImpl userDetails , Model model){
+        model.addAttribute("role" ,userDetails.getUser().getRole());
+
+        return "chatlist";
+    }
+    @GetMapping("/Chats/{ChannelId}")
+    public String chat(@PathVariable Long ChannelId , Model model , @AuthenticationPrincipal UserDetailsImpl userDetails){
+        model.addAttribute("ChannelId" ,ChannelId);
+        model.addAttribute("username" ,userDetails.getUser().getName());
+        model.addAttribute("role" ,userDetails.getUser().getRole());
+
+        return "chat";
+    }
 }
