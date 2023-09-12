@@ -1,8 +1,11 @@
 package com.foot.controller;
 
 import com.foot.dto.bidProduct.BidProductResponseDto;
+import com.foot.dto.bidProduct.BrandResponseDto;
 import com.foot.entity.Bid;
+import com.foot.entity.Brand;
 import com.foot.service.BidService;
+import com.foot.service.BrandService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,6 +18,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ViewController {
     private final BidService bidService;
+    private final BrandService brandService;
 
     @GetMapping("/bp/resist")
     public String getBpResister() {
@@ -37,8 +41,21 @@ public class ViewController {
     @GetMapping("/view/bp")
     public String getActiveBidProducts(Model model) {
         List<BidProductResponseDto> activeBidProducts = bidService.getActiveBidProducts();
+        List<BrandResponseDto> brands = brandService.getAllBrand();
 
         model.addAttribute("products", activeBidProducts);
+        model.addAttribute("brands", brands);
+
+        return "bidProductList";
+    }
+
+    @GetMapping("/view/bp/brand/{brandId}")
+    public String getBidProductsByBrand(Model model, @PathVariable Long brandId) {
+        List<BidProductResponseDto> activeBidProducts = bidService.getBidProductsByBrand(brandId);
+        List<BrandResponseDto> brands = brandService.getAllBrand();
+
+        model.addAttribute("products", activeBidProducts);
+        model.addAttribute("brands", brands);
 
         return "bidProductList";
     }

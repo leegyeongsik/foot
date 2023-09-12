@@ -23,6 +23,10 @@ public class CartItem extends Timestamped {
     @JoinColumn(name = "productSizeColor_id")
     private ProductColor productColor;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "productSize_id")
+    private ProductSize productSize;
+
     private int count;
 
     public static CartItem createCartItem(Cart cart, ProductColor productColor, int count) {
