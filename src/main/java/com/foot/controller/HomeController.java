@@ -30,36 +30,36 @@ public class HomeController {
         }
     }
 
-    @GetMapping("/Product/{productId}")
+    @GetMapping("/product/{productId}")
     public String ProductPage(@PathVariable Long productId , Model model){
         model.addAttribute("productId" ,productId);
         return "innerProduct";
     }
 
     @Secured(UserRoleEnum.Authority.ADMIN)
-    @GetMapping("/Product/create")
+    @GetMapping("/product/create")
     public String CreateProductPage(){
         return "createProduct";
     }
 
     @Secured(UserRoleEnum.Authority.ADMIN)
-    @GetMapping("/Product/update/{productId}")
+    @GetMapping("/product/update/{productId}")
     public String UpdateProductPage(@PathVariable Long productId , Model model){
         model.addAttribute("productId" ,productId);
         return "updateProduct";
     }
-    @GetMapping("/Product/favorite")
+    @GetMapping("/product/favorite")
     public String FavoriteProductPage(){
         return "favoritelist";
     }
 
-    @GetMapping("/Chats")
+    @GetMapping("/chats")
     public String chatList(@AuthenticationPrincipal UserDetailsImpl userDetails , Model model){
         model.addAttribute("role" ,userDetails.getUser().getRole());
 
         return "chatlist";
     }
-    @GetMapping("/Chats/{ChannelId}")
+    @GetMapping("/chats/{ChannelId}")
     public String chat(@PathVariable Long ChannelId , Model model , @AuthenticationPrincipal UserDetailsImpl userDetails){
         model.addAttribute("ChannelId" ,ChannelId);
         model.addAttribute("username" ,userDetails.getUser().getName());

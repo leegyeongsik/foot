@@ -12,7 +12,6 @@ import java.util.List;
 
 @Entity
 @Getter
-@Setter
 @NoArgsConstructor
 @Table(name = "products")
 public class Product extends Timestamped {
@@ -105,9 +104,8 @@ public class Product extends Timestamped {
         this.discountPrice = discountPrice;
     }
 
-//    public void addSale(SaleProductRequestDto requestDto){
-//        this.discountRate = requestDto.getDiscountRate();
-//        this.discountPrice = requestDto.getDiscountPrice();
-//    }
+    public void decreaseProductAmount(Long currentAmount , Long orderAmount){
+        this.TotalAmount = currentAmount - orderAmount;
+    }
 
 }

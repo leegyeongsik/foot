@@ -49,7 +49,7 @@ public class ChannelService {
     }
 
     public List<ChannelMessageResponseDto> getChannelMessage(String channelId) {
-        List<ChatLog> chatLogList = chatLogRepository.findAllByChannel_id(Long.valueOf(channelId));
+        List<ChatLog> chatLogList = chatLogRepository.findAllByChannelId(Long.valueOf(channelId));
         ArrayList<ChannelMessageResponseDto> channelMessageResponseDtos = new ArrayList<>();
         for (ChatLog chatLog : chatLogList) {
             channelMessageResponseDtos.add(new ChannelMessageResponseDto(chatLog));

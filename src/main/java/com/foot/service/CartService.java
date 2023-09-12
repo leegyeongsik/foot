@@ -42,12 +42,12 @@ public class CartService {
         }
 
         CartItem savedCartItem = cartItemRepository.findByCartIdAndProductColorId(cart.getId(), productColor.getId());
-
+        productColor.getProductSize();
 
         if (savedCartItem != null) {
             // 장바구니에 이미 존재하는 상품이면 개수만 추가
             // productSize의 amount 이상으로 못담게 제한
-            int remainingSpace = (int) (productSize.getAmount() - savedCartItem.getCount());
+            int remainingSpace = (int) (productColor.getAmount() - savedCartItem.getCount());
             if (remainingSpace < itemCountToAdd) {
                 itemCountToAdd = remainingSpace;
             }
@@ -55,10 +55,10 @@ public class CartService {
             return savedCartItem.getId();
         } else {
             // 장바구니에 없는 상품이면 담기
-            if (itemCountToAdd > productSize.getAmount()) {
-                itemCountToAdd = Math.toIntExact(productSize.getAmount());
+            if (itemCountToAdd > productColor.getAmount()) {
+                itemCountToAdd = Math.toIntExact(productColor.getAmount());
             }
-            CartItem cartItem = CartItem.createCartItem(cart, productSize, itemCountToAdd);
+            CartItem cartItem = CartItem.createCartItem(cart, productColor, itemCountToAdd);
             cartItemRepository.save(cartItem);
             return cartItem.getId();
         }
@@ -91,13 +91,13 @@ public class CartService {
                         () -> new IllegalArgumentException("존재하지 않는 상품입니다.")
                 );
 
-        ProductSize productSize = productSizeRepository.findById(cartItem.getProductSize().getId()).orElseThrow(
+        ProductColor productColor = productColorRepository.findById(cartItem.getProductColor().getId()).orElseThrow(
                 () -> new IllegalArgumentException("존재하지 않는 상품입니다.")
         );
 
         // count를 ProductSize의 amount로 제한
-        if (count > productSize.getAmount()) {
-            count = Math.toIntExact(productSize.getAmount());
+        if (count > productColor.getAmount()) {
+            count = Math.toIntExact(productColor.getAmount());
         }
         cartItem.updateCount(count);
     }
@@ -133,6 +133,6 @@ public class CartService {
                 cartItem.getCount(),
                 product.getModelpicture(),
                 productColor.getId()
-                );
+        );
     }
 }

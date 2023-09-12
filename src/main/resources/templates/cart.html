@@ -242,9 +242,9 @@
                         </button>
                     </td>
                     <div hidden>
-                    <td hidden th:id="'colorid_' + ${item.cartItemId}"
-                        th:data-colorid="${item.productColorId}" th:text="${item.price}"></td>
-                    <td hidden>
+                        <td hidden th:id="'colorid_' + ${item.cartItemId}"
+                            th:data-colorid="${item.productColorId}" th:text="${item.price}"></td>
+                        <td hidden>
                     </div>
                 </tr>
                 </tbody>
@@ -295,7 +295,7 @@
     function goToProductDetailPage(row) {
         var productId = row.getAttribute("data-product-id");
         console.log(productId);
-        window.location.href = "/Product/" + productId;
+        window.location.href = "/product/" + productId;
     }
 
     // 상품 수량 변경
@@ -343,9 +343,6 @@
             var price = $("#price_" + cartItemId).attr("data-price");
             var count = $("#count_" + cartItemId).val();
             orderTotalPrice += price * count;
-
-
-            console.log(cartItemId, price, count, orderTotalPrice);
         });
 
         $("#orderTotalPrice").html(orderTotalPrice + '원');
@@ -355,7 +352,6 @@
     // 상품 삭제
     function deleteCartItem(obj) {
         var cartItemId = obj.dataset.id;
-
         var url = "/api/cart/" + cartItemId;
 
         $.ajax({

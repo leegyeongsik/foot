@@ -8,5 +8,5 @@ import java.util.List;
 @Repository
 
 public interface ChatLogRepository extends JpaRepository<ChatLog, Long> , ChatLogRepositoryCustom {
-    List<ChatLog> findAllByChannel_id(Long channelId);
+    List<ChatLog> findAllByChannelId(Long channelId);
 }

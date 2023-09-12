@@ -8,7 +8,6 @@ import lombok.Setter;
 
 @Entity
 @Getter
-@Setter
 @NoArgsConstructor
 @Table(name = "productcolors")
 public class ProductColor {
@@ -54,5 +53,9 @@ public class ProductColor {
      */
     public void updateProductColor(Long amount){
         this.amount = amount;
+    }
+
+    public void decreaseProductAmount(Long currentAmount , Long orderAmount){
+        this.amount = currentAmount - orderAmount;
     }
 }

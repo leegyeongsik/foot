@@ -18,7 +18,7 @@ import java.util.HashMap;
 public class MessageConsumer {
     private final SimpMessagingTemplate template;
 
-    @KafkaListener(id = "message-listener", topics = "kafka-chatting1")
+    @KafkaListener(id = "message-listener", topics = "kafka-chatting")
     public void receive(ChatMessageRequestDto message) throws Exception { // 토픽에 전송된 데이터를 consumer에서 가져옴
 //        log.info("message='{}'", message);
         HashMap<String, String> msg = new HashMap<>();

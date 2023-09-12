@@ -344,6 +344,21 @@
     #result {
       font-size: 24px; /* 결과 텍스트 크기 설정 */
     }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    th, td {
+      padding: 10px;
+      text-align: center;
+    }
+
+    th {
+      background-color: #f2f2f2;
+    }
+
   </style>
 
   </style>
@@ -400,24 +415,22 @@
       <div class="TextContainer" style="position: relative; top: 160px; line-height: 1.5;"> <!-- 설명 -->
       </div>
 
-
-      <details style="position: relative; top: 180px;"> <!-- 댓글 -->
-        <summary>
-          review
-        </summary>
-        <p>
-          text
-        </p>
-
-      </details>
-
       <details style="position: relative; top: 220px;"> <!-- 사이즈 비교 -->
         <summary>
-          Shoses size confirm
+          사이즈(cm)
         </summary>
-        <p>
-          two picture
-        </p>
+        <table>
+          <thead>
+          <tr class="inner_size">
+            <th>상품 사이즈</th>
+            <th>상품 발크기</th>
+            <th>상품 발볼크기</th>
+          </tr>
+          </thead>
+          <tbody class="foot_size_container">
+
+          </tbody>
+        </table>
       </details>
 
 
@@ -469,7 +482,7 @@
           $('.image-container').append(Products);
           var Productsss=`
                           <hgroup>
-                                <p style="color: #EE312F;">나이키</p>
+                                <p style="color: #EE312F;">${response.productResponseDto.brand}</p>
                                 <h2>${response.productResponseDto.modelName}</h2>
                               </hgroup>`
           var Productss=`<p>${response.productResponseDto.price}</p>`
@@ -498,7 +511,7 @@
             $('.DivOLayout').append(Products);
           }
           $('.check_wrap').empty()
-          if(response.productResponseDto.isAppend == true){
+          if(response.productResponseDto.append == true){
             isappend=`<input class="checkboxs" id="productcheckId_${response.productResponseDto.productId}" type="checkbox" checked/>
             <label htmlFor="check_btn"></label>
             <button class="btnsssssssssssss"
@@ -514,8 +527,17 @@
                     id="productcheckId_${response.productResponseDto.productId}">+</button>`
             $('.check_wrap').append(isappend)
           }
+          var listsssss = response.productSizesResponseDtos
 
-
+          $('.foot_size_container').empty()
+          for (let i = 0; i < listsssss.length; i++) {
+            foot_size = `<tr>
+                                <td class="product-model" data-product-id="11">${listsssss[i].size}</td>
+                                <td class="product-model" data-product-id="11">${listsssss[i].footSize}</td>
+                                <td class="product-model" data-product-id="11">${listsssss[i].feetSize}</td>
+                       </tr>`
+            $('.foot_size_container').append(foot_size)
+          }
         }
       },
       error: function () {
@@ -580,8 +602,7 @@
           // 'Authorization': Cookies.get('Authorization') // 클라이언트 쿠키의 값을 전달
         },
         success: function (response) {
-          // window.location.href = '/view/myPage';
-
+          window.location.href = '/view/myPage';
         },
         error: function () {
           console.log("실패")
@@ -590,7 +611,7 @@
     })
 
     $(document).on('click',"div[id='shoes_id']" , function (e) { // 신발 누르면 해당 사이즈 출력
-      window.location.href=`http://localhost:8080`
+      window.location.href=`/view/home`
 
     })
     $(document).on('click',"div[id='signup']" , function (e) { // 보드 상세 페이지 이동
@@ -610,11 +631,11 @@
     $(document).on('click',"div[id='signout']" , function (e) { // 보드 상세 페이지 이동
       e.preventDefault();
       Cookies.remove('Authorization', {path: '/'});
-      window.location.href = ""
+      window.location.href = `/view/home`
     })
     $(document).on('click',"div[id='favorite']" , function (e) { // 보드 상세 페이지 이동
       e.preventDefault();
-      window.location.href = `/Product/favorite`
+      window.location.href = `/product/favorite`
     })
     $(document).on('click',"div[id='my-page']" , function (e) { // 보드 상세 페이지 이동
       e.preventDefault();

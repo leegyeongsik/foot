@@ -10,11 +10,10 @@ public class ProductResponseDto {
     String modelDescription;
     Long totalAmount;
     Long price;
-    String ModelPicture;
+    String modelPicture;
     double discountRate;
     Long discountPrice;
-    boolean IsAppend = false;
-
+    boolean isAppend = false;
     String brand;
 
     public ProductResponseDto(Product product){
@@ -22,7 +21,7 @@ public class ProductResponseDto {
         this.modelName = product.getModel();
         this.totalAmount = product.getTotalAmount();
         this.price = product.getPrice();
-        this.ModelPicture= product.getModelpicture();
+        this.modelPicture= product.getModelpicture();
         this.discountRate = product.getDiscountRate();
         this.discountPrice = product.getDiscountPrice();
         this.modelDescription = product.getDescription();
@@ -34,11 +33,11 @@ public class ProductResponseDto {
         this.modelName = product.getModel();
         this.totalAmount = product.getTotalAmount();
         this.price = product.getPrice();
-        this.ModelPicture= product.getModelpicture();
+        this.modelPicture= product.getModelpicture();
         this.discountRate = product.getDiscountRate();
         this.discountPrice = product.getDiscountPrice();
         this.modelDescription = product.getDescription();
-        this.IsAppend = IsAppend;
+        this.isAppend = IsAppend;
         this.brand = product.getBrand().getName();
     }
 }
