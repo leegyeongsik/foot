@@ -620,6 +620,7 @@
                     $('#root').append(infoProduct);
 
                     SizesList=response.productSizeResponseDtos;
+                    console.log(SizesList)
                     for (let i = 0; i < SizesList.length; i++) {
                         var newSizes = document.createElement("div");
                         newSizes.className = "Sizes";
@@ -691,8 +692,9 @@
                     }
                 }
                 Product_Size_Info[Object.keys(Product_Size_Info).length] = temp_product_info_list
-                alert("ok")
             }
+            alert("ok")
+
         })
 
         $(document).on('click', "button[id='uploadBtn']", function (e) { // 유처 초대
