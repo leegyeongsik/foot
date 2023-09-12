@@ -415,17 +415,6 @@
       <div class="TextContainer" style="position: relative; top: 160px; line-height: 1.5;"> <!-- 설명 -->
       </div>
 
-
-      <details style="position: relative; top: 180px;"> <!-- 댓글 -->
-        <summary>
-          review
-        </summary>
-        <p>
-          text
-        </p>
-
-      </details>
-
       <details style="position: relative; top: 220px;"> <!-- 사이즈 비교 -->
         <summary>
           사이즈(cm)
@@ -613,8 +602,7 @@
           // 'Authorization': Cookies.get('Authorization') // 클라이언트 쿠키의 값을 전달
         },
         success: function (response) {
-          // window.location.href = '/view/myPage';
-
+          window.location.href = '/view/myPage';
         },
         error: function () {
           console.log("실패")

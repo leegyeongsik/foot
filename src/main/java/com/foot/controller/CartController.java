@@ -1,5 +1,4 @@
 package com.foot.controller;
-
 import com.foot.dto.CartItemDto;
 import com.foot.dto.CartResponseDto;
 import com.foot.security.UserDetailsImpl;
@@ -19,6 +18,7 @@ public class CartController {
     private final CartService cartService;
 
     // 장바구니에 상품 추가
+    @ResponseBody
     @PostMapping("/api/cart")
     public void addCart(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody CartItemDto cartItemDto) {
         cartService.addCart(userDetails.getUser(), cartItemDto);
@@ -33,6 +33,8 @@ public class CartController {
     }
 
     // 장바구니 아이템 수량 변경
+    @ResponseBody
+
     @PatchMapping("/api/cart")
     public ResponseEntity<String> updateCartAmount(@RequestBody CartItemDto cartItemDto) {
         cartService.updateCartItemCount(cartItemDto.getItemId(), cartItemDto.getCount());
@@ -40,6 +42,7 @@ public class CartController {
     }
 
     // 장바구니 아이템 삭제
+    @ResponseBody
     @DeleteMapping("/api/cart/{cartItemId}")
     public ResponseEntity<String> deleteCartItem(@PathVariable Long cartItemId) {
         cartService.deleteCartItem(cartItemId);

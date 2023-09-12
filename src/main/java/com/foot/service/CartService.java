@@ -6,7 +6,6 @@ import com.foot.entity.*;
 import com.foot.repository.cart.CartItemRepository;
 import com.foot.repository.cart.CartRepository;
 import com.foot.repository.products.ProductColorRepository;
-import com.foot.repository.products.ProductSizeRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -25,7 +24,6 @@ public class CartService {
     private final CartRepository cartRepository;
     private final CartItemRepository cartItemRepository;
     private final ProductColorRepository productColorRepository;
-    private final ProductSizeRepository productSizeRepository;
 
     // 장바구니 상품 추가
     @Transactional
