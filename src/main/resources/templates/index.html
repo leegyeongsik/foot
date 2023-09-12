@@ -416,7 +416,6 @@
 </body>
 <script>
     const auth = Cookies.get('Authorization');
-    console.log(auth)
 
     $(document).ready(function () {
         if (auth != null){ // ture인지 펄스인지
@@ -437,7 +436,7 @@
                 },
                 success: function (response) {
                     if (response) {
-                        console.log(response)
+                        // console.log(response)
                         var list = response.productResponseDtos
                         var brandList = response.brandResponseDtos
                         $('.sidebar-container').empty()
@@ -504,7 +503,7 @@
                     }
                 },
                 error: function () {
-                    console.log("실패")
+                    // console.log("실패")
                 }
             })
         } else {
@@ -549,7 +548,7 @@
                     }
                 },
                 error: function () {
-                    console.log("실패")
+                    // console.log("실패")
                 }
             })
         }
@@ -745,7 +744,7 @@
 
             var checked =  $(`#${tagId}`).is(':checked');
 
-            console.log(checked)
+            // console.log(checked)
             if(checked == true){
                 $(`#${tagId}`).prop('checked',!checked);
 

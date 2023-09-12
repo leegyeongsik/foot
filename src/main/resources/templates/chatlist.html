@@ -409,13 +409,17 @@
             var sock = new SockJS("/ws/chat"); //new SockJS()를 사용하여 아까 핸들러에서 지정해준 endPoint를 사용하여 연결을 해준다.
             var ws = Stomp.over(sock);
 
-            ws.connect({}, function(frame) {
+            ws.connect({}, function(frame) { // 변경해야할수도 널인경우가 두가지 입장했을때 카운트만 보내주고 또 하나는 채팅에서 이미지만 보낸경우 그것도 널임
               ws.subscribe("/topic/api/channel", function(message) {
                 let receive = JSON.parse(message.body);
-                let tempssss=document.getElementById(`channel_${receive.channelId}`)
+                if (receive.message != null ){
+                  let tempssss=document.getElementById(`channel_${receive.channelId}`)
+                  tempssss.innerText =`${receive.message}`
+                } else if(receive.message == null && receive.img != null){
+                  let tempssss=document.getElementById(`channel_${receive.channelId}`)
+                  tempssss.innerText ="이미지"
+                }
                 let tempssssssss=document.getElementById(`chatcnt_${receive.channelId}`)
-
-                tempssss.innerText =`${receive.message}`
                 tempssssssss.innerText = `${receive.adminChannelCnt}`
               });
             }, function(error) {

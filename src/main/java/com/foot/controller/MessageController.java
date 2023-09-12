@@ -33,7 +33,7 @@ public class MessageController {
 
     @MessageMapping("/chat/message")
     public void message(ChatMessageRequestDto message) throws Exception {
-        log.info(String.valueOf(message));
+//        log.info(String.valueOf(message));
         if(message.getMessageImg() !=null){
             ChatMessageRequestDto messageRequestDto = messageService.messageImg(message);
             messageProducer.send(BOOT_TOPIC, messageRequestDto);
@@ -55,6 +55,7 @@ public class MessageController {
                 chatLogRepository.save(chatLog);
             }
             HashMap<String, String> adminMsg = new HashMap<>();
+            adminMsg.put("channelId" , String.valueOf(enterExitMessageRequestDto.getChannelIDs()));
             adminMsg.put("adminChannelCnt" , String.valueOf(chatLogRepository.getMessageLeadCount(channel.getId())));
             ObjectMapper mapper = new ObjectMapper();
             String messageJsons = mapper.writeValueAsString(adminMsg);
@@ -85,7 +86,7 @@ public class MessageController {
     }
     @MessageMapping("/chat/exit")
     public void channelExit(@RequestBody EnterExitMessageRequestDto enterExitMessageRequestDto) throws IOException {
-        log.info(enterExitMessageRequestDto.toString());
+//        log.info(enterExitMessageRequestDto.toString());
         Channel channel=repository.findById(enterExitMessageRequestDto.getChannelIDs()).get();
         if(enterExitMessageRequestDto.getUserRole().equals("ADMIN")) {
             channel.setEnterAdmin(channel.getEnterAdmin()-1);
