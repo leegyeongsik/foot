@@ -3,6 +3,7 @@ package com.foot.controller;
 import com.foot.dto.CartItemDto;
 import com.foot.dto.CartResponseDto;
 import com.foot.security.UserDetailsImpl;
+import com.foot.service.CartService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;

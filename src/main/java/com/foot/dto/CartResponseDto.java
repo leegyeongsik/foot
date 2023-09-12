@@ -11,8 +11,6 @@ public class CartResponseDto {
 
     private Long productId; // 상품 아이디
 
-    private String productName; //상품명
-
     private Long productSize;
 
     private String productName; //상품명  조인
@@ -23,8 +21,10 @@ public class CartResponseDto {
 
     private String imgUrl; //상품 이미지 경로
 
+    private Long productColorId;
 
-    public CartResponseDto(Long cartItemId, Long productId, String productName, Long productSize, Long price, int count, String imgUrl) {
+
+    public CartResponseDto(Long cartItemId, Long productId, String productName, Long productSize, Long price, int count, String imgUrl, Long id) {
         this.cartItemId = cartItemId;
         this.productId = productId;
         this.productName = productName;
@@ -32,6 +32,6 @@ public class CartResponseDto {
         this.price = price;
         this.count = count;
         this.imgUrl = imgUrl;
-        this.productColorId = productColorId;
+        this.productColorId = id;
     }
 }
