@@ -9,7 +9,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -36,4 +35,6 @@ public interface BidProductRepository extends JpaRepository<BidProduct, Long> {
 
     // 경매 상품 이름으로 조회
     Page<BidProduct> findByNameContaining(String searchKeyword, Pageable pageable);
+
+
 }

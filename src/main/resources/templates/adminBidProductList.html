@@ -9,23 +9,26 @@
     <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     <script src="https://kit.fontawesome.com/1d07e1c680.js" crossorigin="anonymous"></script>
-    <title>product List</title>
+    <title>경매상품 관리 페이지</title>
     <style>
         body {
             margin: 0;
         }
+
         .admin-container {
             display: flex;
             flex-direction: row;
             height: 100vh;
             background-color: white;
         }
+
         .btn-container {
             flex-direction: row;
             display: flex;
-            justify-content:space-between;
+            justify-content: space-around;
 
         }
+
         .product-btn {
             padding: 10px 16px;
             border: none;
@@ -36,6 +39,7 @@
             cursor: pointer;
             display: block; /* 블록 요소로 설정하여 한 줄에 하나의 버튼만 표시 */
         }
+
         .discount-btn {
             padding: 10px 16px;
             border: none;
@@ -151,75 +155,170 @@
             font-weight: 700;
             cursor: pointer;
         }
+
+             /* 모달 스타일 */
+         .modal {
+             display: none; /* 모달 초기에는 숨김 상태로 설정 */
+             position: fixed;
+             top: 30%;
+             left: 45%;
+             transform: translate(-50%, -50%);
+             width: 30%;
+             height: 40%;
+             overflow: auto;
+
+         }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #f2f2f2;
+            width: 50%;
+            border-radius: 5px;
+        }
+
+        /* 모달 내의 요소 스타일 */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .btn-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            margin: 0 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+
+        .btn-secondary {
+            background-color: #ccc;
+            color: #333;
+        }
+
+        .btn-secondary:hover {
+            background-color: #999;
+        }
+
     </style>
 </head>
 <body>
 <div class="admin-container">
     <div class="admin-menu">
-        <div class="menu-item" onclick="location.href='/view/admin'"><i class="fas fa-home" style="margin-right: 10px;"></i>관리자 홈</div>
-        <div class="menu-item" onclick="location.href='/view/admin/users'"><i class="fas fa-users" style="margin-right: 10px;"></i>회원 관리</div>
-        <div class="menu-item" onclick="location.href='/view/admin/brands'"><i class="fas fa-tag" style="margin-right: 10px;"></i>브랜드 관리</div>
-        <div class="menu-item" onclick="location.href='/view/admin/products'"><i class="fas fa-box"  style="margin-right: 10px;"></i> 상품 관리</div>
-        <!-- 원하는 메뉴 항목들을 추가 -->
+        <div class="menu-item" onclick="location.href='/view/admin'">
+            <i class="fas fa-home" style="margin-right: 10px;"></i>관리자 홈
+        </div>
+        <div class="menu-item" onclick="location.href='/view/admin/users'">
+            <i class="fas fa-users" style="margin-right: 10px;"></i>회원 관리
+        </div>
+        <div class="menu-item" onclick="location.href='/view/admin/brands'">
+            <i class="fas fa-tag" style="margin-right: 10px;"></i>브랜드 관리
+        </div>
+        <div class="menu-item" onclick="location.href='/view/admin/products'"><i class="fas fa-box"
+                                                                                 style="margin-right: 10px;"></i> 상품 관리
+        </div>
     </div>
-
     <div class="admin-content">
-
         <div class="list-container">
             <div class="btn-container">
-                <button class="product-btn" onclick="location.href='/Product/create'">상품 추가</button>
-                <button class="discount-btn" onclick="openDiscountPrompt()">할인율 변경</button>
+                <button class="product-btn" onclick="location.href='/view/bp/create'">상품 추가</button>
+                <button class="discount-btn" onclick="openStatusModal()">경매상태 변경</button>
                 <button class="delete-btn" onclick="deleteProduct()">상품 삭제</button>
             </div>
 
             <table>
                 <thead>
                 <tr>
-                    <th><input type="checkbox" id="selectAll" /></th>
-                    <th>상품 번호</th>
-                    <th>상품 이미지</th>
-                    <th>상품 모델</th>
+                    <th><input type="checkbox" id="selectAll"/></th>
+                    <th>상품번호</th>
+                    <th>상품이미지</th>
+                    <th>상품이름</th>
                     <th>브랜드</th>
-                    <th>가격</th>
-                    <th>할인율</th>
-                    <th>판매 가격</th>
-                    <th>수량</th>
+                    <th>시작가격</th>
+                    <th>현재가격</th>
+                    <th>마감시간</th>
+                    <th>경매상태</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr th:each="product : ${list}">
-                    <td><input type="checkbox" class="product-checkbox" th:attr="data-product-id=${product.id}" /></td>
+                    <td><input type="checkbox" class="product-checkbox" th:attr="data-product-id=${product.id}"/></td>
                     <td th:text="${product.id}"></td>
-                    <td><img th:src="${product.modelpicture}" alt="Product Image" width="50" height="50" /></td>
-                    <td th:text="${product.model}"  th:attr="data-product-id=${product.id}" onclick="goToProductDetailPage(this)" class="product-model"></td>
-                    <td th:text="${product.brand}"></td>
-                    <td th:text="${product.price}"></td>
-                    <td th:text="${product.discountRate}"></td>
-                    <td th:text="${product.discountPrice}"></td>
-                    <td th:text="${product.totalAmount}"></td>
+                    <td><img th:src="${product.footpicture}" alt="Product Image" width="50" height="50"/></td>
+                    <td th:text="${product.name}" th:attr="data-product-id=${product.id}"
+                        onclick="goToProductDetailPage(this)" class="product-model"></td>
+                    <td th:text="${product.brand.name}"></td>
+                    <td th:text="${product.startPrice}"></td>
+                    <td th:text="${product.topBid != null ? product.topBid.bidPrice : 0}"></td>
+                    <td th:text="${product.expirationPeriod}"></td>
+                    <td th:text="${product.status == 1 ? '마감' : '진행중'}"></td>
                 </tr>
                 </tbody>
             </table>
             <div class="page-number">
                 <th:block th:each="page : ${#numbers.sequence(startPage, endPage)}">
-                    <a th:if="${page != nowPage}" th:href="@{/view/admin/products(page = ${page -1}, searchKeyword = ${param.searchKeyword})}" th:text="${page}"></a>
+                    <a th:if="${page != nowPage}"
+                       th:href="@{/view/admin/bidProducts(page = ${page -1}, searchKeyword = ${param.searchKeyword})}"
+                       th:text="${page}"></a>
                     <strong th:if="${page == nowPage}" th:text="${page}" style="color : #333"></strong>
                 </th:block>
             </div>
         </div>
         <div class="search-form">
-            <form th:action="@{/view/admin/products}" method="get">
+            <form th:action="@{/view/admin/bidProducts}" method="get">
                 <input type="text" name="searchKeyword">
                 <button class="search-btn" type="submit">Search</button>
             </form>
         </div>
-
     </div>
+    <div class="modal" id="statusModal">
+        <div class="modal-content">
+            <form>
+                <div class="form-group">
+                    <label for="newStatus">경매 상태 변경:</label>
+                    <select class="form-control" id="newStatus">
+                        <option value="0">경매 중</option>
+                        <option value="1">마감</option>
+                    </select>
+                </div>
+                <button type="button" class="btn btn-primary" onclick="selectStatus()">변경</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="closeStatusModal()">취소</button>
+            </form>
+        </div>
+    </div>
+
 
 </div>
 
 </body>
-<script>
+<script th:inline="javascript">
+
     const Toast = Swal.mixin({
         toast: true,
         position: 'center-center',
@@ -231,7 +330,6 @@
             toast.addEventListener('mouseleave', Swal.resumeTimer)
         }
     })
-
 
     $(document).ready(function () {
         $("#selectAll").click(function () {
@@ -253,76 +351,15 @@
     function goToProductDetailPage(row) {
         var productId = row.getAttribute("data-product-id");
         console.log(productId);
-        window.location.href = "/Product/update/" + productId;
+        window.location.href = "/view/bp/" + productId;
     }
 
-    // 상품 할인율을 입력하는 창
-    function openDiscountPrompt() {
-        var selectedProductIds = [];
-
-        // 선택한 체크 박스의 상품 ID 수집
-        $('.product-checkbox:checked').each(function() {
-            var productId = $(this).data('product-id'); // data-product-id 속성 값 가져오기
-            selectedProductIds.push(productId);
-        });
-
-        console.log(selectedProductIds);
-
-        if (selectedProductIds.length === 0) {
-            alert("할인율을 변경할 상품을 선택해 주세요.");
-            return;
-        }
-
-        // 프롬프트 창을 이용하여 할인율 입력 받기
-        var discountRate = parseFloat(prompt("할인율 입력 : "));
-
-        if (discountRate === null) {
-            return; // 사용자가 취소 버튼을 눌렀을 경우 처리 중단
-        }
-
-        console.log(discountRate);
-
-        if (isNaN(discountRate) || discountRate < 0 || discountRate > 100) {
-            alert("Please enter a valid discount rate between 0 and 100.");
-            return;
-        }
-
-        // 선택한 상품들의 할인율을 업데이트하는 작업 수행
-        updateDiscountRates(selectedProductIds, discountRate);
-    }
-
-    // 할인율 수정
-    function updateDiscountRates(productIds, discountRate) {
-
-        // 선택한 상품 ID와 할인율 정보를 JSON으로 변환하여 POST 요청 보내기
-        var requestData = {
-            productIds: productIds,
-            discountRate: discountRate
-        };
-
-        console.log(requestData.productIds, requestData.discountRate)
-
-        $.ajax({
-            type: "POST",
-            url: "/api/admin/products/updateDiscountRates",
-            contentType: "application/json",
-            data: JSON.stringify(requestData),
-            success: function(data) {
-                successMsg("할인율 변경 성공");
-            },
-            error: function(jqXHR, textStatus, errorThrown) {
-                errorMsg("할인율 변경 실패")
-            }
-        });
-    }
-
-
-    // 상품 삭제
+    // 경매 상품 삭제
     function deleteProduct() {
         var selectedProductIds = [];
 
         // 선택한 체크 박스의 상품 ID 수집
-        $('.product-checkbox:checked').each(function() {
+        $('.product-checkbox:checked').each(function () {
             var productId = $(this).data('product-id'); // data-product-id 속성 값 가져오기
             selectedProductIds.push(productId);
         });
@@ -358,17 +395,87 @@
 
         $.ajax({
             type: "DELETE",
-            url: "/api/admin/products",
+            url: "/api/admin/bidProducts",
             contentType: "application/json",
             data: JSON.stringify(requestData),
-            success: function(data) {
+            success: function (data) {
                 successMsg("삭제 성공")
             },
-            error: function(jqXHR, textStatus, errorThrown) {
+            error: function (jqXHR, textStatus, errorThrown) {
                 errorMsg("삭제 실패")
             }
         });
     }
+
+    // 경매 상태 변경
+    function selectStatus() {
+        var selectedProductIds = [];
+        var selectedStatus = document.getElementById('newStatus').value;
+
+        // 선택한 체크 박스의 상품 ID 수집
+        $('.product-checkbox:checked').each(function () {
+            var productId = $(this).data('product-id'); // data-product-id 속성 값 가져오기
+            selectedProductIds.push(productId);
+        });
+
+        console.log(selectedProductIds);
+
+        if (selectedProductIds.length === 0) {
+            alert("상태를 변경할 상품을 선택해 주세요.");
+            return;
+        }
+
+        console.log(selectedStatus);
+
+        // 선택한 상품들의 할인율을 업데이트하는 작업 수행
+        updateStatus(selectedProductIds, selectedStatus);
+    }
+
+    // 할인율 수정
+    function updateStatus(productIds, selectedStatus) {
+
+        // 선택한 상품 ID와 할인율 정보를 JSON으로 변환하여 POST 요청 보내기
+        var requestData = {
+            productIds: productIds,
+            status: selectedStatus
+        };
+
+        console.log(requestData.productIds, requestData.status)
+
+        $.ajax({
+            type: "POST",
+            url: "/api/admin/bidProducts/updateStatus",
+            contentType: "application/json",
+            data: JSON.stringify(requestData),
+            success: function (data) {
+                successMsg("경매 상태 변경 성공");
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                errorMsg("경매 상태 변경 실패")
+            }
+        });
+    }
+
+    // 모달 열기
+    function openStatusModal() {
+        var modal = document.getElementById("statusModal");
+        modal.style.display = "block";
+    }
+
+    // 모달 닫기
+    function closeStatusModal() {
+        var modal = document.getElementById("statusModal");
+        modal.style.display = "none";
+    }
+
+    // 모달 외부 클릭 시 닫기
+    window.onclick = function(event) {
+        var modal = document.getElementById("statusModal");
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+
 
     function successMsg(msg) {
         Toast.fire({
@@ -379,12 +486,13 @@
         })
     }
 
-    function errorMsg(msg){
+    function errorMsg(msg) {
         Toast.fire({
             icon: 'error',
             title: msg
         })
     }
+
 
 </script>
 </html>

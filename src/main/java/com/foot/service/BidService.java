@@ -166,17 +166,7 @@ public class BidService {
         return result;
     }
 
-//    // 경매 상품 수정
-//    @Transactional
-//    public BidProductResponseDto updateBidProduct(Long bidId, BidProductRequestDto requestDto, User user) {
-//        BidProduct bidProduct = findBidProductById(bidId);
-//        if (bidProduct.getUser().equals(user)) {
-//            bidProduct.update(requestDto);
-//        } else {
-//            throw new IllegalArgumentException("본인의 경매상품만 수정할수 있습니다.");
-//        }
-//        return new BidProductResponseDto(bidProduct);
-//    }
+
 
     // 경매 상품 삭제
     public void deleteBidProduct(Long bidId, User user) {
@@ -186,6 +176,27 @@ public class BidService {
         } else {
             throw new IllegalArgumentException("본인의 경매상품만 삭제할수 있습니다.");
         }
+    }
+
+    // 경매 상품 수정
+    public void updateBidProduct(BidProductRequestDto requestDto, Long id) throws IOException {
+        BidProduct bidProduct = findBidProductById(id);
+        Brand brand = brandRepository.findByName(requestDto.getBrand());
+
+        // 아무 이미지도 첨부하지 않았을 경우 수정 x
+        if (!requestDto.getBidProductFile().isEmpty()) {
+            bidProduct.setFootpicture(s3UploadService.uploadImage(requestDto.getBidProductFile()));
+        }
+
+        bidProduct.setName(requestDto.getName());
+        bidProduct.setBrand(brand);
+        bidProduct.setDescription(requestDto.getDescription());
+        bidProduct.setFeetsize(requestDto.getFeetSize());
+        bidProduct.setFootsize(requestDto.getFootSize());
+        bidProduct.setStartPrice(requestDto.getStartPrice());
+        bidProduct.setExpirationPeriod(requestDto.getExpirationPeriod());
+
+        bidProductRepository.save(bidProduct);
     }
 
 
@@ -267,9 +278,26 @@ public class BidService {
         return String.format(Locale.US, "%d일 %d시간 %d분", days, hours, minutes);
     }
 
-    // 경매 마감 시간 포맷팅
-    public String formatExpirationTime(LocalDateTime expirationTime) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-        return expirationTime.format(formatter);
+
+    // 경매 상품 상태 변경
+    public void updateStatus(StatusRequestDto requestDto) {
+        List<Long> productIds = requestDto.getProductIds();
+        int status = requestDto.getStatus();
+        LocalDateTime endDate = (status == 1)
+                ? LocalDateTime.now().minusSeconds(1).withNano(0)
+                : LocalDateTime.now().plusDays(1).withNano(0);
+
+
+        for (Long productId : productIds) {
+            BidProduct product = findBidProductById(productId);
+            if (product != null) {
+                // 경매 상태 업데이트
+                product.setStatus(status);
+                product.setExpirationPeriod(endDate);
+
+                // 상품 저장
+                bidProductRepository.save(product);
+            }
+        }
     }
 }
