@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"
+            integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g="
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <title>Bid Product Details</title>
+    <style>
+        /* 전체 페이지 스타일 */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .Header {
+            width: 100%;
+            height: 10%;
+            position: absolute;
+            background-color: #ffffff;
+            display: flex;
+            padding: 0 20px;
+        }
+
+        .NavList {
+            margin-top: 2%;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            width: 95%;
+        }
+
+        .NavItem {
+            flex: 1;
+            text-align: center;
+            color: #EE312F;
+            font-size: 23.71px;
+            font-family: Inter, sans-serif;
+            font-weight: 400;
+            text-transform: uppercase;
+            line-height: 1.1;
+            word-wrap: break-word;
+            cursor: pointer;
+            margin-left: 10%;
+
+        }
+
+        /* .product-info 컨테이너 스타일 */
+        .product-info {
+            display: flex;
+            padding: 20px;
+        }
+
+        /* .product-image 스타일 */
+        .product-image {
+            flex: 1; /* 왼쪽 부분을 확장하여 이미지 크게 표시 */
+            text-align: center; /* 텍스트 가운데 정렬 */
+        }
+
+        .product-image img {
+            max-width: 50%; /* 이미지 크기 조정 */
+            height: auto;
+
+            display: block; /* 이미지 중앙 정렬 */
+            margin-left: 30%;
+            margin-top: 25%;
+        }
+
+        /* .info-box 스타일 */
+        .info-box {
+            flex: 2; /* 오른쪽 부분을 확장하여 정보 표시 */
+            background-color: #f0f0f0;
+            padding: 20px;
+            border-radius: 5px;
+            max-width: 27%; /* 상자 가로 길이 제한 */
+            margin-top: 8%;
+            margin-right: 13%;
+        }
+
+        /* .info-header 스타일 */
+        .info-header h4 {
+            font-size: 20px;
+            margin: 10px 20px;
+            padding-bottom: 10px;
+        }
+
+        .info-header p {
+            display: block;
+        }
+
+        .product-name {
+            font-size: 15px;
+            margin-left: 15px;
+        }
+
+        .product-description {
+            font-size: 13px;
+            margin-left: 20px;
+        }
+
+
+
+        .info-body-title {
+            margin-top: 25px; /* 위쪽 여백을 20px로 설정 */
+            margin-left: 10px;
+        }
+
+        /* .detail-info 스타일 */
+        .detail-info {
+            display: flex;
+            flex-direction: column; /* 내부 요소를 세로로 배치 */
+            padding: 5px;
+        }
+
+
+        .detail-info-label {
+            font-size: 15px;
+            margin-right: 10px; /* 간격을 오른쪽으로 추가 */
+            padding: 10px;
+        }
+
+        .detail-info-value {
+            font-size: 13px;
+            font-weight: normal;
+            text-align: left;
+            margin-left: 15px; /* 간격을 왼쪽으로 추가 */
+        }
+
+        #currentTopBid {
+            color: #EE312F;
+            font-weight: bold;
+        }
+
+        .bidding-form-container {
+            margin-top: 3%;
+            display: flex;
+            justify-content: center; /* 수평 가운데 정렬 */
+        }
+
+
+        /* 입력 필드와 버튼 스타일 */
+        input[type="number"] {
+            width: 200px;
+            padding: 12px 20px;
+            margin: 5px 30px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+        }
+
+        button[type="submit"] {
+            background-color: #EE312F;
+            color: white;
+            padding: 12px 70px;
+            border: none;
+            border-radius: 18px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 15px;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #C02832;
+        }
+
+        /* 예쁘게 스타일링하기 위해 추가적으로 조정 가능합니다. */
+    </style>
+</head>
+<body>
+<div class="Header">
+    <div class="NavList">
+        <div class="Logo" onclick="location.href='/view/home'">
+            <img alt="Owl Image" style="height: 30px; width: auto; margin-right: 10px;">
+            foot
+        </div>
+        <div class="NavItem" id="shoes_id" onclick="location.href='/view/home'">shoes</div>
+        <div class="NavItem">Auction</div>
+        <div class="NavItem">favourite</div>
+        <div class="NavItem" onclick="location.href='/view/myPage'">MyPage</div>
+        <div class="NavItem" onclick="logoutUser()">SIGNOUT</div>
+    </div>
+</div>
+<div class="product-info">
+    <div class="product-image">
+        <p><img th:src="${product.getFootPicture()}" alt="Foot Picture"/></p>
+    </div>
+    <div class="info-box">
+        <div class="info-header">
+<!--            <h4 th:text="${product.brand.name}"></h4>-->
+            <h4 class="product-name" th:text="${product.name}"></h4>
+            <p class="product-description" th:text="${product.description}"></p>
+        </div>
+        <div class="info-body">
+            <div class="detail-info">
+                <table>
+                    <tr>
+                        <td class="detail-info-label">판매자</td>
+                        <td class="detail-info-value" th:text="${product.author}"></td>
+                    </tr>
+                    <tr>
+                        <td class="detail-info-label">사이즈</td>
+                        <td class="detail-info-value" th:text="${product.footSize}"></td>
+                    </tr>
+                    <tr>
+                        <td class="detail-info-label">시작가격</td>
+                        <td class="detail-info-value" id="startPrice" th:text="${product.startPrice}"></td>
+                    </tr>
+                    <tr>
+                        <td class="detail-info-label">현재가격</td>
+                        <td class="detail-info-value"
+                            id="currentTopBid"
+                            th:text="${product.topBid != null ? product.topBid.getBidPrice() : '0원'}"></td>
+                    </tr>
+                    <tr>
+                        <td class="detail-info-label">마감시간</td>
+                        <td class="detail-info-value"
+                            th:text="${product.expirationPeriod}"></td>
+                    </tr>
+                    <tr>
+                        <td class="detail-info-label">남은시간</td>
+                        <td class="detail-info-value"
+                            th:text="${product.remainingTime}"></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="bidding-form-container">
+    <div class="bidding-form">
+        <form th:action="@{'/api/bid/' + ${product.id}}" method="post" onsubmit="return confirmBid()" id="bidForm">
+            <input type="number" name="bidPrice" id="bidPrice" placeholder="입찰할 가격을 입력해주세요.">
+            <button type="submit">입찰하기</button>
+        </form>
+    </div>
+</div>
+
+</body>
+<script>
+    function validateBid() {
+        var bidPriceInput = document.getElementById("bidPrice");
+        var currentTopBid = parseFloat(document.getElementById("currentTopBid").textContent); // 현재 최고 입찰가를 가져옵니다. 문자열을 숫자로 변환해야 합니다.
+        var startPrice = parseFloat(document.getElementById("startPrice").textContent); // 시작 가격을 가져옵니다.
+
+        if (isNaN(currentTopBid)) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: '현재 최고 입찰가가 잘못 설정되었습니다.'
+            });
+            console.log(currentTopBid);
+            return false;
+        }
+
+        var userBid = parseFloat(bidPriceInput.value);
+
+        if (isNaN(userBid)) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: '올바른 입찰 가격을 입력해주세요.'
+            });
+            console.log(userBid);
+            return false;
+        }
+
+        if (userBid < startPrice) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: '시작 가격보다 낮은 가격을 입찰할 수 없습니다.'
+            });
+            return false;
+        }
+
+
+        if (userBid <= currentTopBid) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: '현재 최고 입찰가보다 높은 가격을 입찰해주세요.'
+            });
+            return false;
+        }
+
+        return true;
+    }
+
+
+    function confirmBid() {
+        const bidPriceInput = document.getElementById('bidPrice');
+        const bidPrice = bidPriceInput.value;
+        console.log(bidPrice);
+
+        Swal.fire({
+            title: '입찰 확인',
+            text: bidPrice + '원을 입찰하시겠습니까?',
+            icon: 'info',
+            showCancelButton: true,
+            confirmButtonText: '입찰',
+            cancelButtonText: '취소'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                if (validateBid()) {
+                    document.getElementById('bidForm').submit(); // 폼 제출
+                }
+            }
+        });
+
+        return false; // 폼 제출 방지
+    }
+
+
+</script>
+</html>
