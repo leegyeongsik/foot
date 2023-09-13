@@ -24,7 +24,7 @@ public class CartController {
         cartService.addCart(userDetails.getUser(), cartItemDto);
     }
 
-//     장바구니 조회
+
     @GetMapping("/view/cart")
     public String getCartList(@AuthenticationPrincipal UserDetailsImpl userDetails, Model model) {
         List<CartResponseDto> cartResponseDtoList = cartService.getCartList(userDetails.getUser());
@@ -33,8 +33,6 @@ public class CartController {
     }
 
     // 장바구니 아이템 수량 변경
-    @ResponseBody
-
     @PatchMapping("/api/cart")
     public ResponseEntity<String> updateCartAmount(@RequestBody CartItemDto cartItemDto) {
         cartService.updateCartItemCount(cartItemDto.getItemId(), cartItemDto.getCount());
