@@ -298,21 +298,28 @@
 <script>
   var role = document.getElementById('targetIdParagraphss').querySelector('span').innerText;
 
+  let clicked = false
   function toggleChatWrap() {
-        $.ajax({
-          url: `/api/channel/infos`,
-          type: 'GET',
-          contentType: 'application/json',
-          headers: {
-            // 'Authorization': Cookies.get('Authorization')
-          },
-          success: function (response) {
-            if (response) {
-              wsss.send("/pub/chat/enter", {'Authorization': Cookies.get('Authorization')}, JSON.stringify({channelIDs: `${response.channelNum}` , userRole: role})); //receiver:participant,
-              $("#footersSSS").load(`/chats/${response.channelNum}`);
-            }
-          },
-        });
+    if (!clicked) {
+      clicked = true
+      $.ajax({
+        url: `/api/channel/infos`,
+        type: 'GET',
+        contentType: 'application/json',
+        headers: {
+          // 'Authorization': Cookies.get('Authorization')
+        },
+        success: function (response) {
+          if (response) {
+            wsss.send("/pub/chat/enter", {'Authorization': Cookies.get('Authorization')}, JSON.stringify({
+              channelIDs: `${response.channelNum}`,
+              userRole: role
+            })); //receiver:participant,
+            $("#footersSSS").load(`/chats/${response.channelNum}`);
+          }
+        },
+      });
+    }
   }
 
 
@@ -323,10 +330,10 @@
     var chatButton = document.getElementById("chatButton");
 
     // Toggle chat list visibility
-    chatListVisible = !chatListVisible;
-    if (chatListVisible) {
+    if (!chatListVisible) {
       chatList.style.display = "block";
       chatButton.textContent = "채팅방 목록 닫기"; // Change button text
+      chatListVisible = true;
       $.ajax({
         url: `/api/channel`,
         type: 'GET',
@@ -340,7 +347,7 @@
             // console.log(response)
             for (let i = 0; i < response.length; i++) {
               chatlist=`<li id = ${response[i].channelId} class="chat_infos">
-                  <img src="https://placekitten.com/50/50" class = "chat_infoss" id=${response[i].channelId} alt="Chat User">
+                  <img src="/img/pancham.webp" class = "chat_infoss" id=${response[i].channelId} alt="Chat User">
                   <div class="chat-info">
                     <h3>${response[i].channelOwner}</h3>
                    <p id = channel_${response[i].channelId}>${response[i].latestMsg}</p> <!-- 마지막 채팅기록-->
@@ -354,9 +361,11 @@
         },
 
       })
-    } else {
+    } else if(chatListVisible == true){
+      console.log(chatListVisible)
       chatList.style.display = "none";
       chatButton.textContent = "채팅방 목록 보기"; // Change button text
+      chatListVisible = false;
       ws.disconnect();
     }
   }
@@ -409,30 +418,28 @@
             var sock = new SockJS("/ws/chat"); //new SockJS()를 사용하여 아까 핸들러에서 지정해준 endPoint를 사용하여 연결을 해준다.
             var ws = Stomp.over(sock);
 
-            ws.connect({}, function(frame) { // 변경해야할수도 널인경우가 두가지 입장했을때 카운트만 보내주고 또 하나는 채팅에서 이미지만 보낸경우 그것도 널임
+            ws.connect({}, function(frame) {
               ws.subscribe("/topic/api/channel", function(message) {
                 let receive = JSON.parse(message.body);
-                if (receive.message != "" && receive.message != null){
-                  let tempssss=document.getElementById(`channel_${receive.channelId}`)
-                  tempssss.innerText =`${receive.message}`
-                } else if(receive.message == "" && receive.img != null){
-                  let tempssss=document.getElementById(`channel_${receive.channelId}`)
-                  tempssss.innerText ="이미지"
+                if (receive.message != "" && receive.message != null) {
+                  let tempssss = document.getElementById(`channel_${receive.channelId}`)
+                  tempssss.innerText = `${receive.message}`
+                } else if (receive.message == "" && receive.img != null) {
+                  let tempssss = document.getElementById(`channel_${receive.channelId}`)
+                  tempssss.innerText = "이미지"
                 }
-                let tempssssssss=document.getElementById(`chatcnt_${receive.channelId}`)
-                console.log(receive)
-                console.log(`${receive.adminChannelCnt}`)
-                if(`${receive.adminChannelCnt}` == "undefined"){
-                  tempssssssss.innerText="0"
-                } else {
-                  tempssssssss.innerText = `${receive.adminChannelCnt}`
-                }
+                let tempssssssss = document.getElementById(`chatcnt_${receive.channelId}`)
+                // if(`${receive.adminChannelCnt}` == "undefined"){
+                //   tempssssssss.innerText="0"
+                // } else {
+                tempssssssss.innerText = `${receive.adminChannelCnt}`
+              // }
               });
             }, function(error) {
               alert("error"+error);
             });
 
-            var socksssss = new SockJS("/ws/chat"); //new SockJS()를 사용하여 아까 핸들러에서 지정해준 endPoint를 사용하여 연결을 해준다.
+            var socksssss = new SockJS("/ws/chat");
             var sssssssssss = Stomp.over(socksssss);
 
             sssssssssss.connect({}, function(frame) {
@@ -467,9 +474,12 @@
 
     $(document).on('click',"img[class='chat_infoss']" , function (e) { // 보드 상세 페이지 이동
       e.preventDefault();
+      chatListVisible =  "enter";
+      console.log(chatListVisible)
       var tagId = e.target.id
       wsss.send("/pub/chat/enter", {'Authorization': Cookies.get('Authorization')}, JSON.stringify({channelIDs: tagId , userRole: role})); //receiver:participant,
-      console.log(tagId)
+      // console.log(tagId)
+
       $("#footersSSS").load(`/chats/${tagId}`)
     }
   )
