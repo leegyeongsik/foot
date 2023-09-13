@@ -3,6 +3,7 @@ package com.foot.controller;
 import com.foot.dto.bidProduct.BidProductResponseDto;
 import com.foot.dto.bidProduct.BrandResponseDto;
 import com.foot.entity.Bid;
+import com.foot.entity.BidProduct;
 import com.foot.entity.Brand;
 import com.foot.security.UserDetailsImpl;
 import com.foot.service.BidService;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
@@ -68,6 +70,19 @@ public class ViewController {
 
         model.addAttribute("products", products);
         return "myBidProducts";
+    }
+
+    @GetMapping("/view/myBids")
+    public String getUserBids(Model model, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        // 유저가 입찰한 BidProduct와 최고 입찰 가격을 가져옴
+        Map<Long, Long> prices = bidService.getHighestBidPricesByUser(userDetails.getUser());
+        List<BidProductResponseDto> products = bidService.getBidProductByBidUser(userDetails.getUser());
+
+        // 모델에 데이터 추가
+        model.addAttribute("userBidProducts", products);
+        model.addAttribute("highestBidPrices", prices);
+
+        return "myBids"; // 뷰 이름 반환
     }
 
 

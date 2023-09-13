@@ -42,4 +42,7 @@ public interface BidProductRepository extends JpaRepository<BidProduct, Long> {
     List<BidProduct> findByStatusAndBrand(int status, Brand brand);
 
     List<BidProduct> findByUser(User user);
+
+    // 유저가 입찰한 경매 상품 조회
+    List<BidProduct> findByBidsUser(User user);
 }

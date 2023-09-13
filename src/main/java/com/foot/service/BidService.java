@@ -204,7 +204,7 @@ public class BidService {
         return result;
     }
 
-    // 유저별 경매상품 조회
+    // 유저가 등록한 경매상품 조회
     public List<BidProductResponseDto> getUserBidProducts(User user) {
         List<BidProduct> bidProductList = bidProductRepository.findByUser(user);
 
@@ -232,6 +232,53 @@ public class BidService {
 
         return bidProductResponses;
     }
+
+    // 유저가 입찰한 경매상품 조회
+    public List<BidProductResponseDto> getBidProductByBidUser(User user) {
+        List<BidProduct> bidProductList = bidProductRepository.findByBidsUser(user);
+
+        // 현재 시간
+        LocalDateTime currentTime = LocalDateTime.now();
+
+        List<BidProductResponseDto> bidProductResponses = bidProductList.stream()
+                .map(bidProduct -> {
+                    // 만료 시간
+                    LocalDateTime expirationTime = bidProduct.getExpirationPeriod();
+
+                    // 남은 시간 계산
+                    Duration duration = Duration.between(currentTime, expirationTime);
+
+                    // 남은 시간을 "X일 Y시간 Z분" 형식으로 포맷팅
+                    String remainingTime = formatRemainingTime(duration);
+
+                    // BidProductResponseDto 생성
+                    return new BidProductResponseDto(bidProduct, remainingTime);
+                })
+                .sorted(Comparator.comparing(BidProductResponseDto::getExpirationPeriod)) // 마감시간 기준으로 정렬
+                .collect(Collectors.toList());
+
+        return bidProductResponses;
+
+
+    }
+
+    // 상품별 자신의 최고 입찰 가격 반환(상품의 topBid가 아닌 본인이 입찰한 가격중 가장 높은 가격)
+    public Map<Long, Long> getHighestBidPricesByUser(User user) {
+        List<BidProduct> userBidProducts = bidProductRepository.findByBidsUser(user);
+
+        // 각 BidProduct에 대한 유저의 최고 입찰 가격을 계산하여 Map으로 반환
+        return userBidProducts.stream()
+                .collect(Collectors.toMap(
+                        BidProduct::getId,  // BidProduct의 ID를 키로 사용
+                        bidProduct -> bidProduct.getBids().stream()
+                                .filter(bid -> bid.getUser().getId()==user.getId()) // 해당 유저의 입찰만 필터링
+                                .mapToLong(Bid::getBidPrice)  // 입찰 리스트에서 입찰 가격만 추출
+                                .max()  // 최대값 계산
+                                .orElse(0L)  // 입찰 내역이 없을 경우 0을 반환
+                ));
+    }
+
+
 
 
     // 경매 상품 삭제
