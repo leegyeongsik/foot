@@ -412,15 +412,21 @@
             ws.connect({}, function(frame) { // 변경해야할수도 널인경우가 두가지 입장했을때 카운트만 보내주고 또 하나는 채팅에서 이미지만 보낸경우 그것도 널임
               ws.subscribe("/topic/api/channel", function(message) {
                 let receive = JSON.parse(message.body);
-                if (receive.message != null ){
+                if (receive.message != "" && receive.message != null){
                   let tempssss=document.getElementById(`channel_${receive.channelId}`)
                   tempssss.innerText =`${receive.message}`
-                } else if(receive.message == null && receive.img != null){
+                } else if(receive.message == "" && receive.img != null){
                   let tempssss=document.getElementById(`channel_${receive.channelId}`)
                   tempssss.innerText ="이미지"
                 }
                 let tempssssssss=document.getElementById(`chatcnt_${receive.channelId}`)
-                tempssssssss.innerText = `${receive.adminChannelCnt}`
+                console.log(receive)
+                console.log(`${receive.adminChannelCnt}`)
+                if(`${receive.adminChannelCnt}` == "undefined"){
+                  tempssssssss.innerText="0"
+                } else {
+                  tempssssssss.innerText = `${receive.adminChannelCnt}`
+                }
               });
             }, function(error) {
               alert("error"+error);
