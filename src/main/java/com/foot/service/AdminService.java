@@ -131,8 +131,6 @@ public class AdminService {
     }
 
 
-
-
     // 경매 상품 전체 목록 조회
     public Page<BidProduct> getBidProductList(Pageable pageable) {
         return bidProductRepository.findAll(pageable);
@@ -143,14 +141,11 @@ public class AdminService {
         return bidProductRepository.findByNameContaining(searchKeyword, pageable);
     }
 
-
-
     public User findUser(Long id) {
         return userRepository.findById(id).orElseThrow(() ->
                 new IllegalArgumentException("유저가 존재하지 않습니다.")
         );
     }
-
     public Product getProductById(Long id) {
         return productRepository.findById(id).orElseThrow(() ->
                 new IllegalArgumentException("상품이 존재하지 않습니다.")

@@ -8,17 +8,12 @@ import com.foot.repository.BidRepository;
 import com.foot.repository.BrandRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.IOException;
 import java.time.Duration;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -279,6 +274,36 @@ public class BidService {
     }
 
 
+    // 경매 상품 상태 변경
+    public void updateStatus(StatusRequestDto requestDto) {
+        List<Long> productIds = requestDto.getProductIds();
+        int status = requestDto.getStatus();
+        LocalDateTime endDate = (status == 1)
+                ? LocalDateTime.now().minusSeconds(1).withNano(0)
+                : LocalDateTime.now().plusDays(1).withNano(0);
+
+
+        for (Long productId : productIds) {
+            BidProduct product = findBidProductById(productId);
+            if (product != null) {
+                // 경매 상태 업데이트
+                product.setStatus(status);
+                product.setExpirationPeriod(endDate);
+
+                // 상품 저장
+                bidProductRepository.save(product);
+
+                if(status == 1) {
+                    //경매 히스토리 테이블 생성
+                    BidHistory bidHistory = new BidHistory(product ,product.getTopBid(), product.getUser(), product.getTopBid().getUser());
+                    bidHistoryRepository.save(bidHistory);
+
+                }
+            }
+        }
+    }
+
+
 
 
     // 경매 상품 삭제
@@ -390,36 +415,5 @@ public class BidService {
 
         return String.format(Locale.US, "%d일 %d시간 %d분", days, hours, minutes);
     }
-
-
-    // 경매 상품 상태 변경
-    public void updateStatus(StatusRequestDto requestDto) {
-        List<Long> productIds = requestDto.getProductIds();
-        int status = requestDto.getStatus();
-        LocalDateTime endDate = (status == 1)
-                ? LocalDateTime.now().minusSeconds(1).withNano(0)
-                : LocalDateTime.now().plusDays(1).withNano(0);
-
-
-        for (Long productId : productIds) {
-            BidProduct product = findBidProductById(productId);
-            if (product != null) {
-                // 경매 상태 업데이트
-                product.setStatus(status);
-                product.setExpirationPeriod(endDate);
-
-                // 상품 저장
-                bidProductRepository.save(product);
-
-                if(status == 1) {
-                    //경매 히스토리 테이블 생성
-                    BidHistory bidHistory = new BidHistory(product ,product.getTopBid(), product.getUser(), product.getTopBid().getUser());
-                    bidHistoryRepository.save(bidHistory);
-
-                }
-            }
-        }
-    }
-
 
 }

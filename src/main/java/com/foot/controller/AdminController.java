@@ -1,6 +1,7 @@
 package com.foot.controller;
 
 import com.foot.dto.AdminUserRequestDto;
+import com.foot.dto.bidProduct.BidProductRequestDto;
 import com.foot.dto.bidProduct.StatusRequestDto;
 import com.foot.dto.products.SaleProductRequestDto;
 import com.foot.dto.products.SelectedProductRequestDto;
@@ -15,6 +16,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+
+import java.io.IOException;
 
 @Controller
 @RequiredArgsConstructor
@@ -72,13 +75,13 @@ public class AdminController {
         return ResponseEntity.ok("BidProducts deleted successfully");
     }
 
-//    // 경매 상품 수정
-//    @Secured(UserRoleEnum.Authority.ADMIN)
-//    @PostMapping("/bidProducts/{id}")
-//    public String updateBidProducts(@ModelAttribute BidProductRequestDto requestDto, @PathVariable Long id) throws IOException {
-//        bidService.updateBidProduct(requestDto, id);
-//        return "redirect:/view/admin";
-//    }
+    // 경매 상품 수정
+    @Secured(UserRoleEnum.Authority.ADMIN)
+    @PostMapping("/bidProducts/{id}")
+    public String updateBidProducts(@ModelAttribute BidProductRequestDto requestDto, @PathVariable Long id) throws IOException {
+        bidService.updateBidProduct(requestDto, id);
+        return "redirect:/view/admin";
+    }
 
 
     // 경매 상품 상태 변경

@@ -351,7 +351,7 @@
     function goToProductDetailPage(row) {
         var productId = row.getAttribute("data-product-id");
         console.log(productId);
-        window.location.href = "/view/bp/" + productId;
+        window.location.href = "/view/admin/bp/" + productId;
     }
 
     // 경매 상품 삭제
@@ -427,11 +427,10 @@
 
         console.log(selectedStatus);
 
-        // 선택한 상품들의 할인율을 업데이트하는 작업 수행
+        // 선택한 상품들의 경매 상태를 업데이트하는 작업 수행
         updateStatus(selectedProductIds, selectedStatus);
     }
 
-    // 할인율 수정
     function updateStatus(productIds, selectedStatus) {
 
         // 선택한 상품 ID와 할인율 정보를 JSON으로 변환하여 POST 요청 보내기
