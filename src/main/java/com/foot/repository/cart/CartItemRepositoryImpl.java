@@ -27,8 +27,8 @@ public class CartItemRepositoryImpl implements CartItemRepositoryCustom {
     public Map<ProductSize, ProductColor> getModelSizeOfColor(Long productColorId , Long CartItemId) {
             List<Tuple> tuples = jpaQueryFactory.select(productSize, productColor)
                     .from(cartItem)
-                    .leftJoin(cartItem.productColor)
-                    .leftJoin(productColor.productSize)
+                    .leftJoin(cartItem.productColor , productColor)
+                    .leftJoin(productColor.productSize , productSize)
                     .where(
                             productColor.id.eq(productColorId).and(cartItem.id.eq(CartItemId))
                     )
