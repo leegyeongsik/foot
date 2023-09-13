@@ -178,7 +178,7 @@
         <div class="NavItem" onclick="logoutUser()">SIGNOUT</div>
     </div>
 </div>
-<form id="bidProductForm" action="@{'/api/admin/bidProducts/' + ${product.id}}" method="post" enctype="multipart/form-data">
+<form id="bidProductForm" th:action="@{'/api/admin/bidProducts/' + ${product.id}}" method="post" enctype="multipart/form-data">
     <div class="product-info">
         <div class="product-image">
             <div id="imagePreviewContainer">

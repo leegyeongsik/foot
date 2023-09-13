@@ -64,6 +64,7 @@ public class ViewController {
         return "bidProductList";
     }
 
+    // 본인이 등록한 경매 상품 확인하는 페이지
     @GetMapping("/view/myBp")
     public String getMyBidProduct(Model model, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         List<BidProductResponseDto> products = bidService.getUserBidProducts(userDetails.getUser());
@@ -72,6 +73,7 @@ public class ViewController {
         return "myBidProducts";
     }
 
+    // 본인이 입찰한 경매 상품 확인하는
     @GetMapping("/view/myBids")
     public String getUserBids(Model model, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         // 유저가 입찰한 BidProduct와 최고 입찰 가격을 가져옴
