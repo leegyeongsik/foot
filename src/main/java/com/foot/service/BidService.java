@@ -410,6 +410,13 @@ public class BidService {
 
                 // 상품 저장
                 bidProductRepository.save(product);
+
+                if(status == 1) {
+                    //경매 히스토리 테이블 생성
+                    BidHistory bidHistory = new BidHistory(product ,product.getTopBid(), product.getUser(), product.getTopBid().getUser());
+                    bidHistoryRepository.save(bidHistory);
+
+                }
             }
         }
     }
