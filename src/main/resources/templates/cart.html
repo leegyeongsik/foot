@@ -398,9 +398,11 @@
                 error: function(jqXHR, textStatus, errorThrown) {
                     let cartnum =  jqXHR.responseJSON.message
                     alert("재고가 부족합니다" + " " + " 해당상품: "+$("#name_" + cartnum).text())
+                    location.reload();
                 }
             });
         });
+        location.reload();
     }
 
 </script>
