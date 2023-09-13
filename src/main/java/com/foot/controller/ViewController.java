@@ -4,9 +4,11 @@ import com.foot.dto.bidProduct.BidProductResponseDto;
 import com.foot.dto.bidProduct.BrandResponseDto;
 import com.foot.entity.Bid;
 import com.foot.entity.Brand;
+import com.foot.security.UserDetailsImpl;
 import com.foot.service.BidService;
 import com.foot.service.BrandService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -58,6 +60,14 @@ public class ViewController {
         model.addAttribute("brands", brands);
 
         return "bidProductList";
+    }
+
+    @GetMapping("/view/myBp")
+    public String getMyBidProduct(Model model, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        List<BidProductResponseDto> products = bidService.getUserBidProducts(userDetails.getUser());
+
+        model.addAttribute("products", products);
+        return "myBidProducts";
     }
 
 
