@@ -204,12 +204,40 @@ public class BidService {
         return result;
     }
 
+    // 유저별 경매상품 조회
+    public List<BidProductResponseDto> getUserBidProducts(User user) {
+        List<BidProduct> bidProductList = bidProductRepository.findByUser(user);
+
+        checkExpirationPeriod(bidProductList);
+
+        // 현재 시간
+        LocalDateTime currentTime = LocalDateTime.now();
+
+        List<BidProductResponseDto> bidProductResponses = bidProductList.stream()
+                .map(bidProduct -> {
+                    // 만료 시간
+                    LocalDateTime expirationTime = bidProduct.getExpirationPeriod();
+
+                    // 남은 시간 계산
+                    Duration duration = Duration.between(currentTime, expirationTime);
+
+                    // 남은 시간을 "X일 Y시간 Z분" 형식으로 포맷팅
+                    String remainingTime = formatRemainingTime(duration);
+
+                    // BidProductResponseDto 생성
+                    return new BidProductResponseDto(bidProduct, remainingTime);
+                })
+                .sorted(Comparator.comparing(BidProductResponseDto::getExpirationPeriod)) // 마감시간 기준으로 정렬
+                .collect(Collectors.toList());
+
+        return bidProductResponses;
+    }
 
 
     // 경매 상품 삭제
     public void deleteBidProduct(Long bidId, User user) {
         BidProduct bidProduct = findBidProductById(bidId);
-        if (bidProduct.getUser().equals(user)) {
+        if (bidProduct.getUser().getId() == user.getId()) {
             bidProductRepository.delete(bidProduct);
         } else {
             throw new IllegalArgumentException("본인의 경매상품만 삭제할수 있습니다.");
@@ -338,4 +366,6 @@ public class BidService {
             }
         }
     }
+
+
 }

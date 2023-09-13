@@ -193,7 +193,7 @@
                     <td th:text="${product.id}"></td>
                     <td><img th:src="${product.modelpicture}" alt="Product Image" width="50" height="50" /></td>
                     <td th:text="${product.model}"  th:attr="data-product-id=${product.id}" onclick="goToProductDetailPage(this)" class="product-model"></td>
-                    <td th:text="${product.brand.name}"></td>
+                    <td th:text="${product.brand != null ? product.brand.name : ''}"></td>
                     <td th:text="${product.price}"></td>
                     <td th:text="${product.discountRate}"></td>
                     <td th:text="${product.discountPrice}"></td>

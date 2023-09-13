@@ -4,6 +4,7 @@ import com.foot.dto.bidProduct.BidProductChartData;
 import com.foot.dto.bidProduct.BrandBidProductCount;
 import com.foot.entity.BidProduct;
 import com.foot.entity.Brand;
+import com.foot.entity.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -39,4 +40,6 @@ public interface BidProductRepository extends JpaRepository<BidProduct, Long> {
 
 
     List<BidProduct> findByStatusAndBrand(int status, Brand brand);
+
+    List<BidProduct> findByUser(User user);
 }

@@ -44,6 +44,8 @@ public class BidProductController {
         return bidService.getOneBidProduct(bidProductId);
     }
 
+
+
     // text로 경매 상품 검색(queryParam형태로 받는것을 생각중 /api/bid?text=~~ )
     @GetMapping("/search")
     public List<BidProductResponseDto> getSearchedBidProduct(@RequestParam String text) {
@@ -53,10 +55,9 @@ public class BidProductController {
 
     // 경매 상품 삭제
     @DeleteMapping("/{bidProductId}")
-    public String deleteBidProduct(@PathVariable Long bidProductId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public void deleteBidProduct(@PathVariable Long bidProductId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         User user = userDetails.getUser();
         bidService.deleteBidProduct(bidProductId, user);
-        return "삭제 완료";
     }
 
     // 경매 상품 마감
