@@ -27,12 +27,12 @@ public class MessageConsumer {
         msg.put("user", message.getWriter());
         msg.put("img", message.getMessageImg());
         msg.put("channelId", Long.toString(message.getChannelId()));
-
+        msg.put("adminChannelCnt" , String.valueOf(message.getTotalRead()));
         ObjectMapper mapper = new ObjectMapper();
         String messageJson = mapper.writeValueAsString(msg);
 //        log.info("messageJson='{}'", messageJson);
-        template.convertAndSend("/topic/api/channel/" + message.getChannelId(), messageJson); // 가져온 데이터를 해당 채널에 전송
         template.convertAndSend("/topic/api/channel", messageJson); // 어드민 채널 목록에도 전송
+        template.convertAndSend("/topic/api/channel/" + message.getChannelId(), messageJson); // 가져온 데이터를 해당 채널에 전송
 
         if(message.getIsUserRead() == 1){ // 해당 유저의 채널에 해당 유저가 들어가있지 않다면 해당 유저에게 몇개를 안읽었는지 데이터를 전송함
             HashMap<String, String> UserMsgCnt = new HashMap<>();
@@ -47,8 +47,10 @@ public class MessageConsumer {
 
             HashMap<String, String> adminMsgCnt = new HashMap<>();
             adminMsgCnt.put("AdminTotalCnt" , String.valueOf(message.getAdminTotalRead())); // 그리고 어드민에게 토탈로 몇개를 안읽었는지 채팅cnt를 전송함
+//            log.info(String.valueOf(message.getAdminTotalRead()));
             ObjectMapper mapper2 = new ObjectMapper();
             String adminMsgCntJson = mapper2.writeValueAsString(adminMsgCnt);
+
             template.convertAndSend("/topic/api/Admin", adminMsgCntJson);
         }
     }
