@@ -133,8 +133,25 @@
             cursor: pointer;
         }
 
+        .btn-container {
 
+            display: flex;
+            justify-content: space-between;
+            margin: 20px;
 
+        }
+
+        .btn-container button {
+
+            padding: 10px 16px;
+            border: none;
+            border-radius: 5px;
+            background-color: #333;
+            color: #fff;
+            font-weight: 700;
+            cursor: pointer;
+            display: block;
+        }
 
     </style>
 </head>
@@ -160,6 +177,9 @@
             내 경매 상품
         </div>
         <div class="list-container">
+            <div class="btn-container">
+                <button class="product-btn" onclick="location.href='/view/bp/create'">경매 상품 등록</button>
+            </div>
             <table>
                 <thead>
                 <tr>
@@ -178,7 +198,8 @@
                         <br>
                         <span th:text="${item.name}" class="product-model"></span>
                     </td>
-                    <td th:id="'price_' + ${item.id}" th:text="${item.topBid != null ? item.topBid.bidPrice : '0원'}"></td>
+                    <td th:id="'price_' + ${item.id}"
+                        th:text="${item.topBid != null ? item.topBid.bidPrice : '0원'}"></td>
                     <td th:text="${item.remainingTime}"></td>
                     <td th:text="${item.status == 1 ? '마감' : '진행중'}"></td>
                     <td>
@@ -207,6 +228,22 @@
             toast.addEventListener('mouseleave', Swal.resumeTimer)
         }
     })
+
+    $(document).ready(function () {
+        $("#selectAll").click(function () {
+            toggleSelectAll();
+        });
+    });
+
+    // 상품 전체 선택
+    function toggleSelectAll() {
+        var selectAllCheckbox = document.getElementById('selectAll');
+        var productCheckboxes = document.getElementsByClassName('product-checkbox');
+
+        for (var i = 0; i < productCheckboxes.length; i++) {
+            productCheckboxes[i].checked = selectAllCheckbox.checked;
+        }
+    }
 
 
     // 상품 상세 페이지로 이동
