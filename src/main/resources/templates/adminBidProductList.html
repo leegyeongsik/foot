@@ -275,7 +275,7 @@
                         onclick="goToProductDetailPage(this)" class="product-model"></td>
                     <td th:text="${product.brand.name}"></td>
                     <td th:text="${product.startPrice}"></td>
-                    <td th:text="${product.topBid != null ? product.topBid.bidPrice : 0}"></td>
+                    <td th:text="${product.topBid != null ? product.topBid.bidPrice : product.startPrice}"></td>
                     <td th:text="${product.expirationPeriod}"></td>
                     <td th:text="${product.status == 1 ? '마감' : '진행중'}"></td>
                 </tr>

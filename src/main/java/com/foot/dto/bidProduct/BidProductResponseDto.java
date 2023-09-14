@@ -49,12 +49,13 @@ public class BidProductResponseDto {
         this.footPicture = bidProduct.getFootpicture();
         this.brand = new BrandResponseDto(bidProduct.getBrand());
 
-        // topBid 설정 (null 대신 빈 객체 생성)
+        // topBid 설정
         if (bidProduct.getTopBid() != null) {
             this.topBid = new Bid(bidProduct.getTopBid());
         } else {
+            // 입찰자가 아무도 없을 때 topBid의 가격을 경매 시작가로 설정
             this.topBid = new Bid();
-            this.topBid.setBidPrice(0L); // 현재 최고 제시가 0원으로 설정
+            this.topBid.setBidPrice(bidProduct.getStartPrice());
         }
 
         this.status = bidProduct.getStatus();
@@ -81,12 +82,12 @@ public class BidProductResponseDto {
         this.footPicture = bidProduct.getFootpicture();
         this.brand = new BrandResponseDto(bidProduct.getBrand());
 
-        // topBid 설정 (null 대신 빈 객체 생성)
+        // 입찰자가 아무도 없을 때 topBid의 가격을 경매 시작가로 설정
         if (bidProduct.getTopBid() != null) {
             this.topBid = new Bid(bidProduct.getTopBid());
         } else {
             this.topBid = new Bid();
-            this.topBid.setBidPrice(0L); // 현재 최고 제시가 0원으로 설정
+            this.topBid.setBidPrice(bidProduct.getStartPrice()); // 현재 최고 제시가 0원으로 설정
         }
 
         this.status = bidProduct.getStatus();
