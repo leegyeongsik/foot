@@ -347,7 +347,7 @@
             // console.log(response)
             for (let i = 0; i < response.length; i++) {
               chatlist=`<li id = ${response[i].channelId} class="chat_infos">
-                  <img src="/img/pancham.webp" class = "chat_infoss" id=${response[i].channelId} alt="Chat User">
+                  <img src="https://fp-foot.s3.ap-northeast-2.amazonaws.com/shoes/Pancham.webp" class = "chat_infoss" id=${response[i].channelId} alt="Chat User">
                   <div class="chat-info">
                     <h3>${response[i].channelOwner}</h3>
                    <p id = channel_${response[i].channelId}>${response[i].latestMsg}</p> <!-- 마지막 채팅기록-->
