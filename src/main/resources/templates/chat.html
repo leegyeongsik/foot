@@ -194,7 +194,7 @@
         // 'Authorization': Cookies.get('Authorization') // 클라이언트 쿠키의 값을 전달
       },
       success: function (response) {
-        console.log(response)
+        // console.log(response)
         $('.anotherMsg').empty()
         $('.myMsg').empty()
         for (let i = 0; i < response.length; i++) {
@@ -295,6 +295,11 @@
   $(document).on('click',"div[class='exit_header']" , function (e) { // 보드 상세 페이지 이동
 
     ws.send("/pub/chat/exit", {'Authorization': Cookies.get('Authorization')}, JSON.stringify({channelIDs: ChannelId , userRole: role})); //receiver:participant,
+    if(role == "ADMIN"){
+      chatListVisible = true
+    } else {
+      clicked = false
+    }
     ws.disconnect()
 
     $('#footersSSS').empty();
