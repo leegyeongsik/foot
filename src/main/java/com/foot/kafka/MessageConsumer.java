@@ -41,9 +41,9 @@ public class MessageConsumer {
             String UserMsgCntJson = mapper1.writeValueAsString(UserMsgCnt);
             template.convertAndSend("/topic/api/user/channel/" + message.getChannelId(), UserMsgCntJson);
         } else if (message.getIsAdminRead() ==1 ) { // 만약 어드민이 해당 채널에 들어가있지 않다면 어드민의 채널목록에 해당 유저채널에 데이터를 몇개 안읽었는지 전송함
-            msg.put("adminChannelCnt" , String.valueOf(message.getTotalRead()));
-            String messageJsons = mapper.writeValueAsString(msg);
-            template.convertAndSend("/topic/api/channel", messageJsons);
+//            msg.put("adminChannelCnt" , String.valueOf(message.getTotalRead()));
+//            String messageJsons = mapper.writeValueAsString(msg);
+//            template.convertAndSend("/topic/api/channel", messageJsons);
 
             HashMap<String, String> adminMsgCnt = new HashMap<>();
             adminMsgCnt.put("AdminTotalCnt" , String.valueOf(message.getAdminTotalRead())); // 그리고 어드민에게 토탈로 몇개를 안읽었는지 채팅cnt를 전송함
