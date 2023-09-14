@@ -266,7 +266,7 @@ public class BidService {
                 .collect(Collectors.toMap(
                         BidProduct::getId,  // BidProduct의 ID를 키로 사용
                         bidProduct -> bidProduct.getBids().stream()
-                                .filter(bid -> bid.getUser().getId()==user.getId()) // 해당 유저의 입찰만 필터링
+                                .filter(bid -> bid.getUser().getId() == user.getId()) // 해당 유저의 입찰만 필터링
                                 .mapToLong(Bid::getBidPrice)  // 입찰 리스트에서 입찰 가격만 추출
                                 .max()  // 최대값 계산
                                 .orElse(0L)  // 입찰 내역이 없을 경우 0을 반환
@@ -282,7 +282,6 @@ public class BidService {
                 ? LocalDateTime.now().minusSeconds(1).withNano(0)
                 : LocalDateTime.now().plusDays(1).withNano(0);
 
-
         for (Long productId : productIds) {
             BidProduct product = findBidProductById(productId);
             if (product != null) {
@@ -293,17 +292,14 @@ public class BidService {
                 // 상품 저장
                 bidProductRepository.save(product);
 
-                if(status == 1) {
-                    //경매 히스토리 테이블 생성
-                    BidHistory bidHistory = new BidHistory(product ,product.getTopBid(), product.getUser(), product.getTopBid().getUser());
+                if (status == 1 && product.getTopBid() != null) { // topBid가 null이 아닌 경우에만 BidHistory 생성
+                    // 경매 히스토리 테이블 생성
+                    BidHistory bidHistory = new BidHistory(product, product.getTopBid(), product.getUser());
                     bidHistoryRepository.save(bidHistory);
-
                 }
             }
         }
     }
-
-
 
 
     // 경매 상품 삭제
@@ -345,22 +341,19 @@ public class BidService {
 
         if (bidProduct.getStatus() == 0) {
             bidProduct.changeToSell();
-            if (bidProduct.getTopBid() == null) {
-                Bid bid = new Bid();
-                bid.setBidProduct(bidProduct);
-                bid.setUser(bidProduct.getUser());
-                bid.setBidPrice(0L);
-                bidRepository.save(bid);
-                bidProduct.setTopBid(bid);
-            }
 
-            //경매 히스토리 테이블 생성
-            BidHistory bidHistory = new BidHistory(bidProduct ,bidProduct.getTopBid(), bidProduct.getUser(), bidProduct.getTopBid().getUser());
-            bidHistoryRepository.save(bidHistory);
+            Bid topBid = bidProduct.getTopBid();
+
+            if (topBid != null) { // topBid가 null이 아닌 경우에만 BidHistory 생성
+                // 경매 히스토리 테이블 생성
+                BidHistory bidHistory = new BidHistory(bidProduct, topBid, bidProduct.getUser());
+                bidHistoryRepository.save(bidHistory);
+            }
         }
 
         return new BidProductResponseDto(bidProduct);
     }
+
 
     // 경매 상품 유효기한 체크
     @Transactional

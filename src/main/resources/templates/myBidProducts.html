@@ -34,16 +34,13 @@
             width: 95%;
         }
 
+
         .Logo {
-            flex: 1;
-            display: flex;
-            align-items: center;
             color: black;
             font-size: 24px;
             font-family: Poppins, sans-serif;
             font-weight: 900;
             cursor: pointer;
-
         }
 
         .NavItem {
@@ -57,7 +54,6 @@
             line-height: 1.1;
             word-wrap: break-word;
             cursor: pointer;
-            margin-left: 10%;
 
         }
 
@@ -201,7 +197,7 @@
                         <span th:text="${item.name}" class="product-model"></span>
                     </td>
                     <td th:id="'price_' + ${item.id}"
-                        th:text="${item.topBid != null ? item.topBid.bidPrice : '0원'}"></td>
+                        th:text="${item.topBid}"></td>
                     <td th:text="${item.remainingTime}"></td>
                     <td th:text="${item.status == 1 ? '마감' : '진행중'}"></td>
                     <td>
