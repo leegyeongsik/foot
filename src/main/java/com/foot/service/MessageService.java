@@ -72,15 +72,17 @@ public class MessageService {
 
         if(chatLog.getAdminRead() == 1){ // 어드민유저가 채팅을 안읽었을때
             Long readCnt=getAdminCnt(message.getChannelId());
-            message.setTotalRead(readCnt);
-
+            message.setAdminRead(readCnt);
             Long TotalCnt = getAdminTotalCnt();
             message.setAdminTotalRead(TotalCnt);
 
         } else if (chatLog.getUserRead() == 1) { // 유저가 채팅을 안읽었을때
             Long readCnt=getUserCnt(message.getChannelId());
             message.setTotalRead(readCnt);
+            message.setAdminRead(0L);
+
         } else if (chatLog.getAdminRead() == 0 && chatLog.getUserRead() == 0) { // 둘다 채팅방에 접속해있을때
+            message.setAdminRead(0L);
             message.setTotalRead(0L);
         }
         return message;
