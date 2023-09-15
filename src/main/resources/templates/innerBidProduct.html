@@ -179,6 +179,15 @@
             background-color: #C02832;
         }
 
+        #closedProductText {
+            margin-top: 3%;
+            color: #EE312F;
+            font-size: 20px;
+            font-weight: bold;
+            display: flex;
+            justify-content: center;
+        }
+
         /* 예쁘게 스타일링하기 위해 추가적으로 조정 가능합니다. */
     </style>
 </head>
@@ -242,7 +251,7 @@
         </div>
     </div>
 </div>
-<div class="bidding-form-container">
+<div class="bidding-form-container" id="biddingFormContainer"  th:if="${product.status == 0}">
     <div class="bidding-form">
         <form th:action="@{'/api/bid/' + ${product.id}}" method="post" onsubmit="return confirmBid()" id="bidForm">
             <input type="number" name="bidPrice" id="bidPrice" placeholder="입찰할 가격을 입력해주세요.">
@@ -250,9 +259,14 @@
         </form>
     </div>
 </div>
+<div id="closedProductText" th:if="${product.status == 1}">경매 마감된 상품입니다.</div>
 
 </body>
-<script>
+<script th:inline="javascript">
+
+    const status = [[${product.status}]]; // 경매 마감 상태 받아오기
+
+
     const Toast = Swal.mixin({
         toast: true,
         position: 'center-center',
