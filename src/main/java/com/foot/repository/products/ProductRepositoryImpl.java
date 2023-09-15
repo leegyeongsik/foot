@@ -25,7 +25,7 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom{
 
     QProductSize productSize = QProductSize.productSize;
 
-
+    QBrand brand = QBrand.brand;
     @Override
     public ProductColorImg getModelColor(String ModelColorName, Long ModelId) {
         return  jpaQueryFactory.select(productColorImg)
@@ -100,6 +100,46 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom{
                         tuple -> tuple.get(productColor),
                         tuple -> tuple.get(productColorImg)
                 ));
+    }
+
+    @Override
+    public Map<ProductSize, ProductColor> getOrderProduct(Long ProductcolorId) {
+        List<Tuple> tuples = jpaQueryFactory.select(productSize , productColor)
+                .from(productColor)
+                .leftJoin(productColor.productSize)
+                .where(
+                        productColor.id.eq(ProductcolorId)
+                )
+                .fetch();
+        return tuples.stream()
+                .distinct()
+                .collect(Collectors.toMap(
+                        tuple -> tuple.get(productSize),
+                        tuple -> tuple.get(productColor)
+                ));
+    }
+
+    @Override
+    public List<Product> getBrandProduct(String brand) {
+        return  jpaQueryFactory.select(product)
+                .from(product)
+                .leftJoin(product.brand)
+                .where(
+                        product.brand.name.eq(brand)
+                )
+                .fetch();
+
+    }
+
+    @Override
+    public List<ProductSize> getSizes(Long productId) {
+        return  jpaQueryFactory.select(productSize)
+                .from(productSize)
+                .leftJoin(productSize.product)
+                .where(
+                        productSize.product.id.eq(productId)
+                )
+                .fetch();
     }
 
 

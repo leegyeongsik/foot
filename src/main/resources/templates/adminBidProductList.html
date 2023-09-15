@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"
+            integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g="
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <script src="https://kit.fontawesome.com/1d07e1c680.js" crossorigin="anonymous"></script>
+    <title>경매상품 관리 페이지</title>
+    <link rel="shortcut icon" type="image/x-icon" href="https://fp-foot.s3.ap-northeast-2.amazonaws.com/shoes/Pancham.webp">
+
+    <style>
+        body {
+            margin: 0;
+        }
+
+        .admin-container {
+            display: flex;
+            flex-direction: row;
+            height: 100vh;
+            background-color: white;
+        }
+
+        .btn-container {
+            flex-direction: row;
+            display: flex;
+            justify-content: space-around;
+
+        }
+
+        .product-btn {
+            padding: 10px 16px;
+            border: none;
+            border-radius: 5px;
+            background-color: #333;
+            color: #fff;
+            font-weight: 700;
+            cursor: pointer;
+            display: block; /* 블록 요소로 설정하여 한 줄에 하나의 버튼만 표시 */
+        }
+
+        .discount-btn {
+            padding: 10px 16px;
+            border: none;
+            border-radius: 5px;
+            background-color: #333;
+            color: #fff;
+            font-weight: 700;
+            cursor: pointer;
+            display: block;
+
+        }
+
+        .delete-btn {
+            padding: 10px 16px;
+            border: none;
+            border-radius: 5px;
+            background-color: #333;
+            color: #fff;
+            font-weight: 700;
+            cursor: pointer;
+            display: block;
+        }
+
+        .admin-menu {
+            background-color: #333;
+            color: #fff;
+            width: 16%;
+            padding: 20px;
+            box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.2); /* 그림자 효과 추가 */
+        }
+
+        .menu-item {
+            font-size: 18px;
+            margin: 10px 0;
+            padding: 10px 10px;
+            cursor: pointer;
+            border-radius: 5px; /* 버튼 모서리를 둥글게 만듭니다. */
+            transition: background-color 0.3s; /* 배경색에 애니메이션 효과 추가 */
+        }
+
+        .menu-item:hover {
+            background-color: #555; /* 마우스 오버시 배경색 변경 */
+        }
+
+
+        .admin-content {
+            width: 84%; /* 내용 영역 너비 조정 */
+            padding: 20px;
+        }
+
+
+        .list-container {
+            display: flex;
+            justify-content: center;
+            /*align-items: center;*/
+            height: 70vh;
+            flex-direction: column;
+            padding: 20px;
+            border: 1.5px solid transparent;;
+            border-radius: 16px;
+            background-color: #fff;
+        }
+
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        .product-model:hover {
+            text-decoration: underline;
+            cursor: pointer;
+        }
+
+        .page-number {
+            margin-top: 20px; /* 원하는 여백 값으로 조정 */
+            display: flex;
+            justify-content: center;
+            flex-direction: row; /* 가로 방향으로 배치 */
+
+        }
+
+        .search-form {
+            display: flex;
+            justify-content: center;
+            flex-direction: row; /* 가로 방향으로 배치 */
+        }
+
+        .search-form input {
+            padding: 10px;
+            margin-top: 10px;
+            margin-right: 10px; /* 검색 버튼과의 간격을 설정 */
+            border: 1.5px solid #f2f2f2;
+            border-radius: 5px;
+        }
+
+        .search-btn {
+            padding: 10px 16px;
+            border: none;
+            border-radius: 5px;
+            background-color: #333;
+            color: #fff;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+             /* 모달 스타일 */
+         .modal {
+             display: none; /* 모달 초기에는 숨김 상태로 설정 */
+             position: fixed;
+             top: 30%;
+             left: 45%;
+             transform: translate(-50%, -50%);
+             width: 30%;
+             height: 40%;
+             overflow: auto;
+
+         }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #f2f2f2;
+            width: 50%;
+            border-radius: 5px;
+        }
+
+        /* 모달 내의 요소 스타일 */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .btn-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            margin: 0 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+
+        .btn-secondary {
+            background-color: #ccc;
+            color: #333;
+        }
+
+        .btn-secondary:hover {
+            background-color: #999;
+        }
+
+    </style>
+</head>
+<body>
+<div class="admin-container">
+    <div class="admin-menu">
+        <div class="menu-item" onclick="location.href='/view/admin'">
+            <i class="fas fa-home" style="margin-right: 10px;"></i>관리자 홈
+        </div>
+        <div class="menu-item" onclick="location.href='/view/admin/users'">
+            <i class="fas fa-users" style="margin-right: 10px;"></i>회원 관리
+        </div>
+        <div class="menu-item" onclick="location.href='/view/admin/brands'">
+            <i class="fas fa-tag" style="margin-right: 10px;"></i>브랜드 관리
+        </div>
+        <div class="menu-item" onclick="location.href='/view/admin/products'"><i class="fas fa-box"
+                                                                                 style="margin-right: 10px;"></i> 상품 관리
+        </div>
+    </div>
+    <div class="admin-content">
+        <div class="list-container">
+            <div class="btn-container">
+                <button class="product-btn" onclick="location.href='/view/bp/create'">상품 추가</button>
+                <button class="discount-btn" onclick="openStatusModal()">경매상태 변경</button>
+                <button class="delete-btn" onclick="deleteProduct()">상품 삭제</button>
+            </div>
+
+            <table>
+                <thead>
+                <tr>
+                    <th><input type="checkbox" id="selectAll"/></th>
+                    <th>상품번호</th>
+                    <th>상품이미지</th>
+                    <th>상품이름</th>
+                    <th>브랜드</th>
+                    <th>시작가격</th>
+                    <th>현재가격</th>
+                    <th>마감시간</th>
+                    <th>경매상태</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="product : ${list}">
+                    <td><input type="checkbox" class="product-checkbox" th:attr="data-product-id=${product.id}"/></td>
+                    <td th:text="${product.id}"></td>
+                    <td><img th:src="${product.footpicture}" alt="Product Image" width="50" height="50"/></td>
+                    <td th:text="${product.name}" th:attr="data-product-id=${product.id}"
+                        onclick="goToProductDetailPage(this)" class="product-model"></td>
+                    <td th:text="${product.brand.name}"></td>
+                    <td th:text="${product.startPrice}"></td>
+                    <td th:text="${product.topBid != null ? product.topBid.bidPrice : product.startPrice}"></td>
+                    <td th:text="${product.expirationPeriod}"></td>
+                    <td th:text="${product.status == 1 ? '마감' : '진행중'}"></td>
+                </tr>
+                </tbody>
+            </table>
+            <div class="page-number">
+                <th:block th:each="page : ${#numbers.sequence(startPage, endPage)}">
+                    <a th:if="${page != nowPage}"
+                       th:href="@{/view/admin/bidProducts(page = ${page -1}, searchKeyword = ${param.searchKeyword})}"
+                       th:text="${page}"></a>
+                    <strong th:if="${page == nowPage}" th:text="${page}" style="color : #333"></strong>
+                </th:block>
+            </div>
+        </div>
+        <div class="search-form">
+            <form th:action="@{/view/admin/bidProducts}" method="get">
+                <input type="text" name="searchKeyword">
+                <button class="search-btn" type="submit">Search</button>
+            </form>
+        </div>
+    </div>
+    <div class="modal" id="statusModal">
+        <div class="modal-content">
+            <form>
+                <div class="form-group">
+                    <label for="newStatus">경매 상태 변경:</label>
+                    <select class="form-control" id="newStatus">
+                        <option value="0">경매 중</option>
+                        <option value="1">마감</option>
+                    </select>
+                </div>
+                <button type="button" class="btn btn-primary" onclick="selectStatus()">변경</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="closeStatusModal()">취소</button>
+            </form>
+        </div>
+    </div>
+
+
+</div>
+
+</body>
+<script th:inline="javascript">
+
+    const Toast = Swal.mixin({
+        toast: true,
+        position: 'center-center',
+        showConfirmButton: false,
+        timer: 600,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+            toast.addEventListener('mouseenter', Swal.stopTimer)
+            toast.addEventListener('mouseleave', Swal.resumeTimer)
+        }
+    })
+
+    $(document).ready(function () {
+        $("#selectAll").click(function () {
+            toggleSelectAll();
+        });
+    });
+
+    // 상품 전체 선택
+    function toggleSelectAll() {
+        var selectAllCheckbox = document.getElementById('selectAll');
+        var productCheckboxes = document.getElementsByClassName('product-checkbox');
+
+        for (var i = 0; i < productCheckboxes.length; i++) {
+            productCheckboxes[i].checked = selectAllCheckbox.checked;
+        }
+    }
+
+    // 상품 상세 페이지로 이동
+    function goToProductDetailPage(row) {
+        var productId = row.getAttribute("data-product-id");
+        console.log(productId);
+        window.location.href = "/view/admin/bp/" + productId;
+    }
+
+    // 경매 상품 삭제
+    function deleteProduct() {
+        var selectedProductIds = [];
+
+        // 선택한 체크 박스의 상품 ID 수집
+        $('.product-checkbox:checked').each(function () {
+            var productId = $(this).data('product-id'); // data-product-id 속성 값 가져오기
+            selectedProductIds.push(productId);
+        });
+
+        if (selectedProductIds.length === 0) {
+            alert("삭제할 상품을 선택해 주세요.");
+            return;
+        }
+
+        // 삭제 확인창
+        Swal.fire({
+            title: "상품 삭제",
+            text: "정말 선택하신 상품들을 삭제하시겠습니까?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "예, 삭제합니다.",
+            cancelButtonText: '아니오, 취소합니다'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // 사용자가 확인을 선택한 경우 상품 삭제 처리
+                deleteProducts(selectedProductIds);
+            }
+        });
+    }
+
+    // 선택한 상품들 삭제
+    function deleteProducts(productIds) {
+        var requestData = {
+            productIds: productIds
+        };
+
+        $.ajax({
+            type: "DELETE",
+            url: "/api/admin/bidProducts",
+            contentType: "application/json",
+            data: JSON.stringify(requestData),
+            success: function (data) {
+                successMsg("삭제 성공")
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                errorMsg("삭제 실패")
+            }
+        });
+    }
+
+    // 경매 상태 변경
+    function selectStatus() {
+        var selectedProductIds = [];
+        var selectedStatus = document.getElementById('newStatus').value;
+
+        // 선택한 체크 박스의 상품 ID 수집
+        $('.product-checkbox:checked').each(function () {
+            var productId = $(this).data('product-id'); // data-product-id 속성 값 가져오기
+            selectedProductIds.push(productId);
+        });
+
+        console.log(selectedProductIds);
+
+        if (selectedProductIds.length === 0) {
+            alert("상태를 변경할 상품을 선택해 주세요.");
+            return;
+        }
+
+        console.log(selectedStatus);
+
+        // 선택한 상품들의 경매 상태를 업데이트하는 작업 수행
+        updateStatus(selectedProductIds, selectedStatus);
+    }
+
+    function updateStatus(productIds, selectedStatus) {
+
+        // 선택한 상품 ID와 할인율 정보를 JSON으로 변환하여 POST 요청 보내기
+        var requestData = {
+            productIds: productIds,
+            status: selectedStatus
+        };
+
+        console.log(requestData.productIds, requestData.status)
+
+        $.ajax({
+            type: "POST",
+            url: "/api/admin/bidProducts/updateStatus",
+            contentType: "application/json",
+            data: JSON.stringify(requestData),
+            success: function (data) {
+                successMsg("경매 상태 변경 성공");
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                errorMsg("경매 상태 변경 실패")
+            }
+        });
+    }
+
+    // 모달 열기
+    function openStatusModal() {
+        var modal = document.getElementById("statusModal");
+        modal.style.display = "block";
+    }
+
+    // 모달 닫기
+    function closeStatusModal() {
+        var modal = document.getElementById("statusModal");
+        modal.style.display = "none";
+    }
+
+    // 모달 외부 클릭 시 닫기
+    window.onclick = function(event) {
+        var modal = document.getElementById("statusModal");
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+
+
+    function successMsg(msg) {
+        Toast.fire({
+            icon: 'success',
+            title: msg
+        }).then(function () {
+            window.location.reload();
+        })
+    }
+
+    function errorMsg(msg) {
+        Toast.fire({
+            icon: 'error',
+            title: msg
+        })
+    }
+
+
+</script>
+</html>

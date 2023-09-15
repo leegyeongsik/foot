@@ -13,7 +13,9 @@
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 
   <!--  <link rel="stylesheet" href="/css/main-page.css">-->
-  <title>foot</title>
+  <title>판짱마켓</title>
+  <link rel="shortcut icon" type="image/x-icon" href="https://fp-foot.s3.ap-northeast-2.amazonaws.com/shoes/Pancham.webp">
+
   <style>
     .Header {
       width: 1850px;
@@ -178,27 +180,6 @@
       margin: 0;
     }
 
-    .DivCThumbnailInfo {
-      position: relative;
-      top: 18px;
-    }
-
-    .Heading3 {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .Barand1,
-    .PCThumbnailPrice {
-      margin: 5px; /* 브랜드 이름과 가격의 여백 조절 */
-      color: #EE312F;
-    }
-
-    .Laangels {
-      margin-left: 5px;
-      color: #EE312F;
-    }
 
     :root {
       accent-color: #EE312F;
@@ -213,24 +194,7 @@
       cursor: pointer;
 
     }
-    .item-content {
-      display: flex;
-      align-items: center;
-    }
 
-    .item-text {
-      margin-left: 20px; /* Adjust the spacing between image and text */
-      font-size: 18px; /* Customize text font size */
-      color: #333; /* Customize text color */
-    }
-    /* .rectangle {
-    width: 100%;
-    height: 100%;
-    background-color: gray;
-    position: absolute;
-    bottom: 0;
-    left: 0;
-  } */
     .DivOLayout {
       /* 원하는 크기와 위치 값으로 조정하세요 */
       display: grid;
@@ -342,6 +306,60 @@
       position: absolute;
       bottom: 0;
     }
+    .colorchg:active {
+      border: 1px solid red;
+    }
+
+    .horizontal-line,
+    .vertical-line {
+      position: absolute;
+      background: #cccccc; /* 선의 색상 설정 */
+    }
+
+    .horizontal-line {
+      width: 130px;
+      height: 2px; /* 가로선 두께 설정 */
+      top: 50%;
+      transform: rotate(-45deg)
+    }
+
+    .vertical-line {
+      width: 2px; /* 세로선 두께 설정 */
+      height: 130px;
+      transform: rotate(-45deg)
+    }
+    .button-container {
+      display: flex;
+      align-items: center; /* 세로 중앙 정렬 */
+      gap: 10px; /* 버튼과 결과 사이의 간격 설정 */
+      position: relative;
+      bottom: 35px;
+      left: 150px;
+    }
+
+    /*input[type='button'] {*/
+    /*  width: 30px; !* 버튼 너비 설정 *!*/
+    /*  height: 30px; !* 버튼 높이 설정 *!*/
+    /*  font-size: 24px; !* 버튼 텍스트 크기 설정 *!*/
+    /*}*/
+
+    #result {
+      font-size: 24px; /* 결과 텍스트 크기 설정 */
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    th, td {
+      padding: 10px;
+      text-align: center;
+    }
+
+    th {
+      background-color: #f2f2f2;
+    }
 
   </style>
 
@@ -352,13 +370,13 @@
 
   <div class="Header">
     <div class="Logo">
-      <img src="owl_image.png" alt="Owl Image" style="height: 30px; width: auto; margin-right: 10px;">
-      foot
+      <img src="https://fp-foot.s3.ap-northeast-2.amazonaws.com/shoes/Pancham.webp" alt="Owl Image" style="height: 50px; width: auto; margin-right: 10px;">
+      판짱마켓
     </div>
     <div class="NavList">
       <div class="NavItem" id = "shoes_id">shoes</div>
-      <div class="NavItem">Auction</div>
-      <div class="NavItem">favourite</div>
+      <div class="NavItem" id ="auction_id">Auction</div>
+      <div class="NavItem" id="favorite">favourite</div>
       <div class="NavItem" id = "signup">signup</div>
       <div class="NavItem" id = "signin">signin</div>
 
@@ -380,6 +398,8 @@
 
       <div class="TextContainers" style="position: relative; top: 70px;">  <!-- 제목 -->
         <h2>사이즈 선택</h2>
+        <div class="button-container">
+        </div>
       </div>
 
       <div class="DivOLayoutss"> <!-- 신발 사이즈 -->
@@ -391,32 +411,28 @@
       <div class="wishbutton"> <!-- 위시리스트 -->
         <div class="ButtonText">위시리스트</div>
         <div class="check_wrap" style="left: 5px;">
-          <input type="checkbox" />
-          <label htmlFor="check_btn"></label>
         </div>
       </div>
 
       <div class="TextContainer" style="position: relative; top: 160px; line-height: 1.5;"> <!-- 설명 -->
       </div>
 
-
-      <details style="position: relative; top: 180px;"> <!-- 댓글 -->
-        <summary>
-          review
-        </summary>
-        <p>
-          text
-        </p>
-
-      </details>
-
       <details style="position: relative; top: 220px;"> <!-- 사이즈 비교 -->
         <summary>
-          Shoses size confirm
+          사이즈(cm)
         </summary>
-        <p>
-          two picture
-        </p>
+        <table>
+          <thead>
+          <tr class="inner_size">
+            <th>상품 사이즈</th>
+            <th>상품 발크기</th>
+            <th>상품 발볼크기</th>
+          </tr>
+          </thead>
+          <tbody class="foot_size_container">
+
+          </tbody>
+        </table>
       </details>
 
 
@@ -436,15 +452,14 @@
   var productId = document.getElementById('targetIdParagraph').querySelector('span').innerText;
   const itemDict = {};
   const auth = Cookies.get('Authorization');
-  console.log(auth)
 
   $(document).ready(function () {
     if (auth != null) {
       $('.NavList').empty();
       temp_Navi = `<div class="NavItem" id="shoes_id">shoes</div>
-            <div class="NavItem">Auction</div>
-            <div class="NavItem">favourite</div>
-            <div class="NavItem" id="signup">signup</div>
+            <div class="NavItem" id ="auction_id">Auction</div>
+            <div class="NavItem" id="favorite">favourite</div>
+            <div class="NavItem" id="my-page">info</div>
             <div class="NavItem" id="signout">signOut</div>`
       $('.NavList').append(temp_Navi)
 
@@ -463,14 +478,13 @@
       },
       success: function (response) {
         if (response) {
-          // console.log(response)
           var Products = `
-                              <img src=${response.productResponseDto.modelPicture} alt="Your Image Alt Text" style="max-width: 100%; height: auto; border-radius: 3%;" />
+                              <img src="${response.productResponseDto.modelPicture}" alt="Your Image Alt Text" style="max-width: 100%; height: auto; border-radius: 3%;" />
 `
           $('.image-container').append(Products);
           var Productsss=`
                           <hgroup>
-                                <p style="color: #EE312F;">나이키</p>
+                                <p style="color: #EE312F;">${response.productResponseDto.brand}</p>
                                 <h2>${response.productResponseDto.modelName}</h2>
                               </hgroup>`
           var Productss=`<p>${response.productResponseDto.price}</p>`
@@ -486,10 +500,11 @@
 
           var list = response.productColors
 
+
           for (var i = 0; i < list.length; i++) {
             var Products = `
                               <div class="item" style="border: 1px solid #fff; background-color: #ffffff;">
-                                <img class ="click_img_color" src=${list[i].colorImg} id=${list[i].colorId} style="width:96px; height:96px; border-radius: 3%;" >
+                                <img class ="click_img_color" src="${list[i].colorImg}" id=${list[i].colorId} style="width:96px; height:96px; border-radius: 3%;" >
                               </div>
 
                            `
@@ -497,34 +512,108 @@
             itemDict[item.colorId] = item;
             $('.DivOLayout').append(Products);
           }
+          $('.check_wrap').empty()
+          if(response.productResponseDto.append == true){
+            isappend=`<input class="checkboxs" id="productcheckId_${response.productResponseDto.productId}" type="checkbox" checked/>
+            <label htmlFor="check_btn"></label>
+            <button class="btnsssssssssssss"
+                    style="background-color: #E6E1E5; border: #E6E1E5; position:relative; bottom: 2px;" type="button"
+                    id="productcheckId_${response.productResponseDto.productId}">+</button>`
+            $('.check_wrap').append(isappend)
+
+          }else {
+            isappend= `<input class="checkboxs" id="productcheckId_${response.productResponseDto.productId}" type="checkbox" />
+            <label htmlFor="check_btn"></label>
+            <button class="btnsssssssssssss"
+                    style="background-color: #E6E1E5; border: #E6E1E5; position:relative; bottom: 2px;" type="button"
+                    id="productcheckId_${response.productResponseDto.productId}">+</button>`
+            $('.check_wrap').append(isappend)
+          }
+          var listsssss = response.productSizesResponseDtos
+
+          $('.foot_size_container').empty()
+          for (let i = 0; i < listsssss.length; i++) {
+            foot_size = `<tr>
+                                <td class="product-model" data-product-id="11">${listsssss[i].size}</td>
+                                <td class="product-model" data-product-id="11">${listsssss[i].footSize}</td>
+                                <td class="product-model" data-product-id="11">${listsssss[i].feetSize}</td>
+                       </tr>`
+            $('.foot_size_container').append(foot_size)
+          }
         }
       },
       error: function () {
         console.log("실패")
       }
     })
-
+    var colorIdssssssssss;
+    var sizeId;
     $(document).on('click',"img[class='click_img_color']" , function (e) { // 신발 누르면 해당 사이즈 출력
       e.preventDefault();
       var tagId = e.target.id
-      // console.log(itemDict[tagId]);
-
       lists=itemDict[tagId].productSizeResponseDtos;
-      // console.log(lists)
+      $('.button-container').empty();
       $('.DivOLayoutss').empty();
 
       for (let i = 0; i < lists.length; i++) {
-        var size = `<div class="item" style="border: 1px solid #fff; background-color: #ffffff;">
+        if(lists[i].colorAmount <= 0){
+          var size = `<div class="item" style="border: 1px solid #fff; background-color: #ffffff;">
                         <div class="Label">
-                         <div>${lists[i].size}</div>
+                                   ${lists[i].size}
+                        <div class="horizontal-line"></div>
+                        <div class="vertical-line"></div>
+                        </div>
+                      </div>`
+          $('.DivOLayoutss').append(size);
+        } else if(lists[i].colorAmount > 0){
+          var size = `<div class="item" style="border: 1px solid #fff; background-color: #ffffff;">
+                        <div class="Label">
+                         <div class="colorchg" id=${lists[i].colorIds}>${lists[i].size}</div>
                          </div>
                         </div>`
-        $('.DivOLayoutss').append(size);
+          $('.DivOLayoutss').append(size);
+        }
+
       }
     })
-    $(document).on('click',"div[id='shoes_id']" , function (e) { // 신발 누르면 해당 사이즈 출력
-      window.location.href=`http://localhost:8080`
+    $(document).on('click',"div[class='colorchg']" , function (e) { // 신발 누르면 해당 사이즈 출력
+      e.preventDefault();
+      var tagId = e.target.id
+      sizeId = tagId;
+      $('.button-container').empty()
+    sizenum=`          <input type='button' onClick='count("plus")' value='+'/>
+          <div id='result'>1</div>
+          <input type='button' onClick='count("minus")' value='-'/>
 
+      `
+      $('.button-container').append(sizenum)
+
+    })
+    $(document).on('click',"div[id='basket_add']" , function (e) { // 신발 누르면 해당 사이즈 출력
+      e.preventDefault();
+      console.log(sizeId)
+      var productcnt=document.getElementById('result').innerText
+      console.log(productcnt)
+      $.ajax({
+        url: `/api/cart`,
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify({itemId: sizeId, count: productcnt}),
+
+        headers: {
+          // 'Authorization': Cookies.get('Authorization') // 클라이언트 쿠키의 값을 전달
+        },
+        success: function (response) {
+          window.location.href = '/view/myPage';
+        },
+        error: function () {
+          console.log("실패")
+        }
+      })
+    })
+
+    $(document).on('click',"div[id='shoes_id']" , function (e) { // 신발 누르면 해당 사이즈 출력
+      window.location.href=`/view/home`
     })
     $(document).on('click',"div[id='signup']" , function (e) { // 보드 상세 페이지 이동
       e.preventDefault();
@@ -543,12 +632,90 @@
     $(document).on('click',"div[id='signout']" , function (e) { // 보드 상세 페이지 이동
       e.preventDefault();
       Cookies.remove('Authorization', {path: '/'});
-      window.location.href = ""
+      window.location.href = `/view/home`
     })
+    $(document).on('click',"div[id='favorite']" , function (e) { // 보드 상세 페이지 이동
+      e.preventDefault();
+      window.location.href = `/product/favorite`
+    })
+    $(document).on('click',"div[id='my-page']" , function (e) { // 보드 상세 페이지 이동
+      e.preventDefault();
+      window.location.href = `/view/myPage`
+    })
+    $(document).on('click',"div[id='auction_id']" , function (e) { // 보드 상세 페이지 이동
+      e.preventDefault();
+      window.location.href = `/view/bp`;
+    })
+
 
     // 해야할거 장바구니 , 댓글 , 각종 헤드 연결 , Shoses_size_confirm 데이터 주기 , 장바구니에 담을때 해당 신발 id값 으로 찾아서 담아주기
     // 나중에 jwt 쿠키 있는지 확인하고 로그인 후 구매하기 -> 장바구니 담기
+    if(auth!=null){
+      $(document).on('click',"button[class='btnsssssssssssss']" , function (e) { // 보드 상세 페이지 이동
+        e.preventDefault();
+        var tagId = e.target.id
+        // console.log(tagId)
+        var checked =  $(`#${tagId}`).is(':checked');
+
+        console.log(checked)
+        if(checked == true){
+          $(`#${tagId}`).prop('checked',!checked);
+
+          $.ajax({
+            url: `/api/product/${productId}/favorite`,
+            type: 'DELETE',
+            contentType: 'application/json',
+            headers: {
+              // 'Authorization': Cookies.get('Authorization') // 클라이언트 쿠키의 값을 전달
+            },
+            success: function (response) {
+              if (response) {
+              }
+            }
+          })
+        } else {
+          $(`#${tagId}`).prop('checked',!checked);
+          $.ajax({
+            url: `/api/product/${productId}/favorite`,
+            type: 'POST',
+            contentType: 'application/json',
+            headers: {
+              // 'Authorization': Cookies.get('Authorization') // 클라이언트 쿠키의 값을 전달
+            },
+            success: function (response) {
+              if (response) {
+                // console.log(response)
+              }
+            }
+          })
+        }
+      })
+    } else {
+      $(document).on('click',"button[class='btnsssssssssssss']" , function (e) { // 보드 상세 페이지 이동
+        e.preventDefault();
+        window.location.href = `/view/login-page`;
+      })
+    }
+
 
   })
+  function count(type)  {
+    // 결과를 표시할 element
+    const resultElement = document.getElementById('result');
+
+    // 현재 화면에 표시된 값
+    let number = resultElement.innerText;
+
+    // 더하기/빼기
+    if(type === 'plus') {
+      number = parseInt(number) + 1;
+    }else if(type === 'minus')  {
+      number = parseInt(number) - 1;
+    }
+
+    // 결과 출력
+    resultElement.innerText = number;
+  }
+
 </script>
 </html>

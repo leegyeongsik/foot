@@ -9,7 +9,9 @@
         <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
 
         <!--    <link rel="stylesheet" href="/css/board-page.css">-->
-        <title>Board</title>
+        <title>판짱마켓</title>
+        <link rel="shortcut icon" type="image/x-icon" href="https://fp-foot.s3.ap-northeast-2.amazonaws.com/shoes/Pancham.webp">
+
     </head>
     <style>
         .Header {
@@ -524,8 +526,8 @@
 
     <div class="Header">
         <div class="Logo">
-            <img src="owl_image.png" alt="Owl Image" style="height: 30px; width: auto; margin-right: 10px;">
-            foot
+            <img src="https://fp-foot.s3.ap-northeast-2.amazonaws.com/shoes/Pancham.webp" alt="Owl Image" style="height: 50px; width: auto; margin-right: 10px;">
+            판짱마켓
         </div>
         <div class="NavList">
             <div class="NavItem" id = "shoes_id">shoes</div>
@@ -596,7 +598,7 @@
             success: function (response) {
                 if (response) {
                     var Products = `
-                            <img src=${response.productResponseDto.modelPicture} alt="미리보기 이미지" class="preview">
+                            <img src="${response.productResponseDto.modelPicture}" alt="미리보기 이미지" class="preview">
                        `
 
                     $('.drag-file').append(Products);
@@ -620,6 +622,7 @@
                     $('#root').append(infoProduct);
 
                     SizesList=response.productSizeResponseDtos;
+                    console.log(SizesList)
                     for (let i = 0; i < SizesList.length; i++) {
                         var newSizes = document.createElement("div");
                         newSizes.className = "Sizes";
@@ -691,8 +694,9 @@
                     }
                 }
                 Product_Size_Info[Object.keys(Product_Size_Info).length] = temp_product_info_list
-                alert("ok")
             }
+            alert("ok")
+
         })
 
         $(document).on('click', "button[id='uploadBtn']", function (e) { // 유처 초대
@@ -734,7 +738,7 @@
                 enctype : 'multipart/form-data',  // * 중요 *
 
                 success: function (response) {
-                    // window.location.href = `http://localhost:8080`
+                    window.location.href = `/view/admin/products`
                 },
                 error: function () {
                     console.log("실패")
@@ -742,7 +746,7 @@
             })
         })
         $(document).on('click',"div[id='shoes_id']" , function (e) { // 신발 누르면 해당 사이즈 출력
-            window.location.href=`http://localhost:8080`
+            window.location.href=`/view/home`
 
         })
         $(document).on('click',"div[id='signup']" , function (e) { // 보드 상세 페이지 이동

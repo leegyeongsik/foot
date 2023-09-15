@@ -4,11 +4,13 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.Optional;
+
 @Entity
 @Getter
 @NoArgsConstructor
 @Table(name = "bidHistories")
-public class BidHistory {
+public class BidHistory extends Timestamped {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,10 +32,18 @@ public class BidHistory {
     @JoinColumn(name = "buyUserId")
     private User buyUser;
 
-    public BidHistory(BidProduct bidProduct, Bid bid, User sellUser, User buyUser) {
-        this.bidProduct= bidProduct;
+//    public BidHistory(BidProduct bidProduct, Bid bid, User sellUser, User buyUser) {
+//        this.bidProduct= bidProduct;
+//        this.bid = bid;
+//        this.sellUser = sellUser;
+//        this.buyUser = buyUser;
+//    }
+
+    public BidHistory(BidProduct bidProduct, Bid bid, User sellUser) {
+        this.bidProduct = bidProduct;
         this.bid = bid;
         this.sellUser = sellUser;
-        this.buyUser = buyUser;
+        this.buyUser = bidProduct.getTopBid().getUser();
     }
+
 }

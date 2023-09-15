@@ -11,6 +11,8 @@
     <script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
     <title>Profile Page</title>
+    <link rel="shortcut icon" type="image/x-icon" href="https://fp-foot.s3.ap-northeast-2.amazonaws.com/shoes/Pancham.webp">
+
     <style>
 
         /* Reset some default styles */
@@ -250,7 +252,7 @@
                         title: '비밀번호가 일치하지 않습니다'        // Alert 제목
                     }).then((result) => {
                         if (result.isConfirmed) {
-                            window.location.href = "http://localhost:8080/";
+                            window.location.href = "/view/profile";
                         }
                     });
                 }
@@ -265,7 +267,7 @@
                     title: '비밀번호가 일치하지 않습니다'        // Alert 제목
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        window.location.href = "http://localhost:8080/";
+                        window.location.href = "/view/profile";
                     }
                 });
             }
@@ -298,7 +300,7 @@
                     title: '변경 완료!'        // Alert 제목
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        window.location.href = "http://localhost:8080/view/profile";
+                        window.location.href = "/view/profile";
                     }
                 });
             },
@@ -308,7 +310,7 @@
                     title: '변경 실패!'        // Alert 제목
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        window.location.href = "http://localhost:8080/view/profile";
+                        window.location.href = "/view/profile";
                     }
                 });
             }

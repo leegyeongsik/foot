@@ -1,11 +1,11 @@
 package com.foot.entity;
 
-import com.foot.dto.products.ProductRequestDto;
-import com.foot.dto.products.SaleProductRequestDto;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,20 +32,23 @@ public class Product extends Timestamped {
     @Column(name = "modelpicture")
     private String modelpicture;
 
-    @Column(name = "discountrate" , nullable = true)
+    @Column(name = "discountrate" )
+    @ColumnDefault("0")
     private double discountRate;
 
-    @Column(name = "discountprice" , nullable = true)
+    @Column(name = "discountprice")
     private Long discountPrice;
 
     @Builder
-    public Product(Long TotalAmount , String Description , Long price  , String model , String modelpicture , User user){
+    public Product(Long TotalAmount , String Description , Long price  , String model , String modelpicture , User user , Long discountPrice ,Brand brand){
         this.TotalAmount = TotalAmount;
         this.Description =Description;
         this.price =price;
         this.model = model;
         this.modelpicture = modelpicture;
         this.user = user;
+        this.discountPrice = discountPrice;
+        this.brand = brand;
     }
 
 
@@ -57,7 +60,7 @@ public class Product extends Timestamped {
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "brandId", nullable = true)
+    @JoinColumn(name = "brandId")
     private Brand brand;
 
 
@@ -91,7 +94,6 @@ public class Product extends Timestamped {
         this.price = price;
         this.Description = description;
         this.TotalAmount = totalAmount;
-//        this.brand =
     }
 
     public void setDiscountRate(double discountRate) {
@@ -102,9 +104,8 @@ public class Product extends Timestamped {
         this.discountPrice = discountPrice;
     }
 
-//    public void addSale(SaleProductRequestDto requestDto){
-//        this.discountRate = requestDto.getDiscountRate();
-//        this.discountPrice = requestDto.getDiscountPrice();
-//    }
+    public void decreaseProductAmount(Long currentAmount , Long orderAmount){
+        this.TotalAmount = currentAmount - orderAmount;
+    }
 
 }

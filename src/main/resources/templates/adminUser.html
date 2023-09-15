@@ -8,6 +8,8 @@
             integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
     <title>Profile Page</title>
+    <link rel="shortcut icon" type="image/x-icon" href="https://fp-foot.s3.ap-northeast-2.amazonaws.com/shoes/Pancham.webp">
+
     <style>
 
         /* Reset some default styles */
@@ -196,9 +198,6 @@
             <option value="ADMIN">Admin</option>
         </select>
         <button onclick="onUpdating()" class="profile-button">Confirm</button>
-        <div class="register-link">
-            <span onclick="logoutUser()">Logout</span>
-        </div>
         <div class="delete-user">
             <p> 회원탈퇴 <span onclick="deleteUser()">Delete</span></p>
         </div>
@@ -240,7 +239,7 @@
                     title: '변경 완료!'        // Alert 제목
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        window.location.href = "http://localhost:8080/view/admin/users";
+                        window.location.href = "/view/admin/users";
                     }
                 });
             },
@@ -250,7 +249,7 @@
                     title: '변경 실패!'        // Alert 제목
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        window.location.href = "http://localhost:8080/view/admin/users";
+                        window.location.href = "/view/admin/users";
                     }
                 });
             }

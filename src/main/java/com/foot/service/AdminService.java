@@ -3,11 +3,12 @@ package com.foot.service;
 import com.foot.dto.AdminUserRequestDto;
 import com.foot.dto.ProfileResponseDto;
 import com.foot.dto.UserListResponseDto;
+import com.foot.dto.bidProduct.BidProductRequestDto;
 import com.foot.dto.products.SaleProductRequestDto;
 import com.foot.dto.products.SelectedProductRequestDto;
-import com.foot.entity.Product;
-import com.foot.entity.User;
-import com.foot.entity.UserRoleEnum;
+import com.foot.entity.*;
+import com.foot.repository.BidProductRepository;
+import com.foot.repository.BrandRepository;
 import com.foot.repository.UserRepository;
 import com.foot.repository.products.ProductRepository;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +29,8 @@ public class AdminService {
     private final UserRepository userRepository;
     private final ProductRepository productRepository;
     private final PasswordEncoder passwordEncoder;
-    private final ProductService productService;
+    private final BrandRepository brandRepository;
+    private final BidProductRepository bidProductRepository;
 
     // 전체 회원 목록 조회
     public Page<User> getUserList(Pageable pageable) {
@@ -77,7 +79,6 @@ public class AdminService {
         return productRepository.findAll(pageable);
     }
 
-
     // 상품 검색
     public Page<Product> productSearchList(String searchKeyword, Pageable pageable) {
         return productRepository.findByModelContaining(searchKeyword, pageable);
@@ -117,19 +118,45 @@ public class AdminService {
         }
     }
 
+    // 경매 상품 삭제
+    public void deleteBidProducts(SelectedProductRequestDto requestDto) {
+        List<Long> productIds = requestDto.getProductIds();
+
+        for (Long productId : productIds) {
+            BidProduct bidProduct = getBidProductById(productId);
+            if (bidProduct != null) {
+                bidProductRepository.delete(bidProduct);
+            }
+        }
+    }
 
 
+    // 경매 상품 전체 목록 조회
+    public Page<BidProduct> getBidProductList(Pageable pageable) {
+        return bidProductRepository.findAll(pageable);
+    }
 
+    // 경매 상품 검색
+    public Page<BidProduct> bidProductSearchList(String searchKeyword, Pageable pageable) {
+        return bidProductRepository.findByNameContaining(searchKeyword, pageable);
+    }
 
     public User findUser(Long id) {
         return userRepository.findById(id).orElseThrow(() ->
                 new IllegalArgumentException("유저가 존재하지 않습니다.")
         );
     }
-
     public Product getProductById(Long id) {
         return productRepository.findById(id).orElseThrow(() ->
                 new IllegalArgumentException("상품이 존재하지 않습니다.")
         );
     }
+
+    public BidProduct getBidProductById(Long id) {
+        return bidProductRepository.findById(id).orElseThrow(() ->
+                new IllegalArgumentException("상품이 존재하지 않습니다.")
+        );
+    }
+
+
 }

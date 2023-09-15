@@ -51,12 +51,12 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         String token = jwtUtil.createToken(username, role);
        // response.addHeader(JwtUtil.AUTHORIZATION_HEADER, token);
         jwtUtil.addJwtToCookie(token, response);
-        log.info("로그인 성공");
+//        log.info("로그인 성공");
     }
 
     @Override
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) {
-        log.info("로그인 실패");
+//        log.info("로그인 실패");
         response.setStatus(401);
     }
 

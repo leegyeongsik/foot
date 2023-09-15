@@ -4,12 +4,17 @@ import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor
-@Table(name = "baskets")
-public class Basket extends Timestamped{
+@Table(name = "chatlogs")
+public class ChatLog extends Timestamped{ // 채팅방 기능 구현할때 생각
     /**
      * 컬럼 - 연관관계 컬럼을 제외한 컬럼을 정의합니다.
      */
@@ -17,28 +22,42 @@ public class Basket extends Timestamped{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "message")
+    private String message;
 
+    @Column(name = "message_img" , nullable = true)
+    private String messageImg;
+
+    @Column(name = "user_Read")
+    @ColumnDefault("1")
+    private int userRead;
+
+    @Column(name = "admin_Read")
+    @ColumnDefault("1")
+    private int adminRead;
     /**
      * 생성자 - 약속된 형태로만 생성가능하도록 합니다.
      */
     @Builder
-    public Basket(User user , ProductSize productSize){
+    public ChatLog(User user , Channel channel , String message , String messageImg , int userRead , int adminRead){
         this.user = user;
-        this.productSize = productSize;
+        this.channel = channel;
+        this.message = message;
+        this.messageImg = messageImg;
+        this.userRead = userRead;
+        this.adminRead = adminRead;
     }
-
 
     /**
      * 연관관계 - Foreign Key 값을 따로 컬럼으로 정의하지 않고 연관 관계로 정의합니다.
      */
+
     @ManyToOne
     @JoinColumn(name = "userId", nullable = false)
     private User user;
-
     @ManyToOne
-    @JoinColumn(name = "product_sizeId", nullable = false)
-    private ProductSize productSize;
-
+    @JoinColumn(name = "channelId", nullable = false)
+    private Channel channel;
 
     /**
      * 연관관계 편의 메소드 - 반대쪽에는 연관관계 편의 메소드가 없도록 주의합니다.
@@ -50,5 +69,5 @@ public class Basket extends Timestamped{
      * ex (update 메소드)
      */
 
-    //  구매완료 api누르면 basket에 있는거 신발의 cnt -1 , 해당 신발의 크기 cnt -1 , 해당 신발의 크기의 색 cnt -1
+
 }

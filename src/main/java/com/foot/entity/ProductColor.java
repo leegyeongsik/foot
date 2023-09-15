@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Getter
@@ -52,5 +53,9 @@ public class ProductColor {
      */
     public void updateProductColor(Long amount){
         this.amount = amount;
+    }
+
+    public void decreaseProductAmount(Long currentAmount , Long orderAmount){
+        this.amount = currentAmount - orderAmount;
     }
 }

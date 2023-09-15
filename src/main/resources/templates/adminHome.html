@@ -6,6 +6,8 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>관리자 페이지</title>
+    <link rel="shortcut icon" type="image/x-icon" href="https://fp-foot.s3.ap-northeast-2.amazonaws.com/shoes/Pancham.webp">
+
     <style>
         body {
             display: flex;
@@ -79,16 +81,17 @@
         <div class="menuBox product">
             <p class="title" onclick="location.href='/view/admin/users'">회원관리</p>
         </div>
+        <div class="menuBox brand">
+            <p class="title"  onclick="location.href='/view/admin/brands'">브랜드관리</p>
+        </div>
+
+    </div>
+    <div class="menuRow">
         <div class="menuBox user">
             <p class="title" onclick="location.href='/view/admin/products'">상품관리</p>
         </div>
-    </div>
-    <div class="menuRow">
-        <div class="menuBox brand">
-            <p class="title"></p>
-        </div>
         <div class="menuBox bidProduct">
-            <p class="title"></p>
+            <p class="title" onclick="location.href='/view/admin/bidProducts'">경매상품관리</p>
         </div>
     </div>
 </div>

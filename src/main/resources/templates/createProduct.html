@@ -9,7 +9,9 @@
     <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
 
 <!--    <link rel="stylesheet" href="/css/board-page.css">-->
-    <title>Board</title>
+    <title>판짱마켓</title>
+      <link rel="shortcut icon" type="image/x-icon" href="https://fp-foot.s3.ap-northeast-2.amazonaws.com/shoes/Pancham.webp">
+
   </head>
     <style>
         .Header {
@@ -526,8 +528,8 @@
 
     <div class="Header">
         <div class="Logo">
-            <img src="owl_image.png" alt="Owl Image" style="height: 30px; width: auto; margin-right: 10px;">
-            foot
+            <img src="https://fp-foot.s3.ap-northeast-2.amazonaws.com/shoes/Pancham.webp" alt="Owl Image" style="height: 50px; width: auto; margin-right: 10px;">
+            판짱마켓
         </div>
         <div class="NavList">
             <div class="NavItem" id = "shoes_id">shoes</div>
@@ -684,7 +686,7 @@
         const productName = document.getElementById("mark25").value; // 파일 input 요소
         const producttotalAmount = document.getElementById("mark26").value; // 파일 input 요소
         const productPrice = document.getElementById("mark29").value; // 파일 input 요소
-
+        const produchBrand = document.getElementById("mark27").value;
         const productdescription = document.getElementById("mark28").value; // 파일 input 요소
 
 
@@ -692,7 +694,7 @@
         formData.append('ModelPicture', productImg.files[0]);
         formData.append('name', productName);
         formData.append('price', productPrice);
-        // formData.append('price', productPrice); 브랜드
+        formData.append('brand', produchBrand);
         formData.append('description', productdescription);
         formData.append('totalAmount', producttotalAmount);
         formData.append('modelSize', ProductSize);
@@ -732,7 +734,7 @@
           enctype : 'multipart/form-data',  // * 중요 *
 
           success: function (response) {
-              window.location.href = `http://localhost:8080`
+              window.location.href = `/view/home`
           }
         })
 
@@ -742,7 +744,7 @@
         e.preventDefault();
         var size_id = e.target.id
         console.log(size_id)
-        ProductFootSize.push(parseInt(document.getElementById(`size_id_${size_id}`).value))
+        ProductFootSize.push(parseInt(document.getElementById(`foot_id_${size_id}`).value))
         ProductFeetSize.push(parseInt(document.getElementById(`feet_id_${size_id}`).value))
         ProductAmount.push(parseInt(document.getElementById(`amount_id_${size_id}`).value))
         ProductSize.push(parseInt(document.getElementById(`size_id_${size_id}`).value))
@@ -786,7 +788,7 @@
       })
 
         $(document).on('click',"div[id='shoes_id']" , function (e) { // 신발 누르면 해당 사이즈 출력
-            window.location.href=`http://localhost:8080`
+            window.location.href=`/view/home`
 
         })
         $(document).on('click',"div[id='signup']" , function (e) { // 보드 상세 페이지 이동

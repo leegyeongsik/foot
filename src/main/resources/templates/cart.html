@@ -8,16 +8,66 @@
             crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <script src="https://kit.fontawesome.com/1d07e1c680.js" crossorigin="anonymous"></script>
     <title>장바구니</title>
+    <link rel="shortcut icon" type="image/x-icon" href="https://fp-foot.s3.ap-northeast-2.amazonaws.com/shoes/Pancham.webp">
+
     <style>
         body {
             margin: 0;
         }
 
+        .Header {
+            width: 100%;
+            height: 10%;
+            position: absolute;
+            background-color: #ffffff;
+            display: flex;
+            padding: 0 20px;
+        }
+
+        .NavList {
+            margin-top: 2%;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            width: 95%;
+        }
+
+
+        .Logo {
+            color: black;
+            font-size: 24px;
+            font-family: Poppins, sans-serif;
+            font-weight: 900;
+            cursor: pointer;
+        }
+
+        .NavItem {
+            flex: 1;
+            text-align: center;
+            color: #EE312F;
+            font-size: 23.71px;
+            font-family: Inter, sans-serif;
+            font-weight: 400;
+            text-transform: uppercase;
+            line-height: 1.1;
+            word-wrap: break-word;
+            cursor: pointer;
+
+        }
+
+        .title {
+            font-size: 25px;
+            font-family: Inter, sans-serif;
+            font-weight: 500;
+            margin: 5% 3% 2%;
+
+        }
+
         .cart-container {
             display: flex;
             flex-direction: row;
-            height: 100vh;
             background-color: white;
         }
 
@@ -25,76 +75,45 @@
             flex-direction: row;
             display: flex;
             justify-content: space-between;
-
         }
 
-        .product-btn {
-            padding: 10px 16px;
-            border: none;
-            border-radius: 5px;
-            background-color: #333;
-            color: #fff;
-            font-weight: 700;
+        td.product-info:hover {
             cursor: pointer;
-            display: block; /* 블록 요소로 설정하여 한 줄에 하나의 버튼만 표시 */
         }
 
-        .discount-btn {
+        .close {
             padding: 10px 16px;
             border: none;
             border-radius: 5px;
-            background-color: #333;
-            color: #fff;
-            font-weight: 700;
-            cursor: pointer;
-            display: block;
-
-        }
-
-        .delete-btn {
-            padding: 10px 16px;
-            border: none;
-            border-radius: 5px;
-            background-color: #333;
-            color: #fff;
-            font-weight: 700;
+            background-color: transparent;
+            color: black;
+            font-size: 20px;
             cursor: pointer;
             display: block;
         }
 
-        .cart-menu {
-            width: 15%; /* 메뉴 너비 조정 */
-            background-color:#333;
-            color: white;
-            padding: 20px;
+        .close:hover {
+            cursor: pointer;
+            color: #EE312F;
         }
 
         .cart-content {
-            width: 85%; /* 내용 영역 너비 조정 */
-            padding: 20px;
-        }
-
-        .menu-item {
-            margin-bottom: 10px;
-        }
-
-        .menu-item:hover {
-            text-decoration: underline;
-            cursor: pointer;
+            width: 100%; /* 내용 영역 너비 조정 */
+            padding: 5%
         }
 
         .list-container {
             display: flex;
             justify-content: center;
             /*align-items: center;*/
-            height: 60vh;
+            max-height: 50vh; /* 원하는 세로 높이로 조정 */
+            overflow-y: auto; /* 세로 스크롤을 허용하도록 설정 */
             flex-direction: column;
             padding: 20px;
             border: 1.5px solid transparent;;
             border-radius: 16px;
             background-color: #fff;
         }
-
 
         table {
             width: 100%;
@@ -105,6 +124,10 @@
         th, td {
             padding: 10px;
             text-align: center;
+        }
+
+        table tbody tr {
+            border-bottom: 1px solid #f2f2f2; /* 선의 두께와 색상 설정 */
         }
 
         th {
@@ -139,41 +162,49 @@
 
         .btn-container {
             display: flex;
-            justify-content: center;
-            margin-top: 5%;
+            justify-content: flex-end;
         }
 
         .order-btn {
-            padding: 10px 16px;
+            padding: 10px 5px;
+            margin-right: 5%;
+            width: 10%;
             border: none;
-            border-radius: 5px;
-            background-color:  #575dfb;
+            background-color: #000;
             color: #fff;
             font-weight: 700;
+            font-size: 15px;
             cursor: pointer;
         }
     </style>
 </head>
 <body>
-<div class="cart-container">
-    <div class="cart-menu">
-        <div class="menu-item" onclick="location.href='/view/home'">홈</div>
-        <div class="menu-item" onclick="location.href='/view/myPage'">마이 페이지</div>
-        <!-- 원하는 메뉴 항목들을 추가 -->
+
+<div class="Header">
+    <div class="NavList">
+        <div class="Logo" onclick="location.href='/view/home'">
+            <img src="https://fp-foot.s3.ap-northeast-2.amazonaws.com/shoes/Pancham.webp" alt="Owl Image" style="height: 50px; width: auto; margin-right: 10px;">
+            판짱마켓
+        </div>
+        <div class="NavItem" id="shoes_id" onclick="location.href='/view/home'">shoes</div>
+        <div class="NavItem" onclick="location.href='/view/bp'" >Auction</div>
+        <div class="NavItem" onclick="location.href ='/product/favorite'">favourite</div>
+        <div class="NavItem" onclick="location.href='/view/myPage'">MyPage</div>
+        <div class="NavItem" onclick="logoutUser()">SIGNOUT</div>
     </div>
+</div>
 
+<div class="cart-container">
     <div class="cart-content">
-
+        <div class="title">
+            장바구니
+        </div>
         <div class="list-container">
-            <div class="btn-container">
-            </div>
-
             <table>
                 <thead>
                 <tr>
                     <th><input type="checkbox" id="checkall" onclick="checkAll()"></th>
-                    <th>상품 이미지</th>
-                    <th>상품 모델</th>
+                    <th>상품 정보</th>
                     <th>상품 가격</th>
                     <th>수량</th>
                     <th>합계 금액</th>
@@ -182,11 +213,16 @@
                 </thead>
                 <tbody>
                 <tr th:each="item : ${cartItems}">
-                    <td><input type="checkbox" name="cartChkBox" class="product-checkbox" th:value="${item.cartItemId}" th:attr="data-product-id=${item.cartItemId}"/>
+                    <td><input type="checkbox" name="cartChkBox" class="product-checkbox" th:value="${item.cartItemId}"
+                               th:attr="data-product-id=${item.cartItemId}"/>
                     </td>
-                    <td><img th:src="${item.imgUrl}" alt="Product Image" width="50" height="50"/></td>
-                    <td th:text="${item.productName}" th:attr="data-product-id=${item.cartItemId}"
-                        onclick="goToProductDetailPage(this)" class="product-model"></td>
+                    <td th:attr="data-product-id=${item.productId}"
+                        onclick="goToProductDetailPage(this)" class="product-info">
+                        <img th:src="${item.imgUrl}" alt="Product Image" width="80" height="80"/>
+                        <br>
+                        <span th:text="${item.productName}" class="product-model"></span>
+                        <span th:text="'size : ' + ${item.productSize}" class="product-size"></span>
+                    </td>
                     <td th:id="'price_' + ${item.cartItemId}"
                         th:data-price="${item.price}" th:text="${item.price}"></td>
                     <td>
@@ -200,9 +236,14 @@
                     </td>
                     <td>
                         <button type="button" class="close" aria-label="Close">
-                            <span aria-hidden="true" th:data-id="${item.cartItemId}" onclick="deleteCartItem(this)">&times;</span>
+                            <span aria-hidden="true" th:data-id="${item.cartItemId}" onclick="deleteCartItem(this)"><i class="fa-solid fa-trash-can"></i></span>
                         </button>
                     </td>
+                    <div hidden>
+                        <td hidden th:id="'colorid_' + ${item.cartItemId}"
+                            th:data-colorid="${item.productColorId}" th:text="${item.price}"></td>
+                        <td hidden>
+                    </div>
                 </tr>
                 </tbody>
             </table>
@@ -211,7 +252,7 @@
             총 주문 금액 :&nbsp; <span id="orderTotalPrice">0원</span>
         </h3>
         <div class="btn-container">
-            <button type="button" class="order-btn">주문하기</button>
+            <button type="button" class="order-btn" onclick="orderCartItem()">주문하기</button>
         </div>
     </div>
 
@@ -233,17 +274,17 @@
 
 
     $(document).ready(function () {
-        $("input[name=cartChkBox]").change( function(){
+        $("input[name=cartChkBox]").change(function () {
             getOrderTotalPrice();
         });
     });
 
     // 상품 전체 선택
-    function checkAll(){
-        if($("#checkall").prop("checked")){
-            $("input[name=cartChkBox]").prop("checked",true);
-        }else{
-            $("input[name=cartChkBox]").prop("checked",false);
+    function checkAll() {
+        if ($("#checkall").prop("checked")) {
+            $("input[name=cartChkBox]").prop("checked", true);
+        } else {
+            $("input[name=cartChkBox]").prop("checked", false);
         }
         getOrderTotalPrice();
     }
@@ -252,7 +293,7 @@
     function goToProductDetailPage(row) {
         var productId = row.getAttribute("data-product-id");
         console.log(productId);
-        window.location.href = "/Product/" + productId;
+        window.location.href = "/product/" + productId;
     }
 
     // 상품 수량 변경
@@ -270,7 +311,6 @@
     // 상품 개수 수정
     function updateItemCount(cartItemId, count) {
 
-        // 선택한 상품 ID와 할인율 정보를 JSON으로 변환하여 POST 요청 보내기
         var requestData = {
             itemId: cartItemId,
             count: count
@@ -283,54 +323,85 @@
             url: "/api/cart",
             contentType: "application/json",
             data: JSON.stringify(requestData),
-            success: function(data) {
-                console.log("cartItem count update success");
+            success: function (data) {
+                console.log("수량 변경 성공");
             },
-            error: function(jqXHR, textStatus, errorThrown) {
-                console.log("cartItem count update failed");
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.log("수량 변경 실패");
             }
         });
     }
 
 
-
     // 총 주문 금액 업데이트
-    function getOrderTotalPrice(){
+    function getOrderTotalPrice() {
         var orderTotalPrice = 0;
-        $("input[name=cartChkBox]:checked").each(function() {
+        $("input[name=cartChkBox]:checked").each(function () {
             var cartItemId = $(this).val();
             var price = $("#price_" + cartItemId).attr("data-price");
             var count = $("#count_" + cartItemId).val();
-            orderTotalPrice += price*count;
-
-            console.log(cartItemId,price, count, orderTotalPrice);
+            orderTotalPrice += price * count;
         });
 
-        $("#orderTotalPrice").html(orderTotalPrice+'원');
+        $("#orderTotalPrice").html(orderTotalPrice + '원');
     }
 
 
     // 상품 삭제
     function deleteCartItem(obj) {
         var cartItemId = obj.dataset.id;
-
         var url = "/api/cart/" + cartItemId;
 
         $.ajax({
             type: "DELETE",
             url: url,
             contentType: "application/json",
-            success: function(data) {
+            success: function (data) {
                 console.log("삭제 성공")
                 window.location.reload();
             },
-            error: function(jqXHR, textStatus, errorThrown) {
+            error: function (jqXHR, textStatus, errorThrown) {
                 console.log("삭제 실패")
             }
         });
 
     }
 
+    // 로그아웃
+    function logoutUser() {
+        Cookies.remove('Authorization', {path: '/'});
+        Toast.fire({
+            icon: 'success',
+            title: '로그아웃을 성공하였습니다! \n 사이트 이용을 원하시면 로그인 부탁드립니다.'
+        }).then(function () {
+            window.location.href = "/view/login-page"
+        })
+    }
+
+
+    function orderCartItem(){
+        $("input[name=cartChkBox]:checked").each(function() {
+            let cartItemId = $(this).val();
+            let price = $("#price_" + cartItemId).attr("data-price");
+            let count = $("#count_" + cartItemId).val();
+            let colorid = $("#colorid_" + cartItemId).attr("data-colorid");
+            console.log(cartItemId,price, count,colorid);
+            $.ajax({
+                url: `/api/product/order`,
+                type: "POST",
+                data: JSON.stringify({orderCartItemId:cartItemId,orderPrice:price,orderCount:count,orderProductcolorId:colorid}),
+                contentType: "application/json",
+                success: function(data) {
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    let cartnum =  jqXHR.responseJSON.message
+                    alert("재고가 부족합니다" + " " + " 해당상품: "+$("#name_" + cartnum).text())
+                    location.reload();
+                }
+            });
+        });
+        location.reload();
+    }
 
 </script>
 </html>

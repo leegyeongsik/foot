@@ -8,7 +8,8 @@
             crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-    <title>Login Page</title>
+    <title>login</title>
+
     <style>
 
         /* Reset some default styles */
@@ -72,7 +73,7 @@
         }
 
         .register-link {
-            margin-top: 8px;
+            margin-top: 20px;
             font-size: 16px;
         }
 
@@ -88,12 +89,6 @@
             cursor: pointer;
         }
 
-        .social-login {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-top: 20px;
-        }
 
         .social-login img {
             width: 24px;
@@ -116,9 +111,6 @@
         <input type="text" id="name" placeholder="ID">
         <input type="password" id="password" placeholder="Password">
         <button class="login-button" onclick="onLogin()">Login</button>
-        <div class="social-login">
-            <p>Continue with Google</p>
-        </div>
         <div class="register-link">
             <p>Don’t have an account? <span onclick="location.href='/view/signup'">Register</span></p>
         </div>

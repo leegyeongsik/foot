@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"
+            integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g="
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <script src="https://kit.fontawesome.com/1d07e1c680.js" crossorigin="anonymous"></script>
+    <title>입찰 정보</title>
+    <style>
+        body {
+            margin: 0;
+        }
+
+        .Header {
+            width: 100%;
+            height: 10%;
+            position: absolute;
+            background-color: #ffffff;
+            display: flex;
+            padding: 0 20px;
+        }
+
+        .NavList {
+            margin-top: 2%;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            width: 95%;
+        }
+
+        .Logo {
+            color: black;
+            font-size: 24px;
+            font-family: Poppins, sans-serif;
+            font-weight: 900;
+            cursor: pointer;
+        }
+
+
+        .NavItem {
+            flex: 1;
+            text-align: center;
+            color: #EE312F;
+            font-size: 23.71px;
+            font-family: Inter, sans-serif;
+            font-weight: 400;
+            text-transform: uppercase;
+            line-height: 1.1;
+            word-wrap: break-word;
+            cursor: pointer;
+
+        }
+
+        .title {
+            font-size: 25px;
+            font-family: Inter, sans-serif;
+            font-weight: 500;
+            margin: 8% 3% 2%;
+
+        }
+
+        .cart-container {
+            display: flex;
+            flex-direction: row;
+            background-color: white;
+        }
+
+
+        td.product-info:hover {
+            cursor: pointer;
+        }
+
+        .close {
+            padding: 10px 16px;
+            border: none;
+            border-radius: 5px;
+            background-color: transparent;
+            color: black;
+            font-size: 20px;
+            cursor: pointer;
+            display: block;
+        }
+
+        .close:hover {
+            cursor: pointer;
+            color: #EE312F;
+        }
+
+        .cart-content {
+            width: 100%; /* 내용 영역 너비 조정 */
+            padding: 5%
+        }
+
+        .list-container {
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+            padding: 20px;
+            border: 1.5px solid transparent;;
+            border-radius: 16px;
+            background-color: #fff;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: center;
+        }
+
+        table tbody tr {
+            border-bottom: 1px solid #f2f2f2; /* 선의 두께와 색상 설정 */
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        .product-model:hover {
+            text-decoration: underline;
+            cursor: pointer;
+        }
+
+
+    </style>
+</head>
+<body>
+
+<div class="Header">
+    <div class="NavList">
+        <div class="Logo" onclick="location.href='/view/home'">
+            <img src="https://fp-foot.s3.ap-northeast-2.amazonaws.com/shoes/Pancham.webp" alt="Owl Image"
+                 style="height: 50px; width: auto; margin-right: 10px;">
+            판짱마켓
+        </div>
+        <div class="NavItem" id="shoes_id" onclick="location.href='/'">shoes</div>
+        <div class="NavItem" onclick="location.href='/view/bp'">Auction</div>
+        <div class="NavItem" onclick="location.href ='/product/favorite'">favourite</div>
+        <div class="NavItem" onclick="location.href='/view/myPage'">MyPage</div>
+        <div class="NavItem" onclick="logoutUser()">SIGNOUT</div>
+    </div>
+</div>
+
+<div class="cart-container">
+    <div class="cart-content">
+        <div class="title">
+            입찰 정보
+        </div>
+        <div class="list-container">
+            <table>
+                <thead>
+                <tr>
+                    <th>상품 정보</th>
+                    <th>내 입찰가</th>
+                    <th>현재 최고 입찰가</th>
+                    <th>남은 시간</th>
+                    <th>경매 상태</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="item : ${userBidProducts}">
+                    <td th:attr="data-product-id=${item.id}"
+                        onclick="goToProductDetailPage(this)" class="product-info">
+                        <img th:src="${item.footPicture}" alt="Product Image" width="80" height="80"/>
+                        <br>
+                        <span th:text="${item.name}" class="product-model"></span>
+                    </td>
+                    <td th:text="${highestBidPrices[item.id]}"></td>
+                    <td th:id="'price_' + ${item.id}"
+                        th:text="${item.topBid.bidPrice}"></td>
+                    <td th:text="${item.remainingTime}"></td>
+                    <td th:text="${item.status == 1 ? '마감' : '진행중'}"></td>
+
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+</body>
+<script>
+
+    const Toast = Swal.mixin({
+        toast: true,
+        position: 'center-center',
+        showConfirmButton: false,
+        timer: 600,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+            toast.addEventListener('mouseenter', Swal.stopTimer)
+            toast.addEventListener('mouseleave', Swal.resumeTimer)
+        }
+    })
+
+
+    // 상품 상세 페이지로 이동
+    function goToProductDetailPage(row) {
+        var productId = row.getAttribute("data-product-id");
+        console.log(productId);
+        window.location.href = "/view/bp/" + productId;
+    }
+
+
+    // 로그아웃
+    function logoutUser() {
+        Cookies.remove('Authorization', {path: '/'});
+        Toast.fire({
+            icon: 'success',
+            title: '로그아웃을 성공하였습니다! \n 사이트 이용을 원하시면 로그인 부탁드립니다.'
+        }).then(function () {
+            window.location.href = "/view/login-page"
+        })
+    }
+
+
+</script>
+</html>
