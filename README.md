@@ -29,7 +29,7 @@
 <img width="100%" src="https://github.com/leegyeongsik/foot/assets/67450537/ec087927-2c49-479d-bcb1-2176db2c8592"/>
 
 ## 기술 스택
-springboot , jpa , springsecurity , stomp kafka , mysql , aws(ec2 , rds , s3)
+springboot , jpa , springsecurity , stomp , kafka , mysql , aws(ec2 , rds , s3)
 ## 개발 기간
 - 2023-08-16 ~ 2023-09-15
 ## 기획 & 설계
