@@ -200,7 +200,7 @@
         for (let i = 0; i < response.length; i++) {
           if(response[i].messageUser != username){
             if(response[i].messageImg != null){
-              if(response[i].message != null){
+              if(response[i].message != ""){
                 notmemsg=`<li class="left">
                     <div class="sender">${response[i].messageUser}</div>
                     <img src="${response[i].messageImg}" style="width:150px; height:150px;">
@@ -223,7 +223,7 @@
             }
           } else {
             if(response[i].messageImg != null){
-              if(response[i].message != null) {
+              if(response[i].message != "") {
                 memsg=`<li class="right">
                     <div class="sender">${response[i].messageUser}</div>
                     <img src="${response[i].messageImg}" style="width:150px; height:150px;">
