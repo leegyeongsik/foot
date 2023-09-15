@@ -258,7 +258,7 @@
     ws.subscribe("/topic/api/channel/" + ChannelId, function(message) {
       let receive = JSON.parse(message.body);
       if (receive.img != null) { // 이미지가 존재하고
-        if(receive.message != null){ // 메시지도 존재할때
+        if(receive.message != ""){ // 메시지도 존재할때
           receiveImg(receive);
         } else { // 이미지만 존재할때
           receiveImgNull(receive);
