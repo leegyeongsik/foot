@@ -22,6 +22,7 @@ public class ChatMessageRequestDto implements Serializable {
     private int IsUserRead;
     private Long totalRead;
     private Long adminTotalRead;
+    private Long adminRead;
 
 
     public ChatMessageRequestDto() {
