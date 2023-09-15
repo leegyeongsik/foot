@@ -197,7 +197,7 @@
                         <span th:text="${item.name}" class="product-model"></span>
                     </td>
                     <td th:id="'price_' + ${item.id}"
-                        th:text="${item.topBid}"></td>
+                        th:text="${item.topBid != null ? item.topBid.bidPrice : item.startPrice}"></td>
                     <td th:text="${item.remainingTime}"></td>
                     <td th:text="${item.status == 1 ? '마감' : '진행중'}"></td>
                     <td>
