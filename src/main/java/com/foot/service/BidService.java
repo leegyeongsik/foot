@@ -373,6 +373,11 @@ public class BidService {
     public BidResponseDto createBid(BidRequestDto requestDto, Long bidProductId, User user) {
         BidProduct bidProduct = findBidProductById(bidProductId);
 
+        // Status가 1인 경우 경매를 못하도록 예외 처리
+        if (bidProduct.getStatus() == 1) {
+            throw new IllegalArgumentException("이미 종료된 경매 상품입니다.");
+        }
+
         if (bidProduct.getTopBid() == null) {
             Bid bid = new Bid(requestDto, bidProduct, user);
             bidRepository.save(bid);
