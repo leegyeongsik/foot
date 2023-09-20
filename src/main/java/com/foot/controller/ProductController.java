@@ -75,7 +75,7 @@ public class ProductController {
     }
 
 
-    @GetMapping("/search") // 검색하고 검색한거에 맞는 사람 쭉 나오는데 해당 보드에 이미 초대된 사람이라면 true로 넣어줌 아니면 false
+    @GetMapping("/search") // 상품 검색
     public List<ProductResponseDto> getSearch(@RequestParam("name")String name){
         return productService.getSearch(name);
     }
